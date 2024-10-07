@@ -1,3 +1,5 @@
+//not at moment -- https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing
+
 const darkModeBtn = document.getElementById('darkModeBtn');
 let currentAssignmentId = '';
 
@@ -71,6 +73,19 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Three.js background animation
+// Optional: Initialize Three.js (if you plan to use it for background animation)
+// Uncomment the following lines if you want to implement a background animation
+/*
 const scene = new THREE.Scene();
-const camera = new THREE.Perspect
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Animation loop
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+animate();
+*/
