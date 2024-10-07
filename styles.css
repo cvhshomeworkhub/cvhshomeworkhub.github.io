@@ -1,10 +1,13 @@
+/* ========================================================================== 
+   Base Variables and Reset 
+   ========================================================================== */
 :root {
-    --primary-color: #00a8ff;
-    --secondary-color: #0097e6;
-    --accent-color: #00d2d3;
-    --background-dark: #0c0c0c;
-    --text-light: #ffffff;
-    --text-dark: #333333;
+    --primary-color: #007acc; /* Blue */
+    --secondary-color: #005fa3; /* Darker Blue */
+    --accent-color: #00cfff; /* Cyan */
+    --background-dark: #0d0d0d; /* Dark Background */
+    --text-light: #ffffff; /* Light Text */
+    --text-dark: #333333; /* Dark Text */
     --glass-background: rgba(255, 255, 255, 0.1);
     --glass-border: rgba(255, 255, 255, 0.2);
     --transition-speed: 0.3s;
@@ -16,28 +19,52 @@
     box-sizing: border-box;
 }
 
+/* ========================================================================== 
+   Base Styles 
+   ========================================================================== */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background: var(--background-dark);
+    background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
     color: var(--text-light);
     min-height: 100vh;
     transition: all var(--transition-speed) ease;
     line-height: 1.6;
 }
 
-#bg-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
+/* ========================================================================== 
+   Typography 
+   ========================================================================== */
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    margin: 2rem 0;
+    text-align: center;
+}
+
+/* ========================================================================== 
+   Glass Effect Components 
+   ========================================================================== */
+.glass-effect {
+    background: var(--glass-background);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    transition: all var(--transition-speed) ease;
+}
+
+.glass-effect:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .glass-header {
-    background: rgba(0, 168, 255, 0.1);
+    background: rgba(0, 122, 204, 0.1);
     backdrop-filter: blur(10px);
     padding: 1rem 2rem;
     display: flex;
@@ -49,40 +76,48 @@ body {
     z-index: 100;
 }
 
+/* ========================================================================== 
+   Glow Effects and Animations 
+   ========================================================================== */
 .glow-text {
-    color: var(--primary-color);
-    text-shadow: 0 0 10px rgba(0, 168, 255, 0.5),
-                 0 0 20px rgba(0, 168, 255, 0.3),
-                 0 0 30px rgba(0, 168, 255, 0.1);
+    color: var(--text-light);
+    text-shadow: 0 0 10px rgba(0, 204, 255, 0.5),
+                 0 0 20px rgba(0, 204, 255, 0.3),
+                 0 0 30px rgba(0, 204, 255, 0.1);
     animation: glow 2s ease-in-out infinite alternate;
 }
 
 @keyframes glow {
     from {
-        text-shadow: 0 0 10px rgba(0, 168, 255, 0.5),
-                     0 0 20px rgba(0, 168, 255, 0.3);
+        text-shadow: 0 0 10px rgba(0, 204, 255, 0.5),
+                     0 0 20px rgba(0, 204, 255, 0.3);
     }
     to {
-        text-shadow: 0 0 20px rgba(0, 168, 255, 0.6),
-                     0 0 30px rgba(0, 168, 255, 0.4),
-                     0 0 40px rgba(0, 210, 211, 0.3);
+        text-shadow: 0 0 20px rgba(0, 204, 255, 0.6),
+                     0 0 30px rgba(0, 204, 255, 0.4),
+                     0 0 40px rgba(0, 204, 255, 0.3);
     }
 }
 
-.glass-effect {
-    background: var(--glass-background);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    border-radius: 10px;
-    transition: all var(--transition-speed) ease;
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.glass-effect:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 168, 255, 0.2);
+.fade-in {
+    animation: fadeIn 1s ease;
 }
 
-.nav-link, .dropbtn {
+/* ========================================================================== 
+   Navigation and Dropdown 
+   ========================================================================== */
+nav {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav-link {
     color: var(--text-light);
     text-decoration: none;
     padding: 0.5rem 1rem;
@@ -90,21 +125,53 @@ body {
     transition: all var(--transition-speed) ease;
 }
 
-.nav-link:hover, .dropbtn:hover {
-    background: rgba(0, 168, 255, 0.2);
+.nav-link:hover {
+    background: var(--glass-background);
     transform: translateY(-2px);
 }
 
+.dropdown {
+    position: relative;
+}
+
+.dropbtn {
+    padding: 0.5rem 1rem;
+    color: var(--text-light);
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
 .dropdown-content {
-    background: rgba(0, 168, 255, 0.1);
+    display: none;
+    position: absolute;
     min-width: 200px;
+    z-index: 1;
+    top: 100%;
+    right: 0;
+    animation: fadeIn var(--transition-speed) ease;
+}
+
+.dropdown-content a {
+    color: var(--text-light);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: all var(--transition-speed) ease;
 }
 
 .dropdown-content a:hover {
-    background: rgba(0, 168, 255, 0.2);
+    background: rgba(0, 204, 255, 0.1);
     transform: translateX(5px);
 }
 
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* ========================================================================== 
+   Assignment Cards 
+   ========================================================================== */
 .assignments-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -128,7 +195,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, transparent, rgba(0, 168, 255, 0.1), transparent);
+    background: linear-gradient(45deg, transparent, rgba(0, 204, 255, 0.1), transparent);
     transform: translateX(-100%);
     transition: transform 0.6s ease;
 }
@@ -137,10 +204,26 @@ body {
     transform: translateX(100%);
 }
 
+.assignment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
 .assignment-title {
+    margin: 0;
     color: var(--accent-color);
 }
 
+.due-date {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* ========================================================================== 
+   Buttons and Interactive Elements 
+   ========================================================================== */
 .access-btn, .submit-btn {
     background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
     color: white;
@@ -156,58 +239,65 @@ body {
 
 .access-btn:hover, .submit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 168, 255, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================================================== 
+   Dark Mode Styles 
+   ========================================================================== */
+body.dark {
+    background: #121212;
+    color: var(--text-dark);
+}
+
+body.dark .glass-effect {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark .nav-link,
+body.dark .resource-title,
+body.dark .assignment-title {
+    color: var(--text-light);
+}
+
+body.dark .resource-description,
+body.dark .assignment-details {
+    color: var(--text-dark);
+    opacity: 0.9;
 }
 
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 .modal-content {
-    background: rgba(0, 168, 255, 0.1);
-    margin: 15% auto;
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
-    border: 1px solid var(--glass-border);
-    width: 300px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 168, 255, 0.3);
+    border: 1px solid #888;
+    width: 300px; /* Could be more or less, depending on screen size */
 }
 
-#passwordInput {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-light);
-    border-radius: 5px;
-}
-
-.close-btn {
-    color: var(--text-light);
+.close {
+    color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
-    cursor: pointer;
 }
 
-.close-btn:hover {
+.close:hover,
+.close:focus {
     color: var(--accent-color);
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.fade-in {
-    animation: fadeIn 1s ease;
+    text-decoration: none;
+    cursor: pointer;
 }
