@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>CVHS Homework Hub</h1>
+        <h1 class="glow">CVHS Homework Hub</h1>
         <nav>
             <a href="index.html">Home</a>
             <div class="dropdown">
@@ -32,13 +32,26 @@
     </header>
 
     <main>
-        <h2>Welcome to the CVHS Homework Hub!</h2>
-        <p>Your go-to resource for all homework and study materials.</p>
+        <h2>Assignments</h2>
+        <div class="assignment">
+            <h3><strong>History Project</strong> (History) - Due: Oct 15</h3>
+            <button class="passwordBtn" data-url="https://example.com/history-project">Access</button>
+        </div>
+        <div class="assignment">
+            <h3><strong>Math Homework 5</strong> (Algebra 2) - Due: Oct 10</h3>
+            <button class="passwordBtn" data-url="https://example.com/math-homework">Access</button>
+        </div>
+        <div class="assignment">
+            <h3><strong>Science Lab Report</strong> (Biology) - Due: Oct 12</h3>
+            <button class="passwordBtn" data-url="https://example.com/science-lab-report">Access</button>
+        </div>
+        <!-- Add more assignments here -->
     </main>
 
     <div id="passwordPrompt" class="hidden">
         <input type="password" id="passwordInput" placeholder="Enter Password">
         <button id="submitPassword">Submit</button>
+        <div id="message" class="hidden"></div>
     </div>
 
     <script src="script.js"></script>
