@@ -1,17 +1,22 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     transition: background-color 0.3s, color 0.3s;
 }
 
 header {
-    background-color: #4CAF50;
+    background: linear-gradient(90deg, #4CAF50, #81C784);
     color: white;
-    padding: 10px 20px;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+h1.glow {
+    text-shadow: 0 0 10px #fff, 0 0 20px #4CAF50, 0 0 30px #4CAF50;
 }
 
 nav {
@@ -23,6 +28,12 @@ nav a {
     color: white;
     margin: 0 15px;
     text-decoration: none;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #f9f9f9;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff;
 }
 
 .dropdown {
@@ -35,6 +46,11 @@ nav a {
     border: none;
     cursor: pointer;
     padding: 10px 15px;
+    transition: background-color 0.3s;
+}
+
+.dropbtn:hover {
+    background-color: #81C784;
 }
 
 .dropdown-content {
@@ -65,6 +81,19 @@ nav a {
     cursor: pointer;
 }
 
+.assignment {
+    background: rgba(255, 255, 255, 0.8);
+    margin: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+}
+
+.assignment:hover {
+    transform: scale(1.05);
+}
+
 #passwordPrompt {
     position: absolute;
     top: 50%;
@@ -73,13 +102,13 @@ nav a {
     background-color: white;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
 }
 
 .hidden {
     display: none;
 }
 
-/* Dark Mode Styles */
 body.dark {
     background-color: #333;
     color: white;
@@ -87,4 +116,20 @@ body.dark {
 
 body.dark header {
     background-color: #444;
+}
+
+#message {
+    color: red;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+body {
+    animation: fadeIn 0.5s;
 }
