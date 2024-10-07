@@ -10,7 +10,7 @@ document.getElementById('submitPassword').addEventListener('click', () => {
     const password = passwordInput.value;
     
     // Change "yourSecretPassword" to the actual password you want
-    if (password === "iamvengeance//thebat") {
+    if (password === "iamvengeance//thebatman") {
         window.location.href = 'iamvengeance.html';
     } else {
         document.body.classList.toggle('dark');
