@@ -66,6 +66,7 @@ h1, h2, h3, h4, h5, h6 {
 .glass-header {
     background: rgba(0, 122, 204, 0.1);
     backdrop-filter: blur(10px);
+    margin: 0;
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
