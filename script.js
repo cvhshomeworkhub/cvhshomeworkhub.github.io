@@ -1,22 +1,24 @@
+// Not at the moment --> https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing
+
 const darkModeBtn = document.getElementById('darkModeBtn');
 let currentAssignmentId = '';
 
 // Password configurations
 const passwordConfigs = {
-    'bio-lab': {
-        password: 'biology2024',
-        correctUrl: 'https://example.com/biology-resources',
-        wrongUrl: 'https://example.com/study-tips'
+    'bio-13.12': {
+        password: '13.1.13.2.13.12',
+        correctUrl: 'https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing',
+        wrongUrl: 'https://www.youtube.com/watch?v=oefAI2x2CQM'
     },
-    'geo-essay': {
-        password: 'geography2024',
-        correctUrl: 'https://example.com/geography-resources',
-        wrongUrl: 'https://example.com/essay-writing-tips'
+    'hug-babyprez': {
+        password: 'leboxadodelababado',
+        correctUrl: 'https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing',
+        wrongUrl: 'https://www.youtube.com/watch?v=PMCCFtpZXpI'
     },
-    'math-project': {
-        password: 'algebra2024',
-        correctUrl: 'https://example.com/math-resources',
-        wrongUrl: 'https://example.com/math-practice'
+    'spiralflowers1': {
+        password: 'spiralwee.uno',
+        correctUrl: 'https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing',
+        wrongUrl: 'https://jeroo.org/docs/JerooDocJava.pdf'
     }
 };
 
