@@ -6,14 +6,16 @@
     <title>Dark Links</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <header>
-        <h1 class="glow">Dark Links</h1>
+<body class="dark-theme">
+    <header class="glass-header">
+        <div class="logo-container">
+            <h1 class="glow-text">Dark Links</h1>
+        </div>
         <nav>
-            <a href="index.html">Home</a>
+            <a href="index.html" class="nav-link">Home</a>
             <div class="dropdown">
-                <button class="dropbtn">Subject Study</button>
-                <div class="dropdown-content">
+                <button class="dropbtn glass-effect">Subject Study</button>
+                <div class="dropdown-content glass-effect">
                     <a href="subject-pages/human-geography.html">Human Geography</a>
                     <a href="subject-pages/biology.html">Biology</a>
                     <a href="subject-pages/theater.html">Theater</a>
@@ -27,32 +29,44 @@
                     <a href="subject-pages/pe.html">PE</a>
                 </div>
             </div>
-            <button id="darkModeBtn">Dark Mode</button>
+            <button id="darkModeBtn" class="glass-effect">Dark Mode</button>
         </nav>
     </header>
 
-    <main>
-        <h2>Welcome to the Dark Links Page</h2>
-        <p>Here are some secret resources you can access:</p>
-        
-        <div class="assignment">
-            <h3><strong>Secret Resource 1</strong></h3>
-            <button class="passwordBtn" data-url="https://example.com/resource1">Access</button>
-        </div>
-        <div class="assignment">
-            <h3><strong>Secret Resource 2</strong></h3>
-            <button class="passwordBtn" data-url="https://example.com/resource2">Access</button>
-        </div>
-        <div class="assignment">
-            <h3><strong>Secret Resource 3</strong></h3>
-            <button class="passwordBtn" data-url="https://example.com/resource3">Access</button>
+    <main class="fade-in">
+        <div class="secret-content-container">
+            <h2 class="section-title glow-text">Secret Resources</h2>
+            
+            <div class="resources-grid">
+                <!-- Resource Cards -->
+                <div class="resource-card glass-effect">
+                    <h3 class="resource-title">AP Biology Past Papers</h3>
+                    <p class="resource-description">Complete collection of past AP Biology exams with solutions.</p>
+                    <button class="access-btn" onclick="showPasswordPrompt('bio-papers')">Access Resource</button>
+                </div>
+
+                <div class="resource-card glass-effect">
+                    <h3 class="resource-title">Math Formula Database</h3>
+                    <p class="resource-description">Comprehensive collection of advanced math formulas and proofs.</p>
+                    <button class="access-btn" onclick="showPasswordPrompt('math-formulas')">Access Resource</button>
+                </div>
+
+                <div class="resource-card glass-effect">
+                    <h3 class="resource-title">English Essay Templates</h3>
+                    <p class="resource-description">Professional essay templates and writing guides.</p>
+                    <button class="access-btn" onclick="showPasswordPrompt('eng-templates')">Access Resource</button>
+                </div>
+            </div>
         </div>
     </main>
 
-    <div id="passwordPrompt" class="hidden">
-        <input type="password" id="passwordInput" placeholder="Enter Password">
-        <button id="submitPassword">Submit</button>
-        <div id="message" class="hidden"></div>
+    <div id="passwordPrompt" class="modal hidden">
+        <div class="modal-content glass-effect">
+            <h3>Verify Access</h3>
+            <input type="password" id="passwordInput" placeholder="Enter Password">
+            <button id="submitPassword" class="submit-btn">Submit</button>
+            <button class="close-btn" onclick="closePasswordPrompt()">×</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
