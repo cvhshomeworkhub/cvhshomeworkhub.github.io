@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>Dark Links</h1>
+        <h1 class="glow">Dark Links</h1>
         <nav>
             <a href="index.html">Home</a>
             <div class="dropdown">
@@ -34,19 +34,26 @@
     <main>
         <h2>Welcome to the Dark Links Page</h2>
         <p>Here are some secret resources you can access:</p>
-        <ul>
-            <li><a href="https://example.com/resource1" target="_blank">Secret Resource 1</a></li>
-            <li><a href="https://example.com/resource2" target="_blank">Secret Resource 2</a></li>
-            <li><a href="https://example.com/resource3" target="_blank">Secret Resource 3</a></li>
-            <!-- Add more secret resources as needed -->
-        </ul>
+        
+        <div class="assignment">
+            <h3><strong>Secret Resource 1</strong></h3>
+            <button class="passwordBtn" data-url="https://example.com/resource1">Access</button>
+        </div>
+        <div class="assignment">
+            <h3><strong>Secret Resource 2</strong></h3>
+            <button class="passwordBtn" data-url="https://example.com/resource2">Access</button>
+        </div>
+        <div class="assignment">
+            <h3><strong>Secret Resource 3</strong></h3>
+            <button class="passwordBtn" data-url="https://example.com/resource3">Access</button>
+        </div>
     </main>
 
     <div id="passwordPrompt" class="hidden">
         <input type="password" id="passwordInput" placeholder="Enter Password">
         <button id="submitPassword">Submit</button>
+        <div id="message" class="hidden"></div>
     </div>
-
 
     <script src="script.js"></script>
 </body>
