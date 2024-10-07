@@ -1,4 +1,4 @@
-s<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -42,26 +42,17 @@ s<!DOCTYPE html>
                 <div class="resource-card glass-effect">
                     <h3 class="resource-title">Digital Art Tools</h3>
                     <p class="resource-description">Free software and tutorials for digital art</p>
-                    <button class="access-btn" onclick="showPasswordPrompt('digital-tools')">Extra Materials</button>
+                    <a href="https://example.com/digital-tools" class="access-btn">Extra Materials</a>
                 </div>
 
                 <div class="resource-card glass-effect">
                     <h3 class="resource-title">Art Reference Library</h3>
                     <p class="resource-description">Collection of reference images and poses</p>
-                    <button class="access-btn" onclick="showPasswordPrompt('art-refs')">Extra Materials</button>
+                    <a href="https://example.com/art-refs" class="access-btn">Extra Materials</a>
                 </div>
             </div>
         </div>
     </main>
-
-    <div id="passwordPrompt" class="modal hidden">
-        <div class="modal-content glass-effect">
-            <h3>Access Required</h3>
-            <input type="password" id="passwordInput" placeholder="Enter Password">
-            <button id="submitPassword" class="submit-btn">Submit</button>
-            <button class="close-btn" onclick="closePasswordPrompt()">×</button>
-        </div>
-    </div>
 
     <script src="../script.js"></script>
 </body>
