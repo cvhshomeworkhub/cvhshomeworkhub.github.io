@@ -1,38 +1,72 @@
 const darkModeBtn = document.getElementById('darkModeBtn');
-const passwordPrompt = document.getElementById('passwordPrompt');
-const passwordInput = document.getElementById('passwordInput');
-const message = document.getElementById('message');
+let currentAssignmentId = '';
 
-darkModeBtn.addEventListener('click', () => {
-    passwordPrompt.classList.toggle('hidden');
+// Password configurations
+const passwordConfigs = {
+    'bio-lab': {
+        password: 'biology2024',
+        correctUrl: 'https://example.com/biology-resources',
+        wrongUrl: 'https://example.com/study-tips'
+    },
+    'geo-essay': {
+        password: 'geography2024',
+        correctUrl: 'https://example.com/geography-resources',
+        wrongUrl: 'https://example.com/essay-writing-tips'
+    },
+    'math-project': {
+        password: 'algebra2024',
+        correctUrl: 'https://example.com/math-resources',
+        wrongUrl: 'https://example.com/math-practice'
+    }
+};
+
+// Show password prompt
+function showPasswordPrompt(assignmentId) {
+    const modal = document.getElementById('passwordPrompt');
+    modal.classList.remove('hidden');
+    currentAssignmentId = assignmentId;
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('passwordInput').focus();
+}
+
+// Close password prompt
+function closePasswordPrompt() {
+    const modal = document.getElementById('passwordPrompt');
+    modal.classList.add('hidden');
+}
+
+// Handle password submission
+document.getElementById('submitPassword').addEventListener('click', () => {
+    const password = document.getElementById('passwordInput').value;
+    const config = passwordConfigs[currentAssignmentId];
+    
+    if (config) {
+        if (password === config.password) {
+            window.location.href = config.correctUrl;
+        } else {
+            window.location.href = config.wrongUrl;
+        }
+    }
+    
+    closePasswordPrompt();
 });
 
-document.getElementById('submitPassword').addEventListener('click', () => {
-    const password = passwordInput.value;
-    
-    if (password === "iamvengeance//thebatman") {
-        window.location.href = 'iamvengeance.html';
-    } else {
-        document.body.classList.toggle('dark');
-        passwordPrompt.classList.add('hidden');
+// Dark mode toggle
+darkModeBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+});
+
+// Close modal when clicking outside
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById('passwordPrompt');
+    if (e.target === modal) {
+        closePasswordPrompt();
     }
 });
 
-// Add event listeners for assignment buttons
-document.querySelectorAll('.passwordBtn').forEach(button => {
-    button.addEventListener('click', () => {
-        const url = button.getAttribute('data-url');
-        passwordPrompt.classList.remove('hidden');
-
-        // Handle password check for each button
-        document.getElementById('submitPassword').onclick = () => {
-            if (passwordInput.value === "yourAssignmentPassword") {
-                window.open(url, '_blank');
-                passwordPrompt.classList.add('hidden');
-            } else {
-                message.textContent = "Incorrect Password!";
-                message.classList.remove('hidden');
-            }
-        };
-    });
+// Handle escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closePasswordPrompt();
+    }
 });
