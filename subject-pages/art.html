@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Art</title>
+    <title>Art Resources</title>
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
     <header>
-        <h1>Art</h1>
+        <h1 class="glow">Art Resources</h1>
         <nav>
             <a href="../index.html">Home</a>
             <div class="dropdown">
@@ -33,14 +33,27 @@
 
     <main>
         <h2>Art Resources</h2>
-        <p>Here you can find resources related to Art.</p>
+        <p>Access the following art resources:</p>
+
+        <div class="assignment">
+            <h3><strong>Art Project Guidelines</strong></h3>
+            <button class="passwordBtn" data-url="https://example.com/art-project">Access</button>
+        </div>
+        <div class="assignment">
+            <h3><strong>Art History Overview</strong></h3>
+            <button class="passwordBtn" data-url="https://example.com/art-history">Access</button>
+        </div>
+        <div class="assignment">
+            <h3><strong>Creative Techniques</strong></h3>
+            <button class="passwordBtn" data-url="https://example.com/creative-techniques">Access</button>
+        </div>
     </main>
 
     <div id="passwordPrompt" class="hidden">
         <input type="password" id="passwordInput" placeholder="Enter Password">
         <button id="submitPassword">Submit</button>
+        <div id="message" class="hidden"></div>
     </div>
-
 
     <script src="../script.js"></script>
 </body>
