@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CVHS Homework Hub</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-    <canvas id="bg-canvas"></canvas>
     <header class="glass-header">
         <div class="logo-container">
             <h1 class="glow-text">CVHS Homework Hub</h1>
@@ -31,7 +29,7 @@
                     <a href="subject-pages/pe.html">PE</a>
                 </div>
             </div>
-            <button id="darkModeBtn" class="glass-effect">Toggle Theme</button>
+            <button id="darkModeBtn" class="glass-effect">Dark Mode</button>
         </nav>
     </header>
 
@@ -74,14 +72,25 @@
         </div>
     </main>
 
-    <div id="passwordModal" class="modal">
+    <div id="passwordPrompt" class="modal hidden">
         <div class="modal-content glass-effect">
-            <h3>Enter Resource Password</h3>
+            <h3>Enter Resource Password - in progress, type random</h3>
             <input type="password" id="passwordInput" placeholder="Enter Password">
             <button id="submitPassword" class="submit-btn">Submit</button>
             <button class="close-btn" onclick="closePasswordPrompt()">×</button>
         </div>
     </div>
+
+    <!-- Password Modal -->
+<div id="passwordModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePasswordPrompt()">&times;</span>
+        <h2>Enter Password</h2>
+        <input type="password" id="passwordInput" placeholder="Password">
+        <button id="submitPassword">Submit</button>
+    </div>
+</div>
+
 
     <script src="script.js"></script>
 </body>
