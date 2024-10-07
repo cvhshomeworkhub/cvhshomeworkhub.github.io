@@ -32,30 +32,43 @@
             <button id="darkModeBtn" class="glass-effect">Dark Mode</button>
         </nav>
     </header>
+
     <main class="fade-in">
         <div class="secret-content-container">
             <h2 class="section-title glow-text">Secret Resources</h2>
-
+            
             <div class="resources-grid">
                 <!-- Resource Cards -->
                 <div class="resource-card glass-effect">
                     <h3 class="resource-title">AP Biology Past Papers</h3>
                     <p class="resource-description">Complete collection of past AP Biology exams with solutions.</p>
-                    <a href="https://example.com/digital-tools" class="access-btn">Extra Materials</a>
+                    <button class="access-btn" onclick="showPasswordPrompt('bio-papers')">Access Resource</button>
                 </div>
+
                 <div class="resource-card glass-effect">
                     <h3 class="resource-title">Math Formula Database</h3>
                     <p class="resource-description">Comprehensive collection of advanced math formulas and proofs.</p>
-                    <a href="https://example.com/digital-tools" class="access-btn">Extra Materials</a>
+                    <button class="access-btn" onclick="showPasswordPrompt('math-formulas')">Access Resource</button>
                 </div>
+
                 <div class="resource-card glass-effect">
                     <h3 class="resource-title">English Essay Templates</h3>
                     <p class="resource-description">Professional essay templates and writing guides.</p>
-                    <a href="https://example.com/digital-tools" class="access-btn">Extra Materials</a>
+                    <button class="access-btn" onclick="showPasswordPrompt('eng-templates')">Access Resource</button>
                 </div>
             </div>
         </div>
     </main>
+
+    <div id="passwordPrompt" class="modal hidden">
+        <div class="modal-content glass-effect">
+            <h3>Verify Access</h3>
+            <input type="password" id="passwordInput" placeholder="Enter Password">
+            <button id="submitPassword" class="submit-btn">Submit</button>
+            <button class="close-btn" onclick="closePasswordPrompt()">×</button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
