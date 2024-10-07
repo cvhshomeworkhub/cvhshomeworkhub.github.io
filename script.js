@@ -1,8 +1,6 @@
-//not at moment -- https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing
-
+//notatmoment -- https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing
 const darkModeBtn = document.getElementById('darkModeBtn');
 let currentAssignmentId = '';
-
 // Password configurations
 const passwordConfigs = {
     'bio-13.12': {
@@ -21,27 +19,24 @@ const passwordConfigs = {
         wrongUrl: 'https://jeroo.org/docs/JerooDocJava.pdf'
     }
 };
-
 // Show password prompt
 function showPasswordPrompt(assignmentId) {
     const modal = document.getElementById('passwordModal');
-    modal.style.display = 'block';
+    modal.style.display = 'block'; // Show the modal
     currentAssignmentId = assignmentId;
     document.getElementById('passwordInput').value = '';
     document.getElementById('passwordInput').focus();
 }
-
 // Close password prompt
 function closePasswordPrompt() {
     const modal = document.getElementById('passwordModal');
-    modal.style.display = 'none';
+    modal.style.display = 'none'; // Hide the modal
 }
-
 // Handle password submission
 document.getElementById('submitPassword').addEventListener('click', () => {
     const password = document.getElementById('passwordInput').value;
     const config = passwordConfigs[currentAssignmentId];
-    
+
     if (config) {
         if (password === config.password) {
             window.location.href = config.correctUrl;
@@ -49,15 +44,13 @@ document.getElementById('submitPassword').addEventListener('click', () => {
             window.location.href = config.wrongUrl;
         }
     }
-    
+
     closePasswordPrompt();
 });
-
 // Dark mode toggle
 darkModeBtn.addEventListener('click', () => {
     document.body.classList.toggle('dark');
 });
-
 // Close modal when clicking outside
 window.addEventListener('click', (e) => {
     const modal = document.getElementById('passwordModal');
@@ -65,27 +58,9 @@ window.addEventListener('click', (e) => {
         closePasswordPrompt();
     }
 });
-
 // Handle escape key
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closePasswordPrompt();
     }
 });
-
-// Optional: Initialize Three.js (if you plan to use it for background animation)
-// Uncomment the following lines if you want to implement a background animation
-/*
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-
-// Animation loop
-function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-}
-animate();
-*/
