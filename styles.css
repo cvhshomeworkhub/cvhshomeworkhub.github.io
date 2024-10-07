@@ -1,127 +1,195 @@
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    transition: background-color 0.3s, color 0.3s;
+/* Base Styles */
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #2196F3;
+    --accent-color: #FF4081;
+    --background-dark: #1a1a1a;
+    --text-light: #ffffff;
+    --text-dark: #333333;
+    --glass-background: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
 }
 
-header {
-    background: linear-gradient(90deg, #4CAF50, #81C784);
-    color: white;
-    padding: 20px;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #1a1a1a, #2c3e50);
+    color: var(--text-light);
+    min-height: 100vh;
+    transition: all 0.3s ease;
+}
+
+/* Glass Effect */
+.glass-effect {
+    background: var(--glass-background);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.glass-effect:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Header Styles */
+.glass-header {
+    background: rgba(76, 175, 80, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--glass-border);
 }
 
-h1.glow {
-    text-shadow: 0 0 10px #fff, 0 0 20px #4CAF50, 0 0 30px #4CAF50;
+/* Glow Text Effect */
+.glow-text {
+    color: var(--text-light);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5),
+                 0 0 20px rgba(255, 255, 255, 0.3),
+                 0 0 30px rgba(255, 255, 255, 0.1);
+    animation: glow 2s ease-in-out infinite alternate;
 }
 
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5),
+                     0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    to {
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.6),
+                     0 0 30px rgba(255, 255, 255, 0.4),
+                     0 0 40px rgba(76, 175, 80, 0.3);
+    }
+}
+
+/* Navigation */
 nav {
     display: flex;
+    gap: 1rem;
     align-items: center;
 }
 
-nav a {
-    color: white;
-    margin: 0 15px;
+.nav-link {
+    color: var(--text-light);
     text-decoration: none;
-    transition: color 0.3s;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
 }
 
-nav a:hover {
-    color: #f9f9f9;
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff;
+.nav-link:hover {
+    background: var(--glass-background);
 }
 
+/* Dropdown Styles */
 .dropdown {
     position: relative;
 }
 
 .dropbtn {
-    background-color: #4CAF50;
-    color: white;
+    padding: 0.5rem 1rem;
+    color: var(--text-light);
     border: none;
     cursor: pointer;
-    padding: 10px 15px;
-    transition: background-color 0.3s;
-}
-
-.dropbtn:hover {
-    background-color: #81C784;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: white;
-    min-width: 160px;
+    min-width: 200px;
     z-index: 1;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    top: 100%;
+    right: 0;
+    animation: fadeIn 0.3s ease;
 }
 
 .dropdown-content a {
-    color: black;
+    color: var(--text-light);
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    transition: all 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
-#darkModeBtn {
-    background-color: #555;
+/* Assignment Cards */
+.assignments-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.assignment-card {
+    padding: 1.5rem;
+    animation: fadeIn 0.5s ease;
+}
+
+.assignment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.assignment-title {
+    margin: 0;
+    color: var(--accent-color);
+}
+
+.due-date {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* Buttons */
+.access-btn {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.assignment {
-    background: rgba(255, 255, 255, 0.8);
-    margin: 20px;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s;
+.access-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-.assignment:hover {
-    transform: scale(1.05);
-}
-
-#passwordPrompt {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 1000;
+    animation: fadeIn 0.3s ease;
 }
 
-.hidden {
-    display: none;
-}
-
-body.dark {
-    background-color: #333;
-    color: white;
-}
-
-body.dark header {
-    background-color: #444;
-}
-
-#message {
-    color: red;
-    margin-top: 10px;
-    font-weight: bold;
+.modal-content {
+    padding: 2rem;
+    position: relative;
+    max-width: 400px;
+    width: 90%;
+    animation: slideIn 0.3s ease;
 }
 
 /* Animations */
@@ -130,6 +198,38 @@ body.dark header {
     to { opacity: 1; }
 }
 
-body {
-    animation: fadeIn 0.5s;
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 1s ease;
+}
+
+/* Dark Mode */
+body.dark {
+    background: linear-gradient(135deg, #000000, #1a1a1a);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .assignments-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .glass-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    nav {
+        margin-top: 1rem;
+    }
 }
