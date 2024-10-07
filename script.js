@@ -1,4 +1,4 @@
-// Not at the moment --> https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing
+//not at the moment -- https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing
 
 const darkModeBtn = document.getElementById('darkModeBtn');
 let currentAssignmentId = '';
@@ -55,7 +55,11 @@ document.getElementById('submitPassword').addEventListener('click', () => {
 
 // Dark mode toggle
 darkModeBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
+    const modal = document.getElementById('passwordPrompt');
+    modal.classList.remove('hidden');
+    currentAssignmentId = 'darkMode'; // Use a unique id for the dark mode prompt
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('passwordInput').focus();
 });
 
 // Close modal when clicking outside
@@ -69,6 +73,31 @@ window.addEventListener('click', (e) => {
 // Handle escape key
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+        closePasswordPrompt();
+    }
+});
+
+// Handle password submission for dark mode
+document.getElementById('submitPassword').addEventListener('click', () => {
+    const password = document.getElementById('passwordInput').value;
+    if (currentAssignmentId === 'darkMode') {
+        if (password === 'yourpassword') { // Replace 'yourpassword' with your desired password
+            document.body.classList.toggle('dark');
+            closePasswordPrompt();
+        } else {
+            // Handle incorrect password scenario
+            alert('Incorrect password. Dark mode will not be activated.');
+            closePasswordPrompt();
+        }
+    } else {
+        const config = passwordConfigs[currentAssignmentId];
+        if (config) {
+            if (password === config.password) {
+                window.location.href = config.correctUrl;
+            } else {
+                window.location.href = config.wrongUrl;
+            }
+        }
         closePasswordPrompt();
     }
 });
