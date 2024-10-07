@@ -1,5 +1,3 @@
-//notatmoment -- https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing
-
 const darkModeBtn = document.getElementById('darkModeBtn');
 let currentAssignmentId = '';
 
@@ -25,7 +23,7 @@ const passwordConfigs = {
 // Show password prompt
 function showPasswordPrompt(assignmentId) {
     const modal = document.getElementById('passwordModal');
-    modal.style.display = 'block'; // Show the modal
+    modal.style.display = 'block';
     currentAssignmentId = assignmentId;
     document.getElementById('passwordInput').value = '';
     document.getElementById('passwordInput').focus();
@@ -34,7 +32,7 @@ function showPasswordPrompt(assignmentId) {
 // Close password prompt
 function closePasswordPrompt() {
     const modal = document.getElementById('passwordModal');
-    modal.style.display = 'none'; // Hide the modal
+    modal.style.display = 'none';
 }
 
 // Handle password submission
@@ -72,3 +70,7 @@ document.addEventListener('keydown', (e) => {
         closePasswordPrompt();
     }
 });
+
+// Three.js background animation
+const scene = new THREE.Scene();
+const camera = new THREE.Perspect
