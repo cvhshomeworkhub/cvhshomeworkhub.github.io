@@ -10,8 +10,8 @@ document.getElementById('submitPassword').addEventListener('click', () => {
     const password = passwordInput.value;
     
     // Change "yourSecretPassword" to the actual password you want
-    if (password === "yourSecretPassword") {
-        window.location.href = 'dark-links.html';
+    if (password === "iamvengeance//thebat") {
+        window.location.href = 'iamvengeance.html';
     } else {
         document.body.classList.toggle('dark');
         passwordPrompt.classList.add('hidden');
