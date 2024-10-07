@@ -2,20 +2,16 @@
   "name": "your-app-name",
   "version": "1.0.0",
   "description": "A brief description of your app",
-  "main": "index.js", // or your main entry file
+  "main": "index.js",
   "scripts": {
-    "start": "node index.js", // change this if your start command is different
-    "build": "your-build-command" // optional, if needed
+    "start": "node index.js",
+    "build": "your-build-command"
   },
   "dependencies": {
-    // Add your dependencies here, for example:
-    // "express": "^4.18.2"
-  },
-  "devDependencies": {
-    // Add any dev dependencies if necessary
+    "express": "^4.18.2"
   },
   "engines": {
-    "node": ">=14.x" // specify the Node version if needed
+    "node": ">=14.x"
   },
-  "license": "MIT" // or whatever license you prefer
+  "license": "MIT"
 }
