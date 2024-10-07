@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1 class="glow">CVHS Homework Hub</h1>
+    <header class="glass-header">
+        <div class="logo-container">
+            <h1 class="glow-text">CVHS Homework Hub</h1>
+        </div>
         <nav>
-            <a href="index.html">Home</a>
+            <a href="index.html" class="nav-link">Home</a>
             <div class="dropdown">
-                <button class="dropbtn">Subject Study</button>
-                <div class="dropdown-content">
+                <button class="dropbtn glass-effect">Subject Study</button>
+                <div class="dropdown-content glass-effect">
                     <a href="subject-pages/human-geography.html">Human Geography</a>
                     <a href="subject-pages/biology.html">Biology</a>
                     <a href="subject-pages/theater.html">Theater</a>
@@ -27,31 +29,59 @@
                     <a href="subject-pages/pe.html">PE</a>
                 </div>
             </div>
-            <button id="darkModeBtn">Dark Mode</button>
+            <button id="darkModeBtn" class="glass-effect">Dark Mode</button>
         </nav>
     </header>
 
-    <main>
-        <h2>Assignments</h2>
-        <div class="assignment">
-            <h3><strong>History Project</strong> (History) - Due: Oct 15</h3>
-            <button class="passwordBtn" data-url="https://example.com/history-project">Access</button>
+    <main class="fade-in">
+        <h2 class="section-title glow-text">Current Assignments</h2>
+        
+        <div class="assignments-container">
+            <!-- Biology Assignment -->
+            <div class="assignment-card glass-effect">
+                <div class="assignment-header">
+                    <h3 class="assignment-title">Biology</h3>
+                    <span class="due-date">Due: October 10, 2024</span>
+                </div>
+                <div class="assignment-content">
+                    <p><strong>Cell Division Lab Report</strong></p>
+                    <button class="access-btn" onclick="showPasswordPrompt('bio-lab')">Access Resources</button>
+                </div>
+            </div>
+
+            <!-- Human Geography Assignment -->
+            <div class="assignment-card glass-effect">
+                <div class="assignment-header">
+                    <h3 class="assignment-title">Human Geography</h3>
+                    <span class="due-date">Due: October 12, 2024</span>
+                </div>
+                <div class="assignment-content">
+                    <p><strong>Population Dynamics Essay</strong></p>
+                    <button class="access-btn" onclick="showPasswordPrompt('geo-essay')">Access Resources</button>
+                </div>
+            </div>
+
+            <!-- Algebra 2 Assignment -->
+            <div class="assignment-card glass-effect">
+                <div class="assignment-header">
+                    <h3 class="assignment-title">Algebra 2</h3>
+                    <span class="due-date">Due: October 9, 2024</span>
+                </div>
+                <div class="assignment-content">
+                    <p><strong>Quadratic Functions Project</strong></p>
+                    <button class="access-btn" onclick="showPasswordPrompt('math-project')">Access Resources</button>
+                </div>
+            </div>
         </div>
-        <div class="assignment">
-            <h3><strong>Math Homework 5</strong> (Algebra 2) - Due: Oct 10</h3>
-            <button class="passwordBtn" data-url="https://example.com/math-homework">Access</button>
-        </div>
-        <div class="assignment">
-            <h3><strong>Science Lab Report</strong> (Biology) - Due: Oct 12</h3>
-            <button class="passwordBtn" data-url="https://example.com/science-lab-report">Access</button>
-        </div>
-        <!-- Add more assignments here -->
     </main>
 
-    <div id="passwordPrompt" class="hidden">
-        <input type="password" id="passwordInput" placeholder="Enter Password">
-        <button id="submitPassword">Submit</button>
-        <div id="message" class="hidden"></div>
+    <div id="passwordPrompt" class="modal hidden">
+        <div class="modal-content glass-effect">
+            <h3>Enter Resource Password</h3>
+            <input type="password" id="passwordInput" placeholder="Enter Password">
+            <button id="submitPassword" class="submit-btn">Submit</button>
+            <button class="close-btn" onclick="closePasswordPrompt()">×</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
