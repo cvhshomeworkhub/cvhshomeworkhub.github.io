@@ -1,4 +1,6 @@
-/* Base Styles */
+/* ==========================================================================
+   Base Variables and Reset
+   ========================================================================== */
 :root {
     --primary-color: #4CAF50;
     --secondary-color: #2196F3;
@@ -8,8 +10,18 @@
     --text-dark: #333333;
     --glass-background: rgba(255, 255, 255, 0.1);
     --glass-border: rgba(255, 255, 255, 0.2);
+    --transition-speed: 0.3s;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ==========================================================================
+   Base Styles
+   ========================================================================== */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -17,16 +29,33 @@ body {
     background: linear-gradient(135deg, #1a1a1a, #2c3e50);
     color: var(--text-light);
     min-height: 100vh;
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) ease;
+    line-height: 1.6;
 }
 
-/* Glass Effect */
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.section-title {
+    font-size: 2rem;
+    margin: 2rem 0;
+    text-align: center;
+}
+
+/* ==========================================================================
+   Glass Effect Components
+   ========================================================================== */
 .glass-effect {
     background: var(--glass-background);
     backdrop-filter: blur(10px);
     border: 1px solid var(--glass-border);
     border-radius: 10px;
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) ease;
 }
 
 .glass-effect:hover {
@@ -34,7 +63,6 @@ body {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Header Styles */
 .glass-header {
     background: rgba(76, 175, 80, 0.1);
     backdrop-filter: blur(10px);
@@ -43,9 +71,14 @@ body {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--glass-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-/* Glow Text Effect */
+/* ==========================================================================
+   Glow Effects and Animations
+   ========================================================================== */
 .glow-text {
     color: var(--text-light);
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5),
@@ -66,133 +99,6 @@ body {
     }
 }
 
-/* Navigation */
-nav {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-}
-
-.nav-link {
-    color: var(--text-light);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-}
-
-.nav-link:hover {
-    background: var(--glass-background);
-}
-
-/* Dropdown Styles */
-.dropdown {
-    position: relative;
-}
-
-.dropbtn {
-    padding: 0.5rem 1rem;
-    color: var(--text-light);
-    border: none;
-    cursor: pointer;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    min-width: 200px;
-    z-index: 1;
-    top: 100%;
-    right: 0;
-    animation: fadeIn 0.3s ease;
-}
-
-.dropdown-content a {
-    color: var(--text-light);
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    transition: all 0.3s ease;
-}
-
-.dropdown-content a:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* Assignment Cards */
-.assignments-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-}
-
-.assignment-card {
-    padding: 1.5rem;
-    animation: fadeIn 0.5s ease;
-}
-
-.assignment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.assignment-title {
-    margin: 0;
-    color: var(--accent-color);
-}
-
-.due-date {
-    font-size: 0.9rem;
-    color: #888;
-}
-
-/* Buttons */
-.access-btn {
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.access-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-/* Modal */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease;
-}
-
-.modal-content {
-    padding: 2rem;
-    position: relative;
-    max-width: 400px;
-    width: 90%;
-    animation: slideIn 0.3s ease;
-}
-
-/* Animations */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -213,23 +119,332 @@ nav {
     animation: fadeIn 1s ease;
 }
 
-/* Dark Mode */
+/* ==========================================================================
+   Navigation and Dropdown
+   ========================================================================== */
+nav {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav-link {
+    color: var(--text-light);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: all var(--transition-speed) ease;
+}
+
+.nav-link:hover {
+    background: var(--glass-background);
+    transform: translateY(-2px);
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropbtn {
+    padding: 0.5rem 1rem;
+    color: var(--text-light);
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    min-width: 200px;
+    z-index: 1;
+    top: 100%;
+    right: 0;
+    animation: fadeIn var(--transition-speed) ease;
+}
+
+.dropdown-content a {
+    color: var(--text-light);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: all var(--transition-speed) ease;
+}
+
+.dropdown-content a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* ==========================================================================
+   Assignment Cards
+   ========================================================================== */
+.assignments-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.assignment-card {
+    padding: 1.5rem;
+    animation: fadeIn 0.5s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.assignment-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.assignment-card:hover::before {
+    transform: translateX(100%);
+}
+
+.assignment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.assignment-title {
+    margin: 0;
+    color: var(--accent-color);
+}
+
+.due-date {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.assignment-details {
+    color: var(--text-light);
+    opacity: 0.8;
+    margin: 0.5rem 0;
+}
+
+/* ==========================================================================
+   Resource Cards
+   ========================================================================== */
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+    padding: 0 2rem;
+}
+
+.resource-card {
+    padding: 1.5rem;
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.resource-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.resource-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.resource-card:hover::before {
+    transform: translateX(100%);
+}
+
+.resource-title {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.resource-description {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   Buttons and Interactive Elements
+   ========================================================================== */
+.access-btn, .submit-btn {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.access-btn:hover, .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   Modal Styles
+   ========================================================================== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn var(--transition-speed) ease;
+    transition: opacity var(--transition-speed) ease;
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    padding: 2rem;
+    position: relative;
+    max-width: 400px;
+    width: 90%;
+    animation: slideIn var(--transition-speed) ease;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform var(--transition-speed) ease;
+}
+
+.close-btn:hover {
+    transform: rotate(90deg);
+}
+
+/* ==========================================================================
+   Dark Mode Styles
+   ========================================================================== */
 body.dark {
     background: linear-gradient(135deg, #000000, #1a1a1a);
 }
 
-/* Responsive Design */
+.dark-theme {
+    background: linear-gradient(135deg, #000000, #1a1a1a);
+}
+
+.dark-theme .glass-header {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   Container Layouts
+   ========================================================================== */
+.art-content-container,
+.secret-content-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   Form Elements
+   ========================================================================== */
+input[type="password"] {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 1rem 0;
+    border: 1px solid var(--glass-border);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    font-size: 1rem;
+}
+
+input[type="password"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(255, 64, 129, 0.3);
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
 @media (max-width: 768px) {
-    .assignments-container {
-        grid-template-columns: 1fr;
-    }
-    
     .glass-header {
         flex-direction: column;
         text-align: center;
+        padding: 1rem;
     }
     
     nav {
         margin-top: 1rem;
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .dropdown {
+        width: 100%;
+    }
+    
+    .dropdown-content {
+        width: 100%;
+        position: static;
+    }
+    
+    .assignments-container,
+    .resources-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+    
+    .art-content-container,
+    .secret-content-container {
+        padding: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .assignments-container,
+    .resources-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
