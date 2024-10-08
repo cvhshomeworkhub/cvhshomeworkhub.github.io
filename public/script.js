@@ -6,17 +6,17 @@ let currentAssignmentId = '';
 // Password configurations
 const passwordConfigs = {
     'bio-13.12': {
-        password: '13.1.13.2.13.12',
+        incorrect: '13.1.13.2.13.12',
         correctUrl: 'https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing',
         wrongUrl: 'https://www.youtube.com/watch?v=oefAI2x2CQM'
     },
     'hug-babyprez': {
-        password: 'leboxadodelababado',
+        incorrect: 'leboxadodelababado',
         correctUrl: 'https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing',
         wrongUrl: 'https://www.youtube.com/watch?v=PMCCFtpZXpI'
     },
     'spiralflowers1': {
-        password: 'spiralwee.uno',
+        incorrect: 'spiralwee.uno',
         correctUrl: 'https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing',
         wrongUrl: 'https://jeroo.org/docs/JerooDocJava.pdf'
     }
@@ -43,7 +43,7 @@ document.getElementById('submitPassword').addEventListener('click', () => {
     const config = passwordConfigs[currentAssignmentId];
     
     if (config) {
-        if (password === config.password) {
+        if (password === config.incorrect) {
             window.location.href = config.correctUrl;
         } else {
             window.location.href = config.wrongUrl;
