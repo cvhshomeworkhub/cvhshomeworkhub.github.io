@@ -4,10 +4,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
 :root {
-    --primary-color: #4CAF50;
-    --secondary-color: #2196F3;
-    --accent-color: #00FFFF;
+    --primary-color: #2196F3;    /* Changed from green to blue */
+    --secondary-color: #0D47A1;  /* Darker blue */
+    --accent-color: #00FFFF;     /* Cyan kept for glow effects */
     --background-dark: #000000;
+    --background-light: #FFFFFF;
     --text-light: #FFFFFF;
     --text-dark: #000000;
     --glass-background: rgba(0, 0, 0, 0.5);
@@ -312,6 +313,22 @@ nav {
     box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
 }
 
+.theme-toggle {
+    background: none;
+    border: 2px solid var(--text-light);
+    color: var(--text-light);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    transition: all var(--transition-speed) ease;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
 /* ==========================================================================
    Modal Styles
    ========================================================================== */
@@ -404,6 +421,26 @@ input[type="password"]:focus {
     outline: none;
     border-color: var(--accent-color);
     box-shadow: 0 0 10px rgba(255, 64, 129, 0.3);
+}
+
+body.light-mode {
+    background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    color: var(--text-dark);
+}
+
+body.light-mode .glass-header {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+body.light-mode .glass-effect {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(33, 150, 243, 0.2);
+}
+
+body.light-mode .nav-link,
+body.light-mode .theme-toggle {
+    color: var(--text-dark);
+    border-color: var(--text-dark);
 }
 
 /* ==========================================================================
