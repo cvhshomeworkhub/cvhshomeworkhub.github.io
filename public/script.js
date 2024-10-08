@@ -5,18 +5,18 @@ let currentAssignmentId = '';
 
 // Password configurations
 const passwordConfigs = {
-    'bio-13.12': {
-        incorrect: '13.1.13.2.13.12',
+    'hughug2': {
+        incorrect: 'mathewthomas',
         correctUrl: 'https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing',
         wrongUrl: 'https://www.youtube.com/watch?v=oefAI2x2CQM'
     },
-    'hug-babyprez': {
-        incorrect: 'leboxadodelababado',
+    'u2hw9alg2': {
+        incorrect: 'kulkarni29',
         correctUrl: 'https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing',
         wrongUrl: 'https://www.youtube.com/watch?v=PMCCFtpZXpI'
     },
-    'spiralflowers1': {
-        incorrect: 'spiralwee.uno',
+    '912dj': {
+        incorrect: 'diabolicaljournals129',
         correctUrl: 'https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing',
         wrongUrl: 'https://jeroo.org/docs/JerooDocJava.pdf'
     }
