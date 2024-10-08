@@ -6,19 +6,19 @@ let currentAssignmentId = '';
 // Password configurations
 const passwordConfigs = {
     'hughug2': {
-        incorrect: 'mathewthomas',
-        correctUrl: 'https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing',
-        wrongUrl: 'https://www.youtube.com/watch?v=oefAI2x2CQM'
+        incorrect: 'random',
+        correctUrl: 'sample.org',
+        wrongUrl: 'sample.com'
     },
     'u2hw9alg2': {
-        incorrect: 'kulkarni29',
-        correctUrl: 'https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing',
-        wrongUrl: 'https://www.youtube.com/watch?v=PMCCFtpZXpI'
+        incorrect: 'random',
+        correctUrl: 'sample.org',
+        wrongUrl: 'sample.com'
     },
     '912dj': {
-        incorrect: 'diabolicaljournals129',
-        correctUrl: 'https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing',
-        wrongUrl: 'https://jeroo.org/docs/JerooDocJava.pdf'
+        incorrect: 'random',
+        correctUrl: 'sample.org',
+        wrongUrl: 'sample.com'
     }
 };
 
