@@ -1,7 +1,7 @@
 {
-  "name": "your-app-name",
+  "name": "cvhshomeworkhub",
   "version": "1.0.0",
-  "description": "A brief description of your app",
+  "description": "The best study calendar for all your assignments",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
