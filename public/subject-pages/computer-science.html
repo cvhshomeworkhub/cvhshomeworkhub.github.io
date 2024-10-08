@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Computer Science</title>
+    <title>Computer Science Resources - CVHS Homework Hub</title>
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-    <header>
-        <h1>Computer Science</h1>
+    <header class="glass-header">
+        <div class="logo-container">
+            <h1 class="glow-text">Computer Science Resources</h1>
+        </div>
         <nav>
-            <a href="../index.html">Home</a>
+            <a href="../index.html" class="nav-link">Home</a>
             <div class="dropdown">
-                <button class="dropbtn">Subject Study</button>
-                <div class="dropdown-content">
+                <button class="dropbtn glass-effect">Subject Study</button>
+                <div class="dropdown-content glass-effect">
                     <a href="human-geography.html">Human Geography</a>
                     <a href="biology.html">Biology</a>
                     <a href="theater.html">Theater</a>
@@ -27,20 +29,29 @@
                     <a href="pe.html">PE</a>
                 </div>
             </div>
-            <button id="darkModeBtn">Dark Mode</button>
         </nav>
     </header>
 
-    <main>
-        <h2>Computer Science Resources</h2>
-        <p>Here you can find resources related to Computer Science.</p>
+    <main class="fade-in">
+        <div class="art-content-container">
+            
+            <!-- Resources Section -->
+            <h2 class="section-title glow-text">Computer Science Resources</h2>
+            <div class="resources-grid">
+                <div class="resource-card glass-effect">
+                    <h3 class="resource-title">Digital Art Tools</h3>
+                    <p class="resource-description">Free software and tutorials for digital art</p>
+                    <a href="https://example.com/digital-tools" class="access-btn">Extra Materials</a>
+                </div>
+
+                <div class="resource-card glass-effect">
+                    <h3 class="resource-title">Art Reference Library</h3>
+                    <p class="resource-description">Collection of reference images and poses</p>
+                    <a href="https://example.com/art-refs" class="access-btn">Extra Materials</a>
+                </div>
+            </div>
+        </div>
     </main>
-
-
-    <div id="passwordPrompt" class="hidden">
-        <input type="password" id="passwordInput" placeholder="Enter Password">
-        <button id="submitPassword">Submit</button>
-    </div>
 
     <script src="../script.js"></script>
 </body>
