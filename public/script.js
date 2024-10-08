@@ -10,6 +10,11 @@ const passwordConfigs = {
         correctUrl: 'sample.org',
         wrongUrl: 'sample.com'
     },
+    'odyssventure': {
+        incorrect: 'random',
+        correctUrl: 'sample.org',
+        wrongUrl: 'sample.com'
+    },
     'u2hw9alg2': {
         incorrect: 'random',
         correctUrl: 'sample.org',
