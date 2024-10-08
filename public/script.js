@@ -77,3 +77,19 @@ document.addEventListener('keydown', (e) => {
         closePasswordPrompt();
     }
 });
+
+function setTheme(theme) {
+    document.body.className = theme;
+    localStorage.setItem('theme', theme);
+}
+
+function toggleTheme() {
+    const currentTheme = localStorage.getItem('theme') || 'dark-mode';
+    const newTheme = currentTheme === 'dark-mode' ? 'light-mode' : 'dark-mode';
+    setTheme(newTheme);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme') || 'dark-mode';
+    setTheme(savedTheme);
+});
