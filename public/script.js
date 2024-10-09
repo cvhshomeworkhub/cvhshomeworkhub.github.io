@@ -1,9 +1,24 @@
-// Not at the moment --> https://docs.google.com/document/d/1aTY8vtHXxVROZyldSZ051JbU3wNq1N7ZW0g1w1fj1Wg/edit?usp=sharing
+// Theme handling
+function setTheme(theme) {
+    document.body.className = theme;
+    localStorage.setItem('theme', theme);
+}
 
-const darkModeBtn = document.getElementById('darkModeBtn');
+function toggleTheme() {
+    const currentTheme = document.body.className;
+    const newTheme = currentTheme === 'light-mode' ? '' : 'light-mode';
+    setTheme(newTheme);
+}
+
+// Initialize theme on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme') || '';
+    setTheme(savedTheme);
+});
+
+// Password handling
 let currentAssignmentId = '';
 
-// Password configurations
 const passwordConfigs = {
     'hughug2': {
         incorrect: 'random',
@@ -27,23 +42,22 @@ const passwordConfigs = {
     }
 };
 
-// Show password prompt
 function showPasswordPrompt(assignmentId) {
     const modal = document.getElementById('passwordPrompt');
     modal.classList.remove('hidden');
     currentAssignmentId = assignmentId;
-    document.getElementById('passwordInput').value = '';
-    document.getElementById('passwordInput').focus();
+    const passwordInput = document.getElementById('passwordInput');
+    passwordInput.value = '';
+    passwordInput.focus();
 }
 
-// Close password prompt
 function closePasswordPrompt() {
     const modal = document.getElementById('passwordPrompt');
     modal.classList.add('hidden');
 }
 
-// Handle password submission
-document.getElementById('submitPassword').addEventListener('click', () => {
+// Event Listeners
+document.getElementById('submitPassword')?.addEventListener('click', () => {
     const password = document.getElementById('passwordInput').value;
     const config = passwordConfigs[currentAssignmentId];
     
@@ -56,11 +70,6 @@ document.getElementById('submitPassword').addEventListener('click', () => {
     }
     
     closePasswordPrompt();
-});
-
-// Dark mode toggle
-darkModeBtn.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
 });
 
 // Close modal when clicking outside
@@ -76,20 +85,4 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closePasswordPrompt();
     }
-});
-
-function setTheme(theme) {
-    document.body.className = theme;
-    localStorage.setItem('theme', theme);
-}
-
-function toggleTheme() {
-    const currentTheme = localStorage.getItem('theme') || 'dark-mode';
-    const newTheme = currentTheme === 'dark-mode' ? 'light-mode' : 'dark-mode';
-    setTheme(newTheme);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('theme') || 'dark-mode';
-    setTheme(savedTheme);
 });
