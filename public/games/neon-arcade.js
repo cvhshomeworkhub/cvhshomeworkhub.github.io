@@ -65,7 +65,7 @@ class Obstacle {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.type = type; // 'wall', 'shield', 'moving'
+        this.type = type; // 'wall', 'shield', 'moving', 'exit'
         this.dx = type === 'moving' ? 2 : 0;
     }
 
@@ -79,9 +79,10 @@ class Obstacle {
     }
 
     draw(ctx) {
-        ctx.fillStyle = this.type === 'shield' ? '#00ff00' : '#ffffff';
+        ctx.fillStyle = this.type === 'shield' ? '#00ff00' : 
+                        this.type === 'exit' ? '#ffff00' : '#ffffff';
         ctx.shadowBlur = 20;
-        ctx.shadowColor = this.type === 'shield' ? '#00ff00' : '#ffffff';
+        ctx.shadowColor = ctx.fillStyle;
         ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.shadowBlur = 0;
     }
@@ -97,16 +98,25 @@ class Game {
         this.lavaSpeed = 0.5;
         this.score = 0;
         this.gameOver = false;
+        this.currentZone = 1;
+        this.totalZones = 3;
+        this.lavaStartTime = 3000; // 3 seconds delay
+        this.lavaStarted = false;
         this.init();
     }
 
     init() {
         this.generateLevel();
         this.setupControls();
+        setTimeout(() => {
+            this.lavaStarted = true;
+        }, this.lavaStartTime);
         this.animate();
     }
 
     generateLevel() {
+        this.obstacles = [];
+
         // Generate walls
         for (let i = 0; i < 10; i++) {
             this.obstacles.push(new Obstacle(
@@ -142,6 +152,16 @@ class Game {
                 'moving'
             ));
         }
+
+        // Generate exit
+        this.obstacles.push(new Obstacle(
+            this,
+            this.canvas.width - 30,
+            0,
+            30,
+            50,
+            'exit'
+        ));
     }
 
     setupControls() {
@@ -185,18 +205,22 @@ class Game {
                     // Push the player back
                     this.player.x -= this.player.dx;
                     this.player.y -= this.player.dy;
+                } else if (obstacle.type === 'exit') {
+                    this.nextZone();
                 }
             }
         });
 
         // Update lava
-        this.lavaHeight += this.lavaSpeed;
-        if (this.player.y + this.player.size > this.canvas.height - this.lavaHeight) {
-            if (this.player.hasShield) {
-                this.player.hasShield = false;
-                this.player.y = this.canvas.height - this.lavaHeight - this.player.size;
-            } else {
-                this.endGame();
+        if (this.lavaStarted) {
+            this.lavaHeight += this.lavaSpeed;
+            if (this.player.y + this.player.size > this.canvas.height - this.lavaHeight) {
+                if (this.player.hasShield) {
+                    this.player.hasShield = false;
+                    this.player.y = this.canvas.height - this.lavaHeight - this.player.size;
+                } else {
+                    this.endGame();
+                }
             }
         }
 
@@ -222,10 +246,18 @@ class Game {
         this.ctx.fillRect(0, this.canvas.height - this.lavaHeight, this.canvas.width, this.lavaHeight);
         this.ctx.shadowBlur = 0;
 
-        // Draw score
+        // Draw score and zone
         this.ctx.fillStyle = '#00ffff';
         this.ctx.font = '20px Arial';
         this.ctx.fillText(`Score: ${Math.floor(this.score / 60)}`, 10, 30);
+        this.ctx.fillText(`Zone: ${this.currentZone}/${this.totalZones}`, this.canvas.width - 100, 30);
+
+        // Draw lava countdown
+        if (!this.lavaStarted) {
+            this.ctx.fillStyle = '#ff0000';
+            this.ctx.font = '40px Arial';
+            this.ctx.fillText(`Lava in: ${Math.ceil(this.lavaStartTime / 1000)}`, this.canvas.width / 2 - 70, this.canvas.height / 2);
+        }
     }
 
     animate() {
@@ -241,10 +273,36 @@ class Game {
                player.y + player.size > obstacle.y;
     }
 
+    nextZone() {
+        this.currentZone++;
+        if (this.currentZone > this.totalZones) {
+            this.winGame();
+        } else {
+            this.player.x = this.canvas.width / 2 - this.player.size / 2;
+            this.player.y = this.canvas.height - this.player.size - 10;
+            this.lavaHeight = 0;
+            this.lavaSpeed += 0.2; // Increase difficulty
+            this.generateLevel();
+            this.lavaStarted = false;
+            setTimeout(() => {
+                this.lavaStarted = true;
+            }, this.lavaStartTime);
+        }
+    }
+
+    winGame() {
+        this.gameOver = true;
+        const finalScore = Math.floor(this.score / 60);
+        document.getElementById('finalScore').textContent = finalScore;
+        document.getElementById('gameOverText').textContent = "You Win!";
+        document.getElementById('gameOver').style.display = 'block';
+    }
+
     endGame() {
         this.gameOver = true;
         const finalScore = Math.floor(this.score / 60);
         document.getElementById('finalScore').textContent = finalScore;
+        document.getElementById('gameOverText').textContent = "Game Over!";
         document.getElementById('gameOver').style.display = 'block';
     }
 
@@ -252,10 +310,16 @@ class Game {
         this.gameOver = false;
         this.score = 0;
         this.lavaHeight = 0;
+        this.lavaSpeed = 0.5;
+        this.currentZone = 1;
         this.player = new Player(this);
         this.obstacles = [];
+        this.lavaStarted = false;
         this.generateLevel();
         document.getElementById('gameOver').style.display = 'none';
+        setTimeout(() => {
+            this.lavaStarted = true;
+        }, this.lavaStartTime);
     }
 }
 
