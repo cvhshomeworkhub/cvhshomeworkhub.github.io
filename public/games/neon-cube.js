@@ -52,14 +52,45 @@ class Cube {
             y: this.getRandomSpeed()
         };
         this.possessed = false;
+        this.passingSpeed = 15;
+        this.isPassing = false;
+        this.targetX = 0;
+        this.targetY = 0;
     }
 
     getRandomSpeed() {
         return (Math.random() * 6 - 3);
     }
 
+    startPass(startX, startY, targetX, targetY) {
+        this.isPassing = true;
+        this.x = startX;
+        this.y = startY;
+        this.targetX = targetX;
+        this.targetY = targetY;
+        
+        // Calculate passing velocity
+        const dx = targetX - startX;
+        const dy = targetY - startY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        this.velocity.x = (dx / distance) * this.passingSpeed;
+        this.velocity.y = (dy / distance) * this.passingSpeed;
+    }
+
     update(canvas) {
-        if (!this.possessed) {
+        if (this.isPassing) {
+            // Update position during pass
+            this.x += this.velocity.x;
+            this.y += this.velocity.y;
+
+            // Check if pass is complete
+            const dx = this.targetX - this.x;
+            const dy = this.targetY - this.y;
+            const distanceToTarget = Math.sqrt(dx * dx + dy * dy);
+            if (distanceToTarget < 10) {
+                this.isPassing = false;
+            }
+        } else if (!this.possessed) {
             this.x += this.velocity.x;
             this.y += this.velocity.y;
 
@@ -80,6 +111,18 @@ class Cube {
         ctx.shadowBlur = 30;
         ctx.shadowColor = '#ffff00';
         ctx.fillRect(this.x, this.y, this.size, this.size);
+        
+        // Draw passing trail if cube is being passed
+        if (this.isPassing) {
+            ctx.beginPath();
+            ctx.strokeStyle = '#ffff00';
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = '#ffff00';
+            ctx.moveTo(this.x + this.size/2, this.y + this.size/2);
+            ctx.lineTo(this.targetX + this.size/2, this.targetY + this.size/2);
+            ctx.stroke();
+        }
+        
         ctx.shadowBlur = 0;
     }
 }
@@ -109,6 +152,8 @@ class Game {
         this.possessionTime = 0;
         this.possessingTeam = null;
         this.gameOver = false;
+        this.lastActivePlayer1 = 0;
+        this.lastActivePlayer2 = 0;
 
         this.setupControls();
         this.animate();
@@ -119,19 +164,53 @@ class Game {
             this.keys.add(e.code);
 
             // Team 1 player switching
-            if (e.code === 'Digit1') this.activePlayer1 = 0;
-            if (e.code === 'Digit2') this.activePlayer1 = 1;
-            if (e.code === 'Digit3') this.activePlayer1 = 2;
+            if (e.code === 'Digit1' || e.code === 'Digit2' || e.code === 'Digit3') {
+                const newActive = parseInt(e.key) - 1;
+                if (newActive !== this.activePlayer1) {
+                    this.handlePlayerSwitch(1, newActive);
+                    this.activePlayer1 = newActive;
+                }
+            }
 
             // Team 2 player switching
-            if (e.code === 'Digit8') this.activePlayer2 = 0;
-            if (e.code === 'Digit9') this.activePlayer2 = 1;
-            if (e.code === 'Digit0') this.activePlayer2 = 2;
+            if (e.code === 'Digit8' || e.code === 'Digit9' || e.code === 'Digit0') {
+                const newActive = e.code === 'Digit0' ? 2 : parseInt(e.key) - 8;
+                if (newActive !== this.activePlayer2) {
+                    this.handlePlayerSwitch(2, newActive);
+                    this.activePlayer2 = newActive;
+                }
+            }
         });
 
         window.addEventListener('keyup', (e) => {
             this.keys.delete(e.code);
         });
+    }
+
+    handlePlayerSwitch(team, newActive) {
+        const players = team === 1 ? this.team1 : this.team2;
+        const oldActive = team === 1 ? this.activePlayer1 : this.activePlayer2;
+        
+        // Check if old active player had the cube
+        if (players[oldActive].hasCube && !this.cube.isPassing) {
+            // Start pass to new active player
+            const startX = players[oldActive].x + players[oldActive].width/2 - this.cube.size/2;
+            const startY = players[oldActive].y + players[oldActive].height/2 - this.cube.size/2;
+            const targetX = players[newActive].x + players[newActive].width/2 - this.cube.size/2;
+            const targetY = players[newActive].y + players[newActive].height/2 - this.cube.size/2;
+            
+            players[oldActive].hasCube = false;
+            this.cube.startPass(startX, startY, targetX, targetY);
+            
+            // After a short delay, give the cube to the new player
+            setTimeout(() => {
+                if (!this.gameOver) {
+                    this.cube.isPassing = false;
+                    players[newActive].hasCube = true;
+                    this.cube.possessed = true;
+                }
+            }, 200);
+        }
     }
 
     handleInput() {
@@ -157,6 +236,8 @@ class Game {
     }
 
     checkCubeInteraction() {
+        if (this.cube.isPassing) return;
+
         const checkDistance = (player) => {
             const dx = (player.x + player.width/2) - (this.cube.x + this.cube.size/2);
             const dy = (player.y + player.height/2) - (this.cube.y + this.cube.size/2);
@@ -196,7 +277,7 @@ class Game {
         this.checkCubeInteraction();
 
         // Update possession time
-        if (this.cube.possessed) {
+        if (this.cube.possessed && !this.cube.isPassing) {
             this.possessionTime += 1/60; // Assuming 60 FPS
             if (this.possessionTime >= 14) {
                 this.endGame(this.possessingTeam);
