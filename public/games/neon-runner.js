@@ -41,7 +41,7 @@ class Obstacle {
     constructor(canvas) {
         this.canvas = canvas;
         this.width = 20;
-        this.height = Math.random() * 100 - 200;
+        this.height = Math.random() * 100 - 500;
         this.x = canvas.width;
         this.y = canvas.height - this.height - 10;
         this.speed = 5;
