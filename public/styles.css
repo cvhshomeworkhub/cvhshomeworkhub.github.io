@@ -9,6 +9,8 @@
     --accent-color: #00FFFF;     /* Cyan kept for glow effects */
     --background-dark: #000000;
     --background-light: #FFFFFF;
+    --bg-color: #1a1a1a;
+    --text-color: #ffffff;
     --text-light: #FFFFFF;
     --text-dark: #000000;
     --glass-background: rgba(0, 0, 0, 0.5);
@@ -16,7 +18,7 @@
     --transition-speed: 0.3s;
 }
 
-* {
+{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -30,9 +32,10 @@ body {
     margin: 0;
     padding: 0;
     background: linear-gradient(135deg, #000000, #0A192F);
-    color: var(--text-light);
+    background-color: var(--bg-color);
+    color: var(--text-color);
     min-height: 100vh;
-    transition: all var(--transition-speed) ease;
+    transition: background-color 0.3s, color 0.3s;
     line-height: 1.6;
 }
 
@@ -146,6 +149,7 @@ nav {
 
 .dropdown {
     position: relative;
+    display: inline-block;
 }
 
 .dropbtn {
@@ -159,10 +163,16 @@ nav {
 .dropdown-content {
     display: none;
     position: absolute;
-    min-width: 200px;
-    z-index: 1;
     top: 100%;
+    min-width: 200px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    top: 100%;
+    left: 0;
     right: 0;
+    border-radius: 8px;
+    overflow: hidden;
     animation: fadeIn var(--transition-speed) ease;
 }
 
@@ -443,6 +453,11 @@ body.light-mode .theme-toggle {
     border-color: var(--text-dark);
 }
 
+.light-mode {
+    --bg-color: #ffffff;
+    --text-color: #1a1a1a;
+}
+
 /* ==========================================================================
    Responsive Design
    ========================================================================== */
@@ -490,3 +505,24 @@ body.light-mode .theme-toggle {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* Games page layout fixes */
+.games-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.game-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem;
