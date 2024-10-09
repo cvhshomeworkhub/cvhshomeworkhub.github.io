@@ -244,18 +244,45 @@ class Game {
             return Math.sqrt(dx*dx + dy*dy) < 60;
         };
 
-        // Check for cube possession
-        [...this.team1, ...this.team2].forEach(player => {
-            if (checkDistance(player)) {
-                if (!this.cube.possessed && 
-                    ((player.team === 1 && this.keys.has('KeyE')) || 
-                     (player.team === 2 && this.keys.has('KeyO')))) {
-                    this.cube.possessed = true;
-                    player.hasCube = true;
-                    this.possessingTeam = player.team;
+        // Check for stealing
+        if (this.cube.possessed) {
+            const currentHolder = [...this.team1, ...this.team2].find(player => player.hasCube);
+            const opposingTeam = currentHolder.team === 1 ? this.team2 : this.team1;
+            const stealButton = currentHolder.team === 1 ? 'KeyO' : 'KeyE';
+            
+            // Check if any opposing player is close enough to steal
+            opposingTeam.forEach(opponent => {
+                const dx = (opponent.x + opponent.width/2) - (currentHolder.x + currentHolder.width/2);
+                const dy = (opponent.y + opponent.height/2) - (currentHolder.y + currentHolder.height/2);
+                const distance = Math.sqrt(dx*dx + dy*dy);
+                
+                if (distance < 80 && this.keys.has(stealButton)) {  // Slightly larger radius for stealing
+                    // Steal the cube
+                    currentHolder.hasCube = false;
+                    opponent.hasCube = true;
+                    this.possessingTeam = opponent.team;
+                    this.possessionTime = 0;  // Reset possession timer
+                    
+                    // Add visual effect for stealing
+                    this.createStealEffect(opponent.x, opponent.y);
                 }
-            }
-        });
+            });
+        }
+
+        // Check for initial cube possession
+        if (!this.cube.possessed) {
+            [...this.team1, ...this.team2].forEach(player => {
+                if (checkDistance(player)) {
+                    if ((player.team === 1 && this.keys.has('KeyE')) || 
+                        (player.team === 2 && this.keys.has('KeyO'))) {
+                        this.cube.possessed = true;
+                        player.hasCube = true;
+                        this.possessingTeam = player.team;
+                        this.possessionTime = 0;
+                    }
+                }
+            });
+        }
 
         // Update cube position if possessed
         [...this.team1, ...this.team2].forEach(player => {
@@ -264,6 +291,20 @@ class Game {
                 this.cube.y = player.y + player.height/2 - this.cube.size/2;
             }
         });
+    }
+
+    // Add visual effect when stealing occurs
+    createStealEffect(x, y) {
+        const effect = {
+            x: x,
+            y: y,
+            radius: 0,
+            opacity: 1,
+            maxRadius: 60
+        };
+        
+        this.stealEffects = this.stealEffects || [];
+        this.stealEffects.push(effect);
     }
 
     update() {
@@ -285,7 +326,7 @@ class Game {
         }
     }
 
-    draw() {
+     draw() {
         // Clear canvas
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -297,8 +338,26 @@ class Game {
             this.ctx.fillRect(0, 0, width, 5);
         }
 
-        // Draw all game objects
-        [...this.team1, ...this.team2].forEach(player => player.draw(this.ctx));
+        // Draw steal effects
+        if (this.stealEffects) {
+            this.stealEffects.forEach((effect, index) => {
+                this.ctx.beginPath();
+                this.ctx.strokeStyle = `rgba(255, 255, 0, ${effect.opacity})`;
+                this.ctx.lineWidth = 2;
+                this.ctx.arc(effect.x, effect.y, effect.radius, 0, Math.PI * 2);
+                this.ctx.stroke();
+                
+                // Update effect
+                effect.radius += 3;
+                effect.opacity -= 0.05;
+                
+                // Remove completed effects
+                if (effect.radius >= effect.maxRadius) {
+                    this.stealEffects.splice(index, 1);
+                }
+            });
+        }
+         [...this.team1, ...this.team2].forEach(player => player.draw(this.ctx));
         this.cube.draw(this.ctx);
     }
 
