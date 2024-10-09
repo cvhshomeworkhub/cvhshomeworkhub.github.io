@@ -45,10 +45,17 @@ class Ball {
 
         // Paddle collision
         if (
-            (this.x - this.radius < game.paddle1.x + game.paddle1.width && this.y > game.paddle1.y && this.y < game.paddle1.y + game.paddle1.height) ||
-            (this.x + this.radius > game.paddle2.x && this.y > game.paddle2.y && this.y < game.paddle2.y + game.paddle2.height)
+            (this.x - this.radius < game.paddle1.x + game.paddle1.width && 
+             this.y > game.paddle1.y && 
+             this.y < game.paddle1.y + game.paddle1.height && 
+             this.dx < 0) ||
+            (this.x + this.radius > game.paddle2.x && 
+             this.y > game.paddle2.y && 
+             this.y < game.paddle2.y + game.paddle2.height && 
+             this.dx > 0)
         ) {
             this.dx *= -1.1; // Increase speed slightly on each hit
+            this.dy += (Math.random() - 0.5) * 4; // Add some randomness to y direction
         }
 
         // Score
@@ -175,12 +182,14 @@ class Game {
     }
 }
 
+let game;
+
 function startGame() {
-    window.game = new Game();
+    game = new Game();
 }
 
 function restartGame() {
-    window.game.restart();
+    game.restart();
 }
 
 window.onload = startGame;
