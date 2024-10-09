@@ -106,18 +106,21 @@ class Game {
     }
 
     setupControls() {
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'w') this.paddle1.dy = -this.paddle1.speed;
-            if (e.key === 's') this.paddle1.dy = this.paddle1.speed;
-            if (e.key === 'ArrowUp') this.paddle2.dy = -this.paddle2.speed;
-            if (e.key === 'ArrowDown') this.paddle2.dy = this.paddle2.speed;
-        });
+    document.addEventListener('keydown', (e) => {
+        console.log(`Key down: ${e.key}`);
+        if (e.key === 'w') this.paddle1.dy = -this.paddle1.speed;
+        if (e.key === 's') this.paddle1.dy = this.paddle1.speed;
+        if (e.key === 'ArrowUp') this.paddle2.dy = -this.paddle2.speed;
+        if (e.key === 'ArrowDown') this.paddle2.dy = this.paddle2.speed;
+    });
 
-        document.addEventListener('keyup', (e) => {
-            if (e.key === 'w' || e.key === 's') this.paddle1.dy = 0;
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') this.paddle2.dy = 0;
-        });
-    }
+    document.addEventListener('keyup', (e) => {
+        console.log(`Key up: ${e.key}`);
+        if (e.key === 'w' || e.key === 's') this.paddle1.dy = 0;
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') this.paddle2.dy = 0;
+    });
+}
+
 
     update() {
         if (this.gameOver) return;
