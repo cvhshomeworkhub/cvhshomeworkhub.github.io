@@ -532,3 +532,36 @@ body.light-mode .theme-toggle {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 255, 255, 0.2);
 }
+
+/* ==========================================================================
+   Glow Effects for DNA and mRNA Labels
+   ========================================================================== */
+.dna-label,
+.mrna-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 24px;
+    color: var(--text-light);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8),
+                 0 0 20px rgba(0, 255, 255, 0.6);
+    position: absolute;
+}
+
+.dna-label {
+    top: 80px; /* Adjust as needed */
+    left: 20px; /* Adjust as needed */
+}
+
+.mrna-label {
+    bottom: 80px; /* Adjust as needed */
+    left: 20px; /* Adjust as needed */
+}
+
+/* ==========================================================================
+   Canvas Styles
+   ========================================================================== */
+canvas {
+    border: 1px solid var(--text-light);
+    display: block;
+    margin: 20px auto;
+}
+
