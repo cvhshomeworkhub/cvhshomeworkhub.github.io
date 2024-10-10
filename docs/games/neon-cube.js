@@ -42,8 +42,8 @@ class Player {
 class Cube {
     constructor() {
         this.size = 30;
-        this.x = Math.random() * (800 - this.size);
-        this.y = Math.random() * (600 - this.size);
+        this.x = 400;
+        this.y = 300;
         this.velocity = { x: this.getRandomSpeed(), y: this.getRandomSpeed() };
         this.possessed = false;
         this.isPassing = false;
@@ -54,7 +54,7 @@ class Cube {
     }
 
     getRandomSpeed() {
-        return (Math.random() * 4 - 2); // Random speed between -2 and 2
+        return (Math.random() * 6 - 3);
     }
 
     startPass(startX, startY, targetX, targetY) {
@@ -73,8 +73,8 @@ class Cube {
     }
 
     teleport() {
-        this.x = Math.random() * (800 - this.size);
-        this.y = Math.random() * (600 - this.size);
+        this.x = Math.random() * (canvas.width - this.size);
+        this.y = Math.random() * (canvas.height - this.size);
         this.velocity = { x: this.getRandomSpeed(), y: this.getRandomSpeed() };
     }
 
@@ -125,7 +125,7 @@ class Game {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
-
+        
         // Create teams
         this.team1 = [
             new Player(100, 200, '#00ffff', 1, 1, { up: 'KeyW', down: 'KeyS', left: 'KeyA', right: 'KeyD', action: 'KeyE' }),
@@ -143,8 +143,6 @@ class Game {
         this.keys = new Set();
         this.activePlayer1 = 0;
         this.activePlayer2 = 0;
-        this.possessionTime = 0;
-        this.possessingTeam = null;
         this.gameOver = false;
 
         this.setupControls();
@@ -155,6 +153,7 @@ class Game {
         window.addEventListener('keydown', (e) => {
             this.keys.add(e.code);
             this.handlePlayerSwitch(e);
+            this.handleSteal();
         });
 
         window.addEventListener('keyup', (e) => {
@@ -167,7 +166,6 @@ class Game {
         if (['Digit1', 'Digit2', 'Digit3'].includes(e.code)) {
             const newActive = parseInt(e.key) - 1;
             if (newActive !== this.activePlayer1) {
-                this.handleSwitch(1, newActive);
                 this.activePlayer1 = newActive;
             }
         }
@@ -176,13 +174,9 @@ class Game {
         if (['Digit8', 'Digit9', 'Digit0'].includes(e.code)) {
             const newActive = e.code === 'Digit0' ? 2 : parseInt(e.key) - 8;
             if (newActive !== this.activePlayer2) {
-                this.handleSwitch(2, newActive);
                 this.activePlayer2 = newActive;
             }
         }
-
-        // Handle stealing
-        this.handleSteal();
     }
 
     handleSteal() {
@@ -200,44 +194,55 @@ class Game {
                     currentHolder.hasCube = false;
                     opponent.hasCube = true;
                     this.cube.possessed = true;
-                    this.possessingTeam = opponent.team;
-                    this.possessionTime = 0;
                 }
             });
         }
     }
 
-    handleSwitch(team, newActive) {
-        const players = team === 1 ? this.team1 : this.team2;
-        const oldActive = team === 1 ? this.activePlayer1 : this.activePlayer2;
+    movePlayers() {
+        this.team1.forEach(player => {
+            player.velocity.x = 0;
+            player.velocity.y = 0;
 
-        // Check if old active player had the cube
-        if (players[oldActive].hasCube && !this.cube.isPassing) {
-            const startX = players[oldActive].x + players[oldActive].width / 2 - this.cube.size / 2;
-            const startY = players[oldActive].y + players[oldActive].height / 2 - this.cube.size / 2;
-            const targetX = players[newActive].x + players[newActive].width / 2 - this.cube.size / 2;
-            const targetY = players[newActive].y + players[newActive].height / 2 - this.cube.size / 2;
-            this.cube.startPass(startX, startY, targetX, targetY);
-            players[oldActive].hasCube = false;
-        }
+            if (this.keys.has(player.controls.up)) player.velocity.y = -player.speed;
+            if (this.keys.has(player.controls.down)) player.velocity.y = player.speed;
+            if (this.keys.has(player.controls.left)) player.velocity.x = -player.speed;
+            if (this.keys.has(player.controls.right)) player.velocity.x = player.speed;
+        });
+
+        this.team2.forEach(player => {
+            player.velocity.x = 0;
+            player.velocity.y = 0;
+
+            if (this.keys.has(player.controls.up)) player.velocity.y = -player.speed;
+            if (this.keys.has(player.controls.down)) player.velocity.y = player.speed;
+            if (this.keys.has(player.controls.left)) player.velocity.x = -player.speed;
+            if (this.keys.has(player.controls.right)) player.velocity.x = player.speed;
+        });
+    }
+
+    update() {
+        this.movePlayers();
+        this.team1.forEach(player => player.update(this.canvas));
+        this.team2.forEach(player => player.update(this.canvas));
+        this.cube.update(this.canvas);
+    }
+
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.team1.forEach(player => player.draw(this.ctx));
+        this.team2.forEach(player => player.draw(this.ctx));
+        this.cube.draw(this.ctx);
     }
 
     animate() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // Update and draw players
-        [...this.team1, ...this.team2].forEach(player => {
-            player.update(this.canvas);
-            player.draw(this.ctx);
-        });
-
-        // Update and draw cube
-        this.cube.update(this.canvas);
-        this.cube.draw(this.ctx);
-
-        requestAnimationFrame(() => this.animate());
+        if (!this.gameOver) {
+            requestAnimationFrame(() => this.animate());
+            this.update();
+            this.draw();
+        }
     }
 }
 
-// Initialize the game
 const game = new Game();
