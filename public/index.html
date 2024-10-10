@@ -41,17 +41,23 @@
     </main>
 
     <script>
-        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-iduA-I49rQ0XAikwc_UE_bDPBKzKeFUB7J-7J7FZ1vGrKLHsGH8KUBlHu8kjbRZTkCy3teFwxEIL/pub?output=csv';
+        // Replace these with your actual values
+        const SHEET_ID = 'YOUR_SHEET_ID';
+        const API_KEY = 'YOUR_API_KEY';
+        const SHEET_NAME = 'Sheet1';  // Change this if your sheet has a different name
 
         async function fetchAssignments() {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+            
             try {
-                const response = await fetch(SHEET_URL);
-                const csvText = await response.text();
+                const response = await fetch(url);
+                const data = await response.json();
                 
-                // Parse CSV
-                const rows = csvText.split('\n')
-                    .map(row => row.split(','))
-                    .slice(1); // Skip header row
+                if (!data.values || data.values.length === 0) {
+                    throw new Error('No data found in sheet');
+                }
+
+                const rows = data.values.slice(1); // Skip header row
                 
                 // Sort assignments by due date
                 rows.sort((a, b) => new Date(a[1]) - new Date(b[1]));
@@ -69,7 +75,7 @@
                         container.appendChild(currentRow);
                     }
 
-                    const [subject, dueDate, title] = row.map(cell => cell.trim().replace(/^["']|["']$/g, ''));
+                    const [subject, dueDate, title] = row;
                     const formattedDate = new Date(dueDate).toLocaleDateString('en-US', {
                         month: 'long',
                         day: 'numeric',
