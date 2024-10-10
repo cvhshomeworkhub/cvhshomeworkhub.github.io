@@ -103,19 +103,13 @@
                     
                     for (let j = i; j < i + 3 && j < rows.length; j++) {
                         const [subject, dueDate, title] = rows[j];
-                        const [year, month, day] = dueDate.split('-'); // Split the date string
-                        const formattedDate = new Date(Date.UTC(year, month - 1, day)).toLocaleDateString('en-US', {
-                            month: 'long',
-                            day: 'numeric',
-                            year: 'numeric'
-                        });
                         
                         const card = document.createElement('div');
                         card.className = 'assignment-card glass-effect';
                         card.innerHTML = `
                             <div class="assignment-header">
                                 <h3 class="assignment-title">${subject}</h3>
-                                <span class="due-date">${formattedDate}</span>
+                                <span class="due-date">${dueDate}</span> <!-- Use dueDate directly -->
                             </div>
                             <div class="assignment-content">
                                 <p class="assignment-details">${title}</p>
