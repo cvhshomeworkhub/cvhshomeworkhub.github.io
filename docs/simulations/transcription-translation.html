@@ -6,55 +6,143 @@
     <title>Transcription & Translation Simulation</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #1a1a2e;
-            color: #e0e0e0;
+            font-family: 'Orbitron', sans-serif;
+            background-color: #000;
+            color: #fff;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
         .container {
             text-align: center;
-            max-width: 800px;
+            max-width: 1000px;
             padding: 20px;
         }
         canvas {
-            border: 2px solid #16213e;
-            background-color: #0f3460;
+            border: 2px solid #0ff;
+            background-color: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
         }
         button {
-            background-color: #e94560;
-            color: white;
-            border: none;
+            background-color: transparent;
+            color: #0ff;
+            border: 2px solid #0ff;
             padding: 10px 20px;
             margin: 10px;
             cursor: pointer;
             font-size: 16px;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
         }
         button:hover {
-            background-color: #ff6b6b;
+            background-color: #0ff;
+            color: #000;
+            box-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
         }
         #explanation {
             margin-top: 20px;
             text-align: left;
+            background-color: rgba(0, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #0ff;
+        }
+        h1, h2 {
+            text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
+        }
+        .concept-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .concept {
+            background-color: rgba(0, 255, 255, 0.1);
+            border: 1px solid #0ff;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .concept:hover {
+            background-color: #0ff;
+            color: #000;
+            box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+        }
+        #dna-strand, #mrna-strand, #trna-strand {
+            height: 50px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        #dna-strand::before, #mrna-strand::before, #trna-strand::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+            animation: shine 2s infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Transcription & Translation Simulation</h1>
+        <div id="dna-strand"></div>
+        <div id="mrna-strand"></div>
+        <div id="trna-strand"></div>
         <canvas id="simulationCanvas" width="800" height="400"></canvas>
         <div>
             <button id="startTranscription">Start Transcription</button>
             <button id="startTranslation">Start Translation</button>
             <button id="reset">Reset</button>
         </div>
+        <div class="concept-list">
+            <div class="concept">Transcription</div>
+            <div class="concept">DNA Polymerase</div>
+            <div class="concept">RNA</div>
+            <div class="concept">Messenger RNA</div>
+            <div class="concept">Ribosomal RNA</div>
+            <div class="concept">Transfer RNA</div>
+            <div class="concept">Promoters</div>
+            <div class="concept">Introns & Exons</div>
+            <div class="concept">Genetic Codes</div>
+            <div class="concept">ATCG Bases</div>
+            <div class="concept">Codons</div>
+            <div class="concept">Reading Codons</div>
+            <div class="concept">Start and Stop Codons</div>
+            <div class="concept">Translation</div>
+            <div class="concept">Ribosomes</div>
+            <div class="concept">Anticodons</div>
+            <div class="concept">Amino Acids</div>
+            <div class="concept">Polypeptides</div>
+            <div class="concept">Central Dogma of Molecular Biology</div>
+        </div>
         <div id="explanation">
-            <h2>Explanation</h2>
-            <p>This simulation demonstrates the processes of transcription and translation, key steps in <strong>the Central Dogma of Molecular Biology</strong>.</p>
+            <h2>The Central Dogma of Molecular Biology</h2>
+            <p>This simulation visualizes the core processes of molecular biology: DNA transcription and RNA translation. These processes form the central dogma of molecular biology, describing the flow of genetic information within a biological system.</p>
+            <p>Key components:</p>
+            <ul>
+                <li><strong>DNA:</strong> The genetic blueprint, composed of ATCG bases.</li>
+                <li><strong>Transcription:</strong> DNA is transcribed into messenger RNA (mRNA) by RNA polymerase.</li>
+                <li><strong>mRNA:</strong> Carries the genetic information from DNA to the ribosome.</li>
+                <li><strong>Translation:</strong> mRNA is translated into a polypeptide chain by ribosomes.</li>
+                <li><strong>tRNA:</strong> Transfer RNA brings amino acids to the ribosome during translation.</li>
+                <li><strong>Codons:</strong> Three-base sequences in mRNA that code for specific amino acids.</li>
+            </ul>
         </div>
     </div>
     <script src="transcription-translation.js"></script>
