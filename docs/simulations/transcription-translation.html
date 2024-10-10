@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcription & Translation Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+        }
+        canvas {
+            border: 2px solid #16213e;
+            background-color: #0f3460;
+        }
+        button {
+            background-color: #e94560;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #ff6b6b;
+        }
+        #explanation {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Transcription & Translation Simulation</h1>
+        <canvas id="simulationCanvas" width="800" height="400"></canvas>
+        <div>
+            <button id="startTranscription">Start Transcription</button>
+            <button id="startTranslation">Start Translation</button>
+            <button id="reset">Reset</button>
+        </div>
+        <div id="explanation">
+            <h2>Explanation</h2>
+            <p>This simulation demonstrates the processes of transcription and translation, key steps in <strong>the Central Dogma of Molecular Biology</strong>.</p>
+        </div>
+    </div>
+    <script src="transcription-translation.js"></script>
+</body>
+</html>
