@@ -92,7 +92,7 @@ class RNAPolymerase {
     constructor() {
         this.x = 0;
         this.y = 75;
-        this.width = 120;
+        this.width = 300;
         this.height = 150;
         this.speed = 1; // Slower speed
     }
@@ -174,7 +174,7 @@ class Transcription {
         // Draw labels with glow effect
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // Glowing effect
         this.ctx.font = '24px Orbitron';
-        this.ctx.fillText('DNA', 10, 120);
+        this.ctx.fillText('DNA', 10, 60);
         this.ctx.fillText('mRNA', 10, 370);
 
         // Draw codons below mRNA strand
