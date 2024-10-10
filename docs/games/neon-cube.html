@@ -4,73 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neon Cube</title>
+    <link rel="stylesheet" href="../styles.css">
     <style>
-        body {
-            margin: 0;
-            background: #111;
-            color: white;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
+        #gameCanvas {
+            border: 2px solid var(--accent-color);
+            background: black;
+            box-shadow: 0 0 20px var(--accent-color);
+            margin: 20px auto;
+            display: block;
         }
-
+        
         .game-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center;
             padding: 20px;
         }
-
-        #gameCanvas {
-            border: 2px solid #00ffff;
-            background: black;
-            box-shadow: 0 0 20px #00ffff;
+        
+        .game-stats {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-color);
+            margin: 20px 0;
+            text-shadow: 0 0 10px var(--accent-color);
         }
-
-        .controls-container {
-            display: flex;
-            justify-content: space-between;
-            width: 800px;
-            margin-top: 20px;
-        }
-
-        .team-controls {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #00ffff;
-        }
-
-        .team-controls:last-child {
-            border-color: #ff00ff;
-        }
-
-        h3 {
-            margin: 0 0 10px 0;
-        }
-
-        .team1 h3 {
-            color: #00ffff;
-        }
-
-        .team2 h3 {
-            color: #ff00ff;
-        }
-
-        .control-key {
-            display: inline-block;
-            padding: 5px 10px;
-            background: rgba(33, 150, 243, 0.3);
-            border: 1px solid #00ffff;
-            border-radius: 5px;
-            color: white;
-            margin: 2px;
-        }
-
-        .team2 .control-key {
-            border-color: #ff00ff;
-        }
-
-        #gameOver {
+        
+        .game-over {
             display: none;
             position: fixed;
             top: 50%;
@@ -78,53 +34,50 @@
             transform: translate(-50%, -50%);
             background: rgba(0, 0, 0, 0.9);
             padding: 20px;
-            text-align: center;
             border-radius: 10px;
-            border: 2px solid #00ffff;
-            box-shadow: 0 0 20px #00ffff;
-        }
-
-        button {
-            background: #00ffff;
-            color: black;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background: #ff00ff;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-color);
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
-        
-        <div class="controls-container">
-            <div class="team-controls team1">
-                <h3>Team 1 Controls</h3>
-                <div>Movement: <span class="control-key">W</span><span class="control-key">A</span><span class="control-key">S</span><span class="control-key">D</span></div>
-                <div>Catch Cube: <span class="control-key">E</span></div>
-                <div>Switch Players: <span class="control-key">1</span><span class="control-key">2</span><span class="control-key">3</span></div>
+    <header class="glass-header">
+        <div class="logo-container">
+            <h1 class="glow-text">Neon Arcade</h1>
+        </div>
+        <nav>
+            <a href="../index.html" class="nav-link">Home</a>
+            <a href="../games.html" class="nav-link">My Games</a>
+        </nav>
+    </header>
+    <main class="fade-in">
+        <div class="game-container">
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+            
+            <div class="controls-container">
+                <div class="team-controls team1">
+                    <h3>Team 1 Controls</h3>
+                    <div>Movement: <span class="control-key">W</span><span class="control-key">A</span><span class="control-key">S</span><span class="control-key">D</span></div>
+                    <div>Catch Cube: <span class="control-key">E</span></div>
+                    <div>Switch Players: <span class="control-key">1</span><span class="control-key">2</span><span class="control-key">3</span></div>
+                </div>
+                <div class="team-controls team2">
+                    <h3>Team 2 Controls</h3>
+                    <div>Movement: <span class="control-key">I</span><span class="control-key">J</span><span class="control-key">K</span><span class="control-key">L</span></div>
+                    <div>Catch Cube: <span class="control-key">O</span></div>
+                    <div>Switch Players: <span class="control-key">8</span><span class="control-key">9</span><span class="control-key">0</span></div>
+                </div>
             </div>
-            <div class="team-controls team2">
-                <h3>Team 2 Controls</h3>
-                <div>Movement: <span class="control-key">I</span><span class="control-key">J</span><span class="control-key">K</span><span class="control-key">L</span></div>
-                <div>Catch Cube: <span class="control-key">O</span></div>
-                <div>Switch Players: <span class="control-key">8</span><span class="control-key">9</span><span class="control-key">0</span></div>
+    
+            <div id="gameOver">
+                <h2>Game Over!</h2>
+                <p id="winner"></p>
+                <button onclick="restartGame()">Play Again</button>
             </div>
         </div>
-
-        <div id="gameOver">
-            <h2>Game Over!</h2>
-            <p id="winner"></p>
-            <button onclick="restartGame()">Play Again</button>
-        </div>
-    </div>
+    </main>
+    <script src="../script.js"></script>
     <script src="neon-cube.js"></script>
 </body>
 </html>
