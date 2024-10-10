@@ -99,52 +99,78 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Transcription & Translation Simulation</h1>
-        <div id="dna-strand"></div>
-        <div id="mrna-strand"></div>
-        <div id="trna-strand"></div>
-        <canvas id="simulationCanvas" width="800" height="400"></canvas>
-        <div>
-            <button id="startTranscription">Start Transcription</button>
-            <button id="startTranslation">Start Translation</button>
-            <button id="reset">Reset</button>
+    <header class="glass-header">
+        <div class="logo-container">
+            <h1 class="glow-text">Simulations</h1>
         </div>
-        <div class="concept-list">
-            <div class="concept">Transcription</div>
-            <div class="concept">DNA Polymerase</div>
-            <div class="concept">RNA</div>
-            <div class="concept">Messenger RNA</div>
-            <div class="concept">Ribosomal RNA</div>
-            <div class="concept">Transfer RNA</div>
-            <div class="concept">Promoters</div>
-            <div class="concept">Introns & Exons</div>
-            <div class="concept">Genetic Codes</div>
-            <div class="concept">ATCG Bases</div>
-            <div class="concept">Codons</div>
-            <div class="concept">Reading Codons</div>
-            <div class="concept">Start and Stop Codons</div>
-            <div class="concept">Translation</div>
-            <div class="concept">Ribosomes</div>
-            <div class="concept">Anticodons</div>
-            <div class="concept">Amino Acids</div>
-            <div class="concept">Polypeptides</div>
-            <div class="concept">Central Dogma of Molecular Biology</div>
+        <nav>
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="simulations.html" class="nav-link">Simulations</a>
+            <div class="dropdown">
+                <button class="dropbtn glass-effect">Subject Study</button>
+                <div class="dropdown-content glass-effect">
+                    <a href="subject-pages/human-geography.html">Human Geography</a>
+                    <a href="subject-pages/biology.html">Biology</a>
+                    <a href="subject-pages/theater.html">Theater</a>
+                    <a href="subject-pages/tech-theater.html">Tech Theater</a>
+                    <a href="subject-pages/art.html">Art</a>
+                    <a href="subject-pages/english.html">English</a>
+                    <a href="subject-pages/algebra2.html">Algebra 2</a>
+                    <a href="subject-pages/geometry.html">Geometry</a>
+                    <a href="subject-pages/computer-science.html">Computer Science</a>
+                    <a href="subject-pages/pe.html">PE</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="fade-in">
+        <div class="container">
+            <h1>Transcription & Translation Simulation</h1>
+            <div id="dna-strand"></div>
+            <div id="mrna-strand"></div>
+            <div id="trna-strand"></div>
+            <canvas id="simulationCanvas" width="800" height="400"></canvas>
+            <div>
+                <button id="startTranscription">Start Transcription</button>
+                <button id="startTranslation">Start Translation</button>
+                <button id="reset">Reset</button>
+            </div>
+            <div class="concept-list">
+                <div class="concept">Transcription</div>
+                <div class="concept">DNA Polymerase</div>
+                <div class="concept">RNA</div>
+                <div class="concept">Messenger RNA</div>
+                <div class="concept">Ribosomal RNA</div>
+                <div class="concept">Transfer RNA</div>
+                <div class="concept">Promoters</div>
+                <div class="concept">Introns & Exons</div>
+                <div class="concept">Genetic Codes</div>
+                <div class="concept">Nucleotide Bases</div>
+                <div class="concept">Codons</div>
+                <div class="concept">Reading Codons</div>
+                <div class="concept">Start and Stop Codons</div>
+                <div class="concept">Translation</div>
+                <div class="concept">Ribosomes</div>
+                <div class="concept">Anticodons</div>
+                <div class="concept">Amino Acids</div>
+                <div class="concept">Polypeptides</div>
+                <div class="concept">Central Dogma of Molecular Biology</div>
+            </div>
+            <div id="explanation">
+                <h2>The Central Dogma of Molecular Biology</h2>
+                <p>This simulation visualizes the core processes of molecular biology: DNA transcription and RNA translation. These processes form the central dogma of molecular biology, describing the flow of genetic information within a biological system.</p>
+                <p>Key components:</p>
+                <ul>
+                    <li><strong>DNA:</strong> The genetic blueprint, composed of ATCG bases.</li>
+                    <li><strong>Transcription:</strong> DNA is transcribed into messenger RNA (mRNA) by RNA polymerase.</li>
+                    <li><strong>mRNA:</strong> Carries the genetic information from DNA to the ribosome.</li>
+                    <li><strong>Translation:</strong> mRNA is translated into a polypeptide chain by ribosomes.</li>
+                    <li><strong>tRNA:</strong> Transfer RNA brings amino acids to the ribosome during translation.</li>
+                    <li><strong>Codons:</strong> Three-base sequences in mRNA that code for specific amino acids.</li>
+                </ul>
+            </div>
         </div>
-        <div id="explanation">
-            <h2>The Central Dogma of Molecular Biology</h2>
-            <p>This simulation visualizes the core processes of molecular biology: DNA transcription and RNA translation. These processes form the central dogma of molecular biology, describing the flow of genetic information within a biological system.</p>
-            <p>Key components:</p>
-            <ul>
-                <li><strong>DNA:</strong> The genetic blueprint, composed of ATCG bases.</li>
-                <li><strong>Transcription:</strong> DNA is transcribed into messenger RNA (mRNA) by RNA polymerase.</li>
-                <li><strong>mRNA:</strong> Carries the genetic information from DNA to the ribosome.</li>
-                <li><strong>Translation:</strong> mRNA is translated into a polypeptide chain by ribosomes.</li>
-                <li><strong>tRNA:</strong> Transfer RNA brings amino acids to the ribosome during translation.</li>
-                <li><strong>Codons:</strong> Three-base sequences in mRNA that code for specific amino acids.</li>
-            </ul>
-        </div>
-    </div>
+    </main>
     <script src="transcription-translation.js"></script>
 </body>
 </html>
