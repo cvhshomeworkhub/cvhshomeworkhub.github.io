@@ -25,6 +25,50 @@
             margin: 20px 0;
             text-shadow: 0 0 10px var(--accent-color);
         }
+
+        .controls-container {
+            display: flex;
+            justify-content: space-between;
+            width: 800px;
+            margin-top: 20px;
+        }
+
+        .team-controls {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #00ffff;
+        }
+
+        .team-controls:last-child {
+            border-color: #ff00ff;
+        }
+
+        h3 {
+            margin: 0 0 10px 0;
+        }
+
+        .team1 h3 {
+            color: #00ffff;
+        }
+
+        .team2 h3 {
+            color: #ff00ff;
+        }
+
+        .control-key {
+            display: inline-block;
+            padding: 5px 10px;
+            background: rgba(33, 150, 243, 0.3);
+            border: 1px solid #00ffff;
+            border-radius: 5px;
+            color: white;
+            margin: 2px;
+        }
+
+        .team2 .control-key {
+            border-color: #ff00ff;
+        }
         
         .game-over {
             display: none;
@@ -38,6 +82,21 @@
             border: 2px solid var(--accent-color);
             box-shadow: 0 0 20px var(--accent-color);
             z-index: 1000;
+        }
+
+        button {
+            background: #00ffff;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #ff00ff;
         }
     </style>
 </head>
