@@ -3,7 +3,7 @@ class Nucleotide {
         this.type = type;
         this.x = x;
         this.y = y;
-        this.radius = 20;
+        this.radius = 30;
         this.color = this.getColor();
         this.targetY = y;
     }
@@ -25,8 +25,8 @@ class Nucleotide {
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = 'black';
-        ctx.font = '16px Arial';
-        ctx.fillText(this.type, this.x - 6, this.y + 6);
+        ctx.font = '24px Arial';
+        ctx.fillText(this.type, this.x - 8, this.y + 8);
     }
 
     update() {
@@ -41,13 +41,14 @@ class DNAStrand {
         this.complementary = [];
         this.startX = startX;
         this.startY = startY;
+        this.spacing = 80;
         this.initializeStrand();
     }
 
     initializeStrand() {
         for (let i = 0; i < this.sequence.length; i++) {
-            this.nucleotides.push(new Nucleotide(this.sequence[i], this.startX + i * 60, this.startY));
-            this.complementary.push(new Nucleotide(this.getComplementary(this.sequence[i]), this.startX + i * 60, this.startY + 60));
+            this.nucleotides.push(new Nucleotide(this.sequence[i], this.startX + i * this.spacing, this.startY));
+            this.complementary.push(new Nucleotide(this.getComplementary(this.sequence[i]), this.startX + i * this.spacing, this.startY + 80));
         }
     }
 
@@ -65,7 +66,6 @@ class DNAStrand {
         this.nucleotides.forEach(n => n.draw(ctx));
         this.complementary.forEach(n => n.draw(ctx));
         
-        // Draw lines connecting the strands
         ctx.strokeStyle = '#FFFFFF';
         for (let i = 0; i < this.nucleotides.length; i++) {
             ctx.beginPath();
@@ -77,8 +77,8 @@ class DNAStrand {
 
     unwind(index) {
         if (index < this.nucleotides.length) {
-            this.nucleotides[index].targetY -= 40;
-            this.complementary[index].targetY += 40;
+            this.nucleotides[index].targetY -= 50;
+            this.complementary[index].targetY += 50;
         }
     }
 
@@ -92,9 +92,9 @@ class RNAPolymerase {
     constructor() {
         this.x = 0;
         this.y = 0;
-        this.width = 80;
-        this.height = 100;
-        this.speed = 1;
+        this.width = 120;
+        this.height = 150;
+        this.speed = 2;
     }
 
     draw(ctx) {
@@ -106,9 +106,9 @@ class RNAPolymerase {
         ctx.closePath();
         ctx.fill();
         ctx.fillStyle = 'black';
-        ctx.font = '16px Arial';
-        ctx.fillText('RNA', this.x + 10, this.y + 40);
-        ctx.fillText('Pol', this.x + 10, this.y + 60);
+        ctx.font = '24px Arial';
+        ctx.fillText('RNA', this.x + 20, this.y + 60);
+        ctx.fillText('Pol', this.x + 20, this.y + 90);
     }
 
     move() {
@@ -130,20 +130,26 @@ class Transcription {
 
     update() {
         this.dna.update();
-        if (this.transcriptionProgress < this.dnaSequence.length * 60) {
+        if (this.transcriptionProgress < this.dnaSequence.length * this.dna.spacing) {
             this.rnaPolymerase.move();
-            this.rnaPolymerase.y = 100;
+            this.rnaPolymerase.y = 75;
             
-            if (this.transcriptionProgress % 60 === 0) {
-                let index = this.transcriptionProgress / 60;
+            if (this.transcriptionProgress % this.dna.spacing === 0) {
+                let index = this.transcriptionProgress / this.dna.spacing;
                 this.dna.unwind(index);
                 let base = this.dnaSequence[index];
                 let complementaryRNA = base === 'T' ? 'U' : this.dna.getComplementary(base);
-                let newNucleotide = new Nucleotide(complementaryRNA, 50 + index * 60, 250);
-                newNucleotide.targetY = 250;
+                let newNucleotide = new Nucleotide(complementaryRNA, 50 + index * this.dna.spacing, 300);
+                newNucleotide.targetY = 300;
                 this.mRNA.push(newNucleotide);
             }
             this.transcriptionProgress++;
+        } else {
+            // Reset the simulation
+            this.transcriptionProgress = 0;
+            this.rnaPolymerase.x = 0;
+            this.mRNA = [];
+            this.dna = new DNAStrand(this.dnaSequence, 50, 150);
         }
         this.mRNA.forEach(n => n.update());
     }
@@ -164,15 +170,15 @@ class Transcription {
 
         // Draw labels
         this.ctx.fillStyle = 'white';
-        this.ctx.font = '20px Arial';
+        this.ctx.font = '24px Arial';
         this.ctx.fillText('DNA', 10, 180);
-        this.ctx.fillText('mRNA', 10, 280);
+        this.ctx.fillText('mRNA', 10, 330);
 
         // Draw codons
         if (this.mRNA.length >= 3) {
             for (let i = 0; i < Math.floor(this.mRNA.length / 3); i++) {
                 this.ctx.strokeStyle = 'white';
-                this.ctx.strokeRect(50 + i * 180, 230, 180, 40);
+                this.ctx.strokeRect(50 + i * this.dna.spacing * 3, 270, this.dna.spacing * 3, 60);
             }
         }
     }
