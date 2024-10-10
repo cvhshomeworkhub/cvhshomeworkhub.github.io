@@ -10,12 +10,12 @@ class Nucleotide {
 
     getColor() {
         switch(this.type) {
-            case 'A': return '#FF5733';
-            case 'T': return '#33FF57';
-            case 'C': return '#3357FF';
-            case 'G': return '#F3FF33';
-            case 'U': return '#FF33F1';
-            default: return '#FFFFFF';
+            case 'A': return '#FF5733'; // Red
+            case 'T': return '#33FF57'; // Green
+            case 'C': return '#3357FF'; // Blue
+            case 'G': return '#F3FF33'; // Yellow
+            case 'U': return '#FF33F1'; // Pink
+            default: return '#FFFFFF'; // White for unknown
         }
     }
 
@@ -91,7 +91,7 @@ class DNAStrand {
 class RNAPolymerase {
     constructor() {
         this.x = 0;
-        this.y = 0;
+        this.y = 75;
         this.width = 120;
         this.height = 150;
         this.speed = 2;
@@ -132,7 +132,6 @@ class Transcription {
         this.dna.update();
         if (this.transcriptionProgress < this.dnaSequence.length * this.dna.spacing) {
             this.rnaPolymerase.move();
-            this.rnaPolymerase.y = 75;
             
             if (this.transcriptionProgress % this.dna.spacing === 0) {
                 let index = this.transcriptionProgress / this.dna.spacing;
@@ -179,6 +178,7 @@ class Transcription {
             for (let i = 0; i < Math.floor(this.mRNA.length / 3); i++) {
                 this.ctx.strokeStyle = 'white';
                 this.ctx.strokeRect(50 + i * this.dna.spacing * 3, 270, this.dna.spacing * 3, 60);
+                this.ctx.fillText(`Codon: ${this.mRNA[i * 3].type}${this.mRNA[i * 3 + 1].type}${this.mRNA[i * 3 + 2].type}`, 50 + i * this.dna.spacing * 3 + 10, 300);
             }
         }
     }
