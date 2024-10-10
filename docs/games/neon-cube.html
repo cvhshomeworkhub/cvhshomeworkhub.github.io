@@ -101,6 +101,17 @@
     </style>
 </head>
 <body>
+    <header class="glass-header">
+        <div class="logo-container">
+            <h1 class="glow-text">Neon Duel</h1>
+        </div>
+        <nav>
+            <a href="../index.html" class="nav-link">Home</a>
+            <a href="../games.html" class="nav-link">My Games</a>
+        </nav>
+    </header>
+
+    <main class="fade-in">
     <div class="game-container">
         <canvas id="gameCanvas" width="800" height="600"></canvas>
         
@@ -125,6 +136,9 @@
             <button onclick="restartGame()">Play Again</button>
         </div>
     </div>
+    </main>
+    
+    <script src="../script.js"></script>
     <script src="neon-cube.js"></script>
 </body>
 </html>
