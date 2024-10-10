@@ -25,7 +25,7 @@ class Nucleotide {
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = 'black';
-        ctx.font = '24px Arial';
+        ctx.font = '24px Orbitron';
         ctx.fillText(this.type, this.x - 8, this.y + 8);
     }
 
@@ -94,7 +94,7 @@ class RNAPolymerase {
         this.y = 75;
         this.width = 120;
         this.height = 150;
-        this.speed = 2;
+        this.speed = 1; // Slower speed
     }
 
     draw(ctx) {
@@ -106,7 +106,7 @@ class RNAPolymerase {
         ctx.closePath();
         ctx.fill();
         ctx.fillStyle = 'black';
-        ctx.font = '24px Arial';
+        ctx.font = '24px Orbitron';
         ctx.fillText('RNA', this.x + 20, this.y + 60);
         ctx.fillText('Pol', this.x + 20, this.y + 90);
     }
@@ -168,10 +168,10 @@ class Transcription {
         this.mRNA.forEach(n => n.draw(this.ctx));
 
         // Draw labels
-        this.ctx.fillStyle = 'white';
-        this.ctx.font = '24px Arial';
-        this.ctx.fillText('DNA', 10, 180);
-        this.ctx.fillText('mRNA', 10, 330);
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // Glowing effect
+        this.ctx.font = '24px Orbitron';
+        this.ctx.fillText('DNA', 10, 120);
+        this.ctx.fillText('mRNA', 10, 370);
 
         // Draw codons
         if (this.mRNA.length >= 3) {
