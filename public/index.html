@@ -6,14 +6,14 @@
     <title>CVHS Homework Hub</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="dark-theme">
     <header class="glass-header">
         <div class="logo-container">
             <h1 class="glow-text">CVHS Homework Hub</h1>
         </div>
         <nav>
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="games.html" class="nav-link">My Games</a>
+            <a href="index.html" class="nav-link glass-effect">Home</a>
+            <a href="games.html" class="nav-link glass-effect">My Games</a>
             <div class="dropdown">
                 <button class="dropbtn glass-effect">Subject Study</button>
                 <div class="dropdown-content glass-effect">
@@ -29,56 +29,81 @@
                     <a href="subject-pages/pe.html">PE</a>
                 </div>
             </div>
+            <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
         </nav>
     </header>
 
     <main class="fade-in">
         <h2 class="section-title glow-text">Upcoming...</h2>
-        
-        <div class="assignments-container">
-            <div class="assignment-card glass-effect">
-                <div class="assignment-header">
-                    <h3 class="assignment-title">Human Geography</h3>
-                    <span class="due-date">October 9-10, 2024</span>
-                </div>
-                <div class="assignment-content">
-                    <p><strong>Project 2 FRQ</strong></p>
-                </div>
-            </div>
-
-            <div class="assignment-card glass-effect">
-                <div class="assignment-header">
-                    <h3 class="assignment-title">Algebra 2</h3>
-                    <span class="due-date">October 10, 2024</span>
-                </div>
-                <div class="assignment-content">
-                    <p><strong>Unit 2 - Homework #10</strong></p>
-                </div>
-            </div>
-
-            <div class="assignment-card glass-effect">
-                <div class="assignment-header">
-                    <h3 class="assignment-title">Biology</h3>
-                    <span class="due-date">October 11, 2024</span>
-                </div>
-                <div class="assignment-content">
-                    <p><strong>Chapter 13.3 Quiz</strong></p>
-                </div>
-            </div>
-        </div>
-        <div class="assignments-container">
-            <div class="assignment-card glass-effect">
-                <div class="assignment-header">
-                    <h3 class="assignment-title">English</h3>
-                    <span class="due-date">October 11, 2024</span>
-                </div>
-                <div class="assignment-content">
-                    <p><strong>DJ (Books 9-12)</strong></p>
-                </div>
-            </div>
+        <div id="assignments-container" class="assignments-container">
+            <!-- Assignment cards will be dynamically inserted here -->
         </div>
     </main>
 
-    <script src="script.js"></script>
+    <script>
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-iduA-I49rQ0XAikwc_UE_bDPBKzKeFUB7J-7J7FZ1vGrKLHsGH8KUBlHu8kjbRZTkCy3teFwxEIL/pub?output=csv';
+
+        async function fetchAssignments() {
+            try {
+                const response = await fetch(SHEET_URL);
+                const csvText = await response.text();
+                
+                // Parse CSV
+                const rows = csvText.split('\n')
+                    .map(row => row.split(','))
+                    .slice(1); // Skip header row
+                
+                // Sort assignments by due date
+                rows.sort((a, b) => new Date(a[1]) - new Date(b[1]));
+                
+                const container = document.getElementById('assignments-container');
+                container.innerHTML = ''; // Clear existing cards
+                
+                // Create a new row container every 3 cards
+                let currentRow;
+                
+                rows.forEach((row, index) => {
+                    if (index % 3 === 0) {
+                        currentRow = document.createElement('div');
+                        currentRow.className = 'assignments-row';
+                        container.appendChild(currentRow);
+                    }
+
+                    const [subject, dueDate, title] = row.map(cell => cell.trim().replace(/^["']|["']$/g, ''));
+                    const formattedDate = new Date(dueDate).toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                    
+                    const card = document.createElement('div');
+                    card.className = 'assignment-card glass-effect';
+                    card.innerHTML = `
+                        <div class="assignment-header">
+                            <h3 class="assignment-title">${subject}</h3>
+                            <span class="due-date">${formattedDate}</span>
+                        </div>
+                        <div class="assignment-content">
+                            <p class="assignment-details">${title}</p>
+                        </div>
+                    `;
+                    
+                    currentRow.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error fetching assignments:', error);
+                const container = document.getElementById('assignments-container');
+                container.innerHTML = '<p>Error loading assignments. Please try again later.</p>';
+            }
+        }
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+        }
+
+        // Fetch assignments when the page loads
+        document.addEventListener('DOMContentLoaded', fetchAssignments);
+    </script>
 </body>
 </html>
