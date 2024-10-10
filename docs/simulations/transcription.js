@@ -92,7 +92,8 @@ class RNAPolymerase {
     constructor() {
         this.x = 0;
         this.y = 75;
-        this.size = 150; // Adjust size for uniformity
+        this.width = 300;
+        this.height = 300;
         this.speed = 1; // Slower speed
     }
 
