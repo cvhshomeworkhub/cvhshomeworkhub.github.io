@@ -20,13 +20,17 @@ class Nucleotide {
     }
 
     draw(ctx) {
+        // Neon effect
         ctx.fillStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 20;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = 'black';
         ctx.font = '24px Orbitron';
         ctx.fillText(this.type, this.x - 8, this.y + 8);
+        ctx.shadowBlur = 0; // Reset shadow
     }
 
     update() {
@@ -173,16 +177,26 @@ class Transcription {
 
         // Draw labels with glow effect
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // Glowing effect
+        this.ctx.shadowColor = 'rgba(255, 255, 255, 0.8)'; // Glow color
+        this.ctx.shadowBlur = 15; // Glow radius
         this.ctx.font = '24px Orbitron';
         this.ctx.fillText('DNA', 10, 30); // Moved up
         this.ctx.fillText('mRNA', 10, 400); // Moved down
+        this.ctx.shadowBlur = 0; // Reset shadow
 
         // Draw codons below mRNA strand, moved down a bit
         if (this.mRNA.length >= 3) {
             for (let i = 0; i < Math.floor(this.mRNA.length / 3); i++) {
-                this.ctx.strokeStyle = 'white';
-                this.ctx.strokeRect(50 + i * this.dna.spacing * 3, 360, this.dna.spacing * 3, 60); // Moved down
-                this.ctx.fillText(`Codon: ${this.mRNA[i * 3].type}${this.mRNA[i * 3 + 1].type}${this.mRNA[i * 3 + 2].type}`, 50 + i * this.dna.spacing * 3 + 10, 390);
+                ctx.strokeStyle = 'white';
+                ctx.strokeRect(50 + i * this.dna.spacing * 3, 360, this.dna.spacing * 3, 60); // Moved down
+
+                // Draw codon with glow effect
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // Codon color
+                ctx.shadowColor = 'rgba(255, 255, 255, 0.8)'; // Glow color
+                ctx.shadowBlur = 15; // Glow radius
+                ctx.fillText(`Codon: ${this.mRNA[i * 3].type}${this.mRNA[i * 3 + 1].type}${this.mRNA[i * 3 + 2].type}`, 
+                    50 + i * this.dna.spacing * 3 + 10, 390);
+                ctx.shadowBlur = 0; // Reset shadow
             }
         }
     }
