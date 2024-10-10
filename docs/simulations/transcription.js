@@ -101,7 +101,7 @@ class RNAPolymerase {
         ctx.fillStyle = '#FFA500';
         ctx.beginPath();
         ctx.moveTo(this.x, this.y);
-        ctx.lineTo(this.x + this.width, this.y + this.height / 2);
+        ctx.lineTo(this.x + this.width / 2, this.y + this.height / 2);
         ctx.lineTo(this.x, this.y + this.height);
         ctx.closePath();
         ctx.fill();
@@ -138,9 +138,13 @@ class Transcription {
                 this.dna.unwind(index);
                 let base = this.dnaSequence[index];
                 let complementaryRNA = base === 'T' ? 'U' : this.dna.getComplementary(base);
-                let newNucleotide = new Nucleotide(complementaryRNA, 50 + index * this.dna.spacing, 300);
-                newNucleotide.targetY = 300;
-                this.mRNA.push(newNucleotide);
+                
+                // Check for existing mRNA nucleotide to avoid duplicates
+                if (!this.mRNA.some(n => n.type === complementaryRNA && n.x === (50 + index * this.dna.spacing))) {
+                    let newNucleotide = new Nucleotide(complementaryRNA, 50 + index * this.dna.spacing, 300);
+                    newNucleotide.targetY = 300;
+                    this.mRNA.push(newNucleotide);
+                }
             }
             this.transcriptionProgress++;
         } else {
@@ -167,18 +171,18 @@ class Transcription {
         // Draw mRNA
         this.mRNA.forEach(n => n.draw(this.ctx));
 
-        // Draw labels
+        // Draw labels with glow effect
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // Glowing effect
         this.ctx.font = '24px Orbitron';
         this.ctx.fillText('DNA', 10, 120);
         this.ctx.fillText('mRNA', 10, 370);
 
-        // Draw codons
+        // Draw codons below mRNA strand
         if (this.mRNA.length >= 3) {
             for (let i = 0; i < Math.floor(this.mRNA.length / 3); i++) {
                 this.ctx.strokeStyle = 'white';
-                this.ctx.strokeRect(50 + i * this.dna.spacing * 3, 270, this.dna.spacing * 3, 60);
-                this.ctx.fillText(`Codon: ${this.mRNA[i * 3].type}${this.mRNA[i * 3 + 1].type}${this.mRNA[i * 3 + 2].type}`, 50 + i * this.dna.spacing * 3 + 10, 300);
+                this.ctx.strokeRect(50 + i * this.dna.spacing * 3, 330, this.dna.spacing * 3, 60);
+                this.ctx.fillText(`Codon: ${this.mRNA[i * 3].type}${this.mRNA[i * 3 + 1].type}${this.mRNA[i * 3 + 2].type}`, 50 + i * this.dna.spacing * 3 + 10, 360);
             }
         }
     }
