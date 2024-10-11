@@ -6,185 +6,144 @@ class Car {
         this.height = 50;
         this.color = color;
         this.speed = 0;
-        this.maxSpeed = 5;
+        this.maxSpeed = 6;
         this.acceleration = 0.2;
         this.deceleration = 0.1;
-        this.friction = 0.05;
+        this.friction = 0.03;  // Reduced friction for smoother movement
         this.angle = 0;
         this.controls = controls;
         this.lap = 0;
-        this.checkpoints = new Set();
+        this.lastAngle = 0;  // For tracking rotation direction
+        this.angleAccumulator = 0;  // For lap counting
+        this.bounce = 0.7;  // Bounce coefficient for collisions
+        this.glow = 30;  // Increased glow effect
     }
 
     update(track, otherCar) {
-        this.move();
+        this.move(track);
         this.checkCollision(track);
         this.checkCarCollision(otherCar);
-        this.updateLap(track);
+        this.updateLapCount(track);
     }
 
-    move() {
+    move(track) {
+        // Handle acceleration
         if (this.controls.up) {
             this.speed += this.acceleration;
         } else if (this.controls.down) {
             this.speed -= this.acceleration;
         }
 
-        // Apply friction when not accelerating
+        // Enhanced friction
         if (!this.controls.up && !this.controls.down) {
             this.speed *= (1 - this.friction);
         }
 
-        // Clamp speed
+        // Speed limiting
         this.speed = Math.max(-this.maxSpeed, Math.min(this.maxSpeed, this.speed));
 
-        if (this.controls.left) this.angle -= 0.05;
-        if (this.controls.right) this.angle += 0.05;
+        // Steering
+        const turnSpeed = 0.05 * (1 - Math.abs(this.speed) / (this.maxSpeed * 2));
+        if (this.controls.left) this.angle -= turnSpeed;
+        if (this.controls.right) this.angle += turnSpeed;
 
-        // Update position based on speed and angle
+        // Update position
         const moveX = Math.cos(this.angle) * this.speed;
         const moveY = Math.sin(this.angle) * this.speed;
 
-        this.x += moveX;
-        this.y += moveY;
+        // Try to move
+        const newX = this.x + moveX;
+        const newY = this.y + moveY;
 
-        // Ensure the car stays within track bounds
-        const distanceFromCenter = Math.sqrt((this.x - track.centerX) ** 2 + (this.y - track.centerY) ** 2);
-        if (distanceFromCenter < track.innerRadius || distanceFromCenter > track.outerRadius) {
-            this.x -= moveX; // Undo movement
-            this.y -= moveY; // Undo movement
-            this.speed *= -0.5; // Bounce back
-        }
-    }
+        // Check if new position is valid
+        const distanceFromCenter = Math.sqrt(
+            (newX - track.centerX) ** 2 + 
+            (newY - track.centerY) ** 2
+        );
 
-    checkCollision(track) {
-        const corners = this.getCorners();
-        for (let corner of corners) {
-            if (!track.isPointInTrack(corner.x, corner.y)) {
-                this.speed *= -0.5; // Reverse speed
-                const overlapX = corner.x < track.centerX ? this.x + 5 : this.x - 5;
-                const overlapY = corner.y < track.centerY ? this.y + 5 : this.y - 5;
-                this.x = overlapX;
-                this.y = overlapY;
-                break;
-            }
+        if (distanceFromCenter >= track.innerRadius && 
+            distanceFromCenter <= track.outerRadius) {
+            this.x = newX;
+            this.y = newY;
+        } else {
+            // Bounce off walls
+            this.speed *= -this.bounce;
         }
     }
 
     checkCarCollision(otherCar) {
+        if (!otherCar) return;
+        
         const dx = this.x - otherCar.x;
         const dy = this.y - otherCar.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
+        const minDistance = (this.width + otherCar.width) / 1.5;
 
-        if (distance < (this.width + otherCar.width) / 2) {
-            // Bounce off the other car
-            this.speed *= -0.5;
-            otherCar.speed *= -0.5;
+        if (distance < minDistance) {
+            // Calculate collision response
+            const angle = Math.atan2(dy, dx);
+            const overlap = minDistance - distance;
+            
+            // Move cars apart
+            this.x += Math.cos(angle) * overlap / 2;
+            this.y += Math.sin(angle) * overlap / 2;
+            otherCar.x -= Math.cos(angle) * overlap / 2;
+            otherCar.y -= Math.sin(angle) * overlap / 2;
 
-            // Move them apart
-            this.x += dx > 0 ? 1 : -1;
-            this.y += dy > 0 ? 1 : -1;
+            // Exchange momentum
+            const tempSpeed = this.speed;
+            this.speed = otherCar.speed * this.bounce;
+            otherCar.speed = tempSpeed * this.bounce;
         }
     }
 
-    updateLap(track) {
-        const center = this.getCenter();
-        const checkpoint = track.getCheckpoint(center.x, center.y);
-        if (checkpoint !== null) {
-            this.checkpoints.add(checkpoint);
-            if (checkpoint === 0 && this.checkpoints.size === track.checkpoints.length) {
+    updateLapCount(track) {
+        // Calculate angle relative to track center
+        const dx = this.x - track.centerX;
+        const dy = this.y - track.centerY;
+        const currentAngle = Math.atan2(dy, dx);
+        
+        // Calculate angle difference
+        let angleDiff = currentAngle - this.lastAngle;
+        
+        // Normalize angle difference
+        if (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+        if (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+        
+        // Accumulate angle (only for clockwise movement)
+        if (angleDiff < 0) {
+            this.angleAccumulator += -angleDiff;
+            
+            // Check for complete lap
+            if (this.angleAccumulator >= 2 * Math.PI) {
                 this.lap++;
-                this.checkpoints.clear();
+                this.angleAccumulator = 0;
             }
         }
-    }
-
-    getCorners() {
-        const cos = Math.cos(this.angle);
-        const sin = Math.sin(this.angle);
-        return [
-            { x: this.x - this.width / 2 * cos - this.height / 2 * sin, y: this.y - this.width / 2 * sin + this.height / 2 * cos },
-            { x: this.x + this.width / 2 * cos - this.height / 2 * sin, y: this.y + this.width / 2 * sin + this.height / 2 * cos },
-            { x: this.x - this.width / 2 * cos + this.height / 2 * sin, y: this.y - this.width / 2 * sin - this.height / 2 * cos },
-            { x: this.x + this.width / 2 * cos + this.height / 2 * sin, y: this.y + this.width / 2 * sin - this.height / 2 * cos }
-        ];
-    }
-
-    getCenter() {
-        return { x: this.x, y: this.y };
+        
+        this.lastAngle = currentAngle;
     }
 
     draw(ctx) {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.angle);
-        ctx.fillStyle = this.color;
-        ctx.shadowBlur = 20;
+        
+        // Enhanced glow effect
+        ctx.shadowBlur = this.glow;
         ctx.shadowColor = this.color;
-        ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
-        ctx.shadowBlur = 0;
+        ctx.fillStyle = this.color;
+        
+        // Draw car body
+        ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height);
+        
+        // Draw additional glow layers
+        ctx.shadowBlur = this.glow * 1.5;
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(-this.width/2, -this.height/2, this.width, this.height);
+        
         ctx.restore();
-    }
-}
-
-class Track {
-    constructor(canvas) {
-        this.canvas = canvas;
-        this.outerRadius = Math.min(canvas.width, canvas.height) * 0.45;
-        this.innerRadius = this.outerRadius * 0.7;
-        this.centerX = canvas.width / 2;
-        this.centerY = canvas.height / 2;
-        this.checkpoints = this.generateCheckpoints();
-    }
-
-    isPointInTrack(x, y) {
-        const dx = x - this.centerX;
-        const dy = y - this.centerY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        return distance >= this.innerRadius && distance <= this.outerRadius;
-    }
-
-    generateCheckpoints() {
-        const checkpoints = [];
-        for (let i = 0; i < 8; i++) {
-            const angle = i * Math.PI / 4;
-            const x = this.centerX + this.outerRadius * Math.cos(angle);
-            const y = this.centerY + this.outerRadius * Math.sin(angle);
-            checkpoints.push({ x, y });
-        }
-        return checkpoints;
-    }
-
-    getCheckpoint(x, y) {
-        for (let i = 0; i < this.checkpoints.length; i++) {
-            const checkpoint = this.checkpoints[i];
-            const dx = x - checkpoint.x;
-            const dy = y - checkpoint.y;
-            if (Math.sqrt(dx * dx + dy * dy) < 20) {
-                return i;
-            }
-        }
-        return null;
-    }
-
-    draw(ctx) {
-        ctx.beginPath();
-        ctx.arc(this.centerX, this.centerY, this.outerRadius, 0, 2 * Math.PI);
-        ctx.strokeStyle = '#00ffff';
-        ctx.lineWidth = 5;
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = '#00ffff';
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(this.centerX, this.centerY, this.innerRadius, 0, 2 * Math.PI);
-        ctx.strokeStyle = '#ff00ff';
-        ctx.lineWidth = 5;
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = '#ff00ff';
-        ctx.stroke();
-
-        ctx.shadowBlur = 0;
     }
 }
 
@@ -194,12 +153,14 @@ class Game {
         this.ctx = this.canvas.getContext('2d');
         this.track = new Track(this.canvas);
         
-        // Set starting positions to the leftmost part of the track
-        const startAngle = Math.PI; // Leftmost angle for the cars
-        const startX1 = this.track.centerX + this.track.innerRadius * Math.cos(startAngle) - 15; // Car 1
-        const startY1 = this.track.centerY + this.track.innerRadius * Math.sin(startAngle); // Car 1
-        const startX2 = this.track.centerX + this.track.innerRadius * Math.cos(startAngle) + 15; // Car 2
-        const startY2 = this.track.centerY + this.track.innerRadius * Math.sin(startAngle); // Car 2
+        // Start positions adjusted to outer track
+        const startAngle = Math.PI;
+        const startRadius = this.track.outerRadius - 40; // Positioned near outer edge
+        
+        const startX1 = this.track.centerX + startRadius * Math.cos(startAngle) - 20;
+        const startY1 = this.track.centerY + startRadius * Math.sin(startAngle);
+        const startX2 = this.track.centerX + startRadius * Math.cos(startAngle) + 20;
+        const startY2 = this.track.centerY + startRadius * Math.sin(startAngle);
 
         this.car1 = new Car(startX1, startY1, '#00ffff', {up: false, down: false, left: false, right: false});
         this.car2 = new Car(startX2, startY2, '#ff00ff', {up: false, down: false, left: false, right: false});
@@ -207,58 +168,24 @@ class Game {
         this.init();
     }
 
-    init() {
-        this.setupControls();
-        this.animate();
-    }
-
-    setupControls() {
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'w') this.car1.controls.up = true;
-            if (e.key === 's') this.car1.controls.down = true;
-            if (e.key === 'a') this.car1.controls.left = true;
-            if (e.key === 'd') this.car1.controls.right = true;
-            if (e.key === 'ArrowUp') this.car2.controls.up = true;
-            if (e.key === 'ArrowDown') this.car2.controls.down = true;
-            if (e.key === 'ArrowLeft') this.car2.controls.left = true;
-            if (e.key === 'ArrowRight') this.car2.controls.right = true;
-        });
-
-        document.addEventListener('keyup', (e) => {
-            if (e.key === 'w') this.car1.controls.up = false;
-            if (e.key === 's') this.car1.controls.down = false;
-            if (e.key === 'a') this.car1.controls.left = false;
-            if (e.key === 'd') this.car1.controls.right = false;
-            if (e.key === 'ArrowUp') this.car2.controls.up = false;
-            if (e.key === 'ArrowDown') this.car2.controls.down = false;
-            if (e.key === 'ArrowLeft') this.car2.controls.left = false;
-            if (e.key === 'ArrowRight') this.car2.controls.right = false;
-        });
-    }
-
-    update() {
-        if (this.winner) return;
-
-        this.car1.update(this.track, this.car2);
-        this.car2.update(this.track, this.car1);
-
-        if (this.car1.lap >= 5 || this.car2.lap >= 5) {
-            this.endGame();
-        }
-    }
-
     draw() {
-        this.ctx.fillStyle = 'black';
+        // Clear with fade effect for motion blur
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.track.draw(this.ctx);
         this.car1.draw(this.ctx);
         this.car2.draw(this.ctx);
 
-        // Draw laps
-        this.ctx.font = '24px Orbitron';
+        // Enhanced lap counter display
+        this.ctx.font = 'bold 24px Orbitron';
+        this.ctx.shadowBlur = 10;
+        
+        this.ctx.shadowColor = this.car1.color;
         this.ctx.fillStyle = this.car1.color;
         this.ctx.fillText(`Player 1 Laps: ${this.car1.lap}`, 10, 30);
+        
+        this.ctx.shadowColor = this.car2.color;
         this.ctx.fillStyle = this.car2.color;
         this.ctx.fillText(`Player 2 Laps: ${this.car2.lap}`, 10, 60);
     }
