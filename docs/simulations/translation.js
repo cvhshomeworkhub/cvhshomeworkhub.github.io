@@ -105,7 +105,7 @@ class Ribosome {
     addAminoAcid() {
         if (this.currentIndex < this.aminoAcids.length) {
             let aminoAcid = this.aminoAcids[this.currentIndex];
-            this.tRNAs.push(new tRNA(aminoAcid, this.x, this.y + 50 * this.tRNAs.length));
+            this.tRNAs.push(new tRNA(aminoAcid, this.x, this.y + 60 * this.tRNAs.length)); // Adjusted y position
             this.currentIndex++;
         }
     }
