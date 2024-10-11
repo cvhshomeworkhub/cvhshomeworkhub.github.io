@@ -85,7 +85,7 @@ class DNAStrand {
 
 class MutationSimulation {
     constructor() {
-        this.canvas = document.getElementById('mutationCanvas');
+        this.canvas = document.getElementById('gameCanvas');
         if (!this.canvas) {
             console.error('Canvas element not found');
             return;
