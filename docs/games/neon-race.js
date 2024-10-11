@@ -2,13 +2,14 @@ class Car {
     constructor(x, y, color, controls) {
         this.x = x;
         this.y = y;
-        this.width = 40; // Car width
-        this.height = 20; // Car height
+        this.width = 30;
+        this.height = 50;
         this.color = color;
         this.speed = 0;
         this.maxSpeed = 5;
         this.acceleration = 0.2;
         this.deceleration = 0.1;
+        this.friction = 0.05; // Added friction
         this.angle = 0;
         this.controls = controls;
         this.lap = 0;
@@ -26,8 +27,11 @@ class Car {
             this.speed += this.acceleration;
         } else if (this.controls.down) {
             this.speed -= this.acceleration;
-        } else {
-            this.speed *= (1 - this.deceleration);
+        }
+
+        // Apply friction when not accelerating
+        if (!this.controls.up && !this.controls.down) {
+            this.speed *= (1 - this.friction);
         }
 
         this.speed = Math.max(-this.maxSpeed / 2, Math.min(this.maxSpeed, this.speed));
@@ -43,7 +47,15 @@ class Car {
         const corners = this.getCorners();
         for (let corner of corners) {
             if (!track.isPointInTrack(corner.x, corner.y)) {
-                this.speed *= -0.5;
+                // Bounce off the wall
+                this.speed *= -0.5; // Reverse speed
+                // Adjust position to prevent sticking
+                if (corner.x < track.centerX - track.innerRadius || corner.x > track.centerX + track.innerRadius) {
+                    this.x += Math.cos(this.angle + Math.PI) * 5; // Move car away from wall
+                }
+                if (corner.y < track.centerY - track.innerRadius || corner.y > track.centerY + track.innerRadius) {
+                    this.y += Math.sin(this.angle + Math.PI) * 5; // Move car away from wall
+                }
                 break;
             }
         }
@@ -65,10 +77,10 @@ class Car {
         const cos = Math.cos(this.angle);
         const sin = Math.sin(this.angle);
         return [
-            {x: this.x - this.width / 2 * cos - this.height / 2 * sin, y: this.y - this.width / 2 * sin + this.height / 2 * cos},
-            {x: this.x + this.width / 2 * cos - this.height / 2 * sin, y: this.y + this.width / 2 * sin + this.height / 2 * cos},
-            {x: this.x - this.width / 2 * cos + this.height / 2 * sin, y: this.y - this.width / 2 * sin - this.height / 2 * cos},
-            {x: this.x + this.width / 2 * cos + this.height / 2 * sin, y: this.y + this.width / 2 * sin - this.height / 2 * cos}
+            {x: this.x - this.width/2 * cos - this.height/2 * sin, y: this.y - this.width/2 * sin + this.height/2 * cos},
+            {x: this.x + this.width/2 * cos - this.height/2 * sin, y: this.y + this.width/2 * sin + this.height/2 * cos},
+            {x: this.x - this.width/2 * cos + this.height/2 * sin, y: this.y - this.width/2 * sin - this.height/2 * cos},
+            {x: this.x + this.width/2 * cos + this.height/2 * sin, y: this.y + this.width/2 * sin - this.height/2 * cos}
         ];
     }
 
@@ -92,26 +104,24 @@ class Car {
 class Track {
     constructor(canvas) {
         this.canvas = canvas;
-        this.outerRadius = Math.min(canvas.width, canvas.height) * 0.4; // Larger track
+        this.outerRadius = Math.min(canvas.width, canvas.height) * 0.45;
         this.innerRadius = this.outerRadius * 0.7;
         this.centerX = canvas.width / 2;
         this.centerY = canvas.height / 2;
         this.checkpoints = this.generateCheckpoints();
-        this.finishLine = {start: {x: this.centerX - this.outerRadius, y: this.centerY}, end: {x: this.centerX + this.outerRadius, y: this.centerY}};
     }
 
     isPointInTrack(x, y) {
         const dx = x - this.centerX;
         const dy = y - this.centerY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distance = Math.sqrt(dx*dx + dy*dy);
         return distance >= this.innerRadius && distance <= this.outerRadius;
     }
 
     generateCheckpoints() {
         const checkpoints = [];
-        const totalCheckpoints = 8;
-        for (let i = 0; i < totalCheckpoints; i++) {
-            const angle = (i * Math.PI * 2) / totalCheckpoints;
+        for (let i = 0; i < 8; i++) {
+            const angle = i * Math.PI / 4;
             const x = this.centerX + this.outerRadius * Math.cos(angle);
             const y = this.centerY + this.outerRadius * Math.sin(angle);
             checkpoints.push({x, y});
@@ -124,7 +134,7 @@ class Track {
             const checkpoint = this.checkpoints[i];
             const dx = x - checkpoint.x;
             const dy = y - checkpoint.y;
-            if (Math.sqrt(dx * dx + dy * dy) < 20) {
+            if (Math.sqrt(dx*dx + dy*dy) < 20) {
                 return i;
             }
         }
@@ -132,7 +142,6 @@ class Track {
     }
 
     draw(ctx) {
-        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.beginPath();
         ctx.arc(this.centerX, this.centerY, this.outerRadius, 0, 2 * Math.PI);
         ctx.strokeStyle = '#00ffff';
@@ -149,14 +158,6 @@ class Track {
         ctx.shadowColor = '#ff00ff';
         ctx.stroke();
 
-        // Draw the finish line
-        ctx.beginPath();
-        ctx.moveTo(this.finishLine.start.x, this.finishLine.start.y);
-        ctx.lineTo(this.finishLine.end.x, this.finishLine.end.y);
-        ctx.strokeStyle = '#ffff00'; // Neon yellow finish line
-        ctx.lineWidth = 10;
-        ctx.stroke();
-
         ctx.shadowBlur = 0;
     }
 }
@@ -166,8 +167,9 @@ class Game {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
         this.track = new Track(this.canvas);
-        this.car1 = new Car(this.track.centerX - 50, this.track.centerY - 30, '#00ffff', {up: false, down: false, left: false, right: false});
-        this.car2 = new Car(this.track.centerX - 50, this.track.centerY + 30, '#ff00ff', {up: false, down: false, left: false, right: false});
+        // Adjust starting positions to be at the front
+        this.car1 = new Car(this.track.centerX - this.track.outerRadius * 0.75, this.track.centerY - 25, '#00ffff', {up: false, down: false, left: false, right: false});
+        this.car2 = new Car(this.track.centerX - this.track.outerRadius * 0.75, this.track.centerY + 35, '#ff00ff', {up: false, down: false, left: false, right: false});
         this.winner = null;
         this.init();
     }
@@ -207,12 +209,15 @@ class Game {
         this.car1.update(this.track);
         this.car2.update(this.track);
 
-        if (this.car1.lap >= 5 || this.car2.lap >= 5) {
+        if (this.car1.lap >= 3 || this.car2.lap >= 3) {
             this.endGame();
         }
     }
 
     draw() {
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
         this.track.draw(this.ctx);
         this.car1.draw(this.ctx);
         this.car2.draw(this.ctx);
@@ -232,14 +237,14 @@ class Game {
     }
 
     endGame() {
-        this.winner = this.car1.lap >= 5 ? 'Player 1' : 'Player 2';
+        this.winner = this.car1.lap >= 3 ? 'Player 1' : 'Player 2';
         document.getElementById('winner').textContent = this.winner;
         document.getElementById('gameOver').style.display = 'block';
     }
 
     restart() {
-        this.car1 = new Car(this.track.centerX - 50, this.track.centerY - 30, '#00ffff', {up: false, down: false, left: false, right: false});
-        this.car2 = new Car(this.track.centerX - 50, this.track.centerY + 30, '#ff00ff', {up: false, down: false, left: false, right: false});
+        this.car1 = new Car(this.track.centerX - this.track.outerRadius * 0.75, this.track.centerY - 25, '#00ffff', {up: false, down: false, left: false, right: false});
+        this.car2 = new Car(this.track.centerX - this.track.outerRadius * 0.75, this.track.centerY + 35, '#ff00ff', {up: false, down: false, left: false, right: false});
         this.winner = null;
         document.getElementById('gameOver').style.display = 'none';
     }
