@@ -86,9 +86,14 @@ class DNAStrand {
 class MutationSimulation {
     constructor() {
         this.canvas = document.getElementById('mutationCanvas');
+        if (!this.canvas) {
+            console.error('Canvas element not found');
+            return;
+        }
         this.ctx = this.canvas.getContext('2d');
         this.canvas.width = 1200;
         this.canvas.height = 600;
+        console.log(`Canvas size set to ${this.canvas.width}x${this.canvas.height}`);
 
         this.dnaSequence = 'ATCGATTGCAGCT';
         this.insertionDNA = new DNAStrand(this.dnaSequence, 50, 100);
@@ -100,6 +105,7 @@ class MutationSimulation {
         this.substitutionRNA = [];
 
         this.mutationIndex = 5; // Index where mutation occurs
+        console.log('MutationSimulation initialized');
         this.animate();
     }
 
@@ -168,16 +174,19 @@ class MutationSimulation {
         // Clear canvas
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        console.log('Canvas cleared and filled with black');
 
         // Draw DNA strands
         this.insertionDNA.draw(this.ctx);
         this.deletionDNA.draw(this.ctx);
         this.substitutionDNA.draw(this.ctx);
+        console.log('DNA strands drawn');
 
         // Draw RNA strands
         this.insertionRNA.forEach(n => n.draw(this.ctx));
         this.deletionRNA.forEach(n => n.draw(this.ctx));
         this.substitutionRNA.forEach(n => n.draw(this.ctx));
+        console.log('RNA strands drawn');
 
         // Draw labels
         this.ctx.fillStyle = 'white';
@@ -185,11 +194,13 @@ class MutationSimulation {
         this.ctx.fillText('Insertion', 10, 50);
         this.ctx.fillText('Deletion', 10, 250);
         this.ctx.fillText('Substitution', 10, 450);
+        console.log('Labels drawn');
 
         // Draw mutation indicators
         this.drawMutationIndicator(this.insertionRNA, 180);
         this.drawMutationIndicator(this.deletionRNA, 380);
         this.drawMutationIndicator(this.substitutionRNA, 580);
+        console.log('Mutation indicators drawn');
     }
 
     drawMutationIndicator(rnaStrand, yOffset) {
@@ -203,6 +214,7 @@ class MutationSimulation {
     }
 
     animate() {
+        console.log('Animation frame started');
         this.update();
         this.draw();
         requestAnimationFrame(() => this.animate());
@@ -210,5 +222,6 @@ class MutationSimulation {
 }
 
 window.onload = () => {
+    console.log('Window loaded, initializing simulation');
     window.simulation = new MutationSimulation();
 };
