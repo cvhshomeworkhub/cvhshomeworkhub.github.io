@@ -90,16 +90,14 @@ class DNAStrand {
 
 class RNAPolymerase {
     constructor() {
-        this.x = 50; // Start position
-        this.y = 75; // Vertical position
-        this.size = 60; // Smaller size
+        this.x = 0;
+        this.y = 75; // Centered vertically on DNA
+        this.size = 100; // Smaller size
         this.speed = 1; // Slower speed
     }
 
     draw(ctx) {
-        ctx.fillStyle = '#FFA500';
-
-        // Draw the triangle pointing in the direction of movement
+        ctx.fillStyle = '#FFA500'; // Fill color for RNA Polymerase triangle
         ctx.beginPath();
         ctx.moveTo(this.x, this.y);
         ctx.lineTo(this.x + this.size / 2, this.y + this.size); // Pointing downwards
@@ -107,13 +105,12 @@ class RNAPolymerase {
         ctx.closePath();
         ctx.fill();
 
-        ctx.fillStyle = 'black';
-        ctx.font = '16px Orbitron'; // Smaller font size
-
-        // Adding glow effect
-        ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+        // Neon effect for the labels
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // Bright color for text
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.8)'; // Glow color
         ctx.shadowBlur = 20;
 
+        ctx.font = '20px Orbitron'; // Slightly smaller font size
         ctx.fillText('RNA', this.x - 12, this.y + 35); // Adjusted to fit the smaller size
         ctx.fillText('Pol', this.x - 12, this.y + 50); // Adjusted to fit the smaller size
 
@@ -160,7 +157,7 @@ class Transcription {
         } else {
             // Reset the simulation
             this.transcriptionProgress = 0;
-            this.rnaPolymerase.x = 50; // Reset position
+            this.rnaPolymerase.x = 0;
             this.mRNA = [];
             this.dna = new DNAStrand(this.dnaSequence, 50, 150);
         }
@@ -182,24 +179,16 @@ class Transcription {
         this.mRNA.forEach(n => n.draw(this.ctx));
 
         // Draw labels with glow effect
-        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // Glowing effect
         this.ctx.font = '24px Orbitron';
+        this.ctx.fillText('DNA', 10, 30); // Moved up
+        this.ctx.fillText('mRNA', 10, 400); // Moved down
 
-        // Adding glow effect
-        this.ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
-        this.ctx.shadowBlur = 20;
-
-        this.ctx.fillText('DNA', 10, 30);
-        this.ctx.fillText('mRNA', 10, 400);
-
-        // Reset shadow
-        this.ctx.shadowBlur = 0;
-
-        // Draw codons below mRNA strand
+        // Draw codons below mRNA strand, moved down a bit
         if (this.mRNA.length >= 3) {
             for (let i = 0; i < Math.floor(this.mRNA.length / 3); i++) {
                 this.ctx.strokeStyle = 'white';
-                this.ctx.strokeRect(50 + i * this.dna.spacing * 3, 360, this.dna.spacing * 3, 60);
+                this.ctx.strokeRect(50 + i * this.dna.spacing * 3, 360, this.dna.spacing * 3, 60); // Moved down
                 this.ctx.fillText(`Codon: ${this.mRNA[i * 3].type}${this.mRNA[i * 3 + 1].type}${this.mRNA[i * 3 + 2].type}`, 50 + i * this.dna.spacing * 3 + 10, 390);
             }
         }
