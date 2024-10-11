@@ -54,17 +54,28 @@ class tRNA {
         this.aminoAcid = aminoAcid;
         this.x = x;
         this.y = y;
-        this.radius = 30;
+        this.width = 100;  // Width for the rounded rectangle
+        this.height = 40;  // Height for the rounded rectangle
+        this.radius = 10;  // Corner radius
     }
 
     draw(ctx) {
         ctx.fillStyle = '#FFA500'; // tRNA color
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.moveTo(this.x - this.width / 2 + this.radius, this.y - this.height / 2);
+        ctx.lineTo(this.x + this.width / 2 - this.radius, this.y - this.height / 2);
+        ctx.quadraticCurveTo(this.x + this.width / 2, this.y - this.height / 2, this.x + this.width / 2, this.y - this.height / 2 + this.radius);
+        ctx.lineTo(this.x + this.width / 2, this.y + this.height / 2 - this.radius);
+        ctx.quadraticCurveTo(this.x + this.width / 2, this.y + this.height / 2, this.x + this.width / 2 - this.radius, this.y + this.height / 2);
+        ctx.lineTo(this.x - this.width / 2 + this.radius, this.y + this.height / 2);
+        ctx.quadraticCurveTo(this.x - this.width / 2, this.y + this.height / 2, this.x - this.width / 2, this.y + this.height / 2 - this.radius);
+        ctx.lineTo(this.x - this.width / 2, this.y - this.height / 2 + this.radius);
+        ctx.quadraticCurveTo(this.x - this.width / 2, this.y - this.height / 2, this.x - this.width / 2 + this.radius, this.y - this.height / 2);
         ctx.fill();
+
         ctx.fillStyle = 'black';
-        ctx.font = '20px Orbitron';
-        ctx.fillText(this.aminoAcid, this.x - 10, this.y + 6);
+        ctx.font = '16px Orbitron';
+        ctx.fillText(this.aminoAcid, this.x - this.width / 4, this.y + 6); // Center text in the rectangle
     }
 }
 
