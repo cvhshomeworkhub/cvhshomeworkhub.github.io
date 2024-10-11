@@ -21,14 +21,9 @@ class Nucleotide {
 
     draw(ctx) {
         ctx.fillStyle = this.color;
-        ctx.shadowColor = this.color;
-        ctx.shadowBlur = 20; // Adjust the glow effect
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
-        ctx.shadowBlur = 0; // Reset shadow after drawing
-
-        // Draw nucleotide label
         ctx.fillStyle = 'black';
         ctx.font = '24px Orbitron';
         ctx.fillText(this.type, this.x - 8, this.y + 8);
@@ -95,8 +90,8 @@ class DNAStrand {
 
 class RNAPolymerase {
     constructor() {
-        this.x = 0;
-        this.y = 100; // Adjusted position to make it visible
+        this.x = 50; // Start further right if needed
+        this.y = 75;
         this.size = 150;
         this.speed = 1; // Slower speed
     }
@@ -105,19 +100,23 @@ class RNAPolymerase {
         ctx.fillStyle = '#FFA500';
         ctx.beginPath();
         ctx.moveTo(this.x, this.y);
-        ctx.lineTo(this.x + this.size / 2, this.y + this.size); // Adjust height
-        ctx.lineTo(this.x - this.size / 2, this.y + this.size); // Adjust height
+        ctx.lineTo(this.x + this.size / 2, this.y + this.size);
+        ctx.lineTo(this.x - this.size / 2, this.y + this.size);
         ctx.closePath();
         ctx.fill();
 
-        // Draw text with glow effect
         ctx.fillStyle = 'black';
-        ctx.shadowColor = 'rgba(255, 165, 0, 0.8)'; // Glow color
-        ctx.shadowBlur = 10; // Glow radius
         ctx.font = '20px Orbitron'; // Slightly smaller font size
+
+        // Adding glow effect
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+        ctx.shadowBlur = 20;
+
         ctx.fillText('RNA', this.x - 15, this.y + 50); // Centered text
         ctx.fillText('Pol', this.x - 15, this.y + 80); // Centered text
-        ctx.shadowBlur = 0; // Reset shadow after drawing
+
+        // Reset shadow to avoid affecting other drawings
+        ctx.shadowBlur = 0;
     }
 
     move() {
@@ -159,7 +158,7 @@ class Transcription {
         } else {
             // Reset the simulation
             this.transcriptionProgress = 0;
-            this.rnaPolymerase.x = 0;
+            this.rnaPolymerase.x = 50; // Reset position
             this.mRNA = [];
             this.dna = new DNAStrand(this.dnaSequence, 50, 150);
         }
@@ -181,21 +180,25 @@ class Transcription {
         this.mRNA.forEach(n => n.draw(this.ctx));
 
         // Draw labels with glow effect
-        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // Glowing effect
-        this.ctx.shadowColor = 'rgba(255, 255, 255, 0.8)'; // Glow color
-        this.ctx.shadowBlur = 15; // Glow radius
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
         this.ctx.font = '24px Orbitron';
-        this.ctx.fillText('DNA', 10, 30); // Moved up
-        this.ctx.fillText('mRNA', 10, 400); // Moved down
-        this.ctx.shadowBlur = 0; // Reset shadow
 
-        // Draw codons below mRNA strand, moved down a bit
+        // Adding glow effect
+        this.ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+        this.ctx.shadowBlur = 20;
+
+        this.ctx.fillText('DNA', 10, 30);
+        this.ctx.fillText('mRNA', 10, 400);
+
+        // Reset shadow
+        this.ctx.shadowBlur = 0;
+
+        // Draw codons below mRNA strand
         if (this.mRNA.length >= 3) {
             for (let i = 0; i < Math.floor(this.mRNA.length / 3); i++) {
                 this.ctx.strokeStyle = 'white';
-                this.ctx.strokeRect(50 + i * this.dna.spacing * 3, 360, this.dna.spacing * 3, 60); // Moved down
-                this.ctx.fillText(`Codon: ${this.mRNA[i * 3].type}${this.mRNA[i * 3 + 1].type}${this.mRNA[i * 3 + 2].type}`, 
-                    50 + i * this.dna.spacing * 3 + 10, 390);
+                this.ctx.strokeRect(50 + i * this.dna.spacing * 3, 360, this.dna.spacing * 3, 60);
+                this.ctx.fillText(`Codon: ${this.mRNA[i * 3].type}${this.mRNA[i * 3 + 1].type}${this.mRNA[i * 3 + 2].type}`, 50 + i * this.dna.spacing * 3 + 10, 390);
             }
         }
     }
