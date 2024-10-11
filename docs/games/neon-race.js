@@ -9,7 +9,7 @@ class Car {
         this.maxSpeed = 5;
         this.acceleration = 0.2;
         this.deceleration = 0.1;
-        this.friction = 0.05; // Friction for slowing down
+        this.friction = 0.05;
         this.angle = 0;
         this.controls = controls;
         this.lap = 0;
@@ -35,13 +35,23 @@ class Car {
             this.speed *= (1 - this.friction);
         }
 
-        this.speed = Math.max(-this.maxSpeed / 2, Math.min(this.maxSpeed, this.speed));
+        this.speed = Math.max(-this.maxSpeed, Math.min(this.maxSpeed, this.speed));
 
         if (this.controls.left) this.angle -= 0.05;
         if (this.controls.right) this.angle += 0.05;
 
+        // Update position based on speed and angle
         this.x += Math.cos(this.angle) * this.speed;
         this.y += Math.sin(this.angle) * this.speed;
+
+        // Keep cars on the track
+        const center = { x: track.centerX, y: track.centerY };
+        const trackDistance = Math.sqrt(Math.pow(this.x - center.x, 2) + Math.pow(this.y - center.y, 2));
+        if (trackDistance < track.innerRadius || trackDistance > track.outerRadius) {
+            this.x -= Math.cos(this.angle) * this.speed; // Undo movement
+            this.y -= Math.sin(this.angle) * this.speed; // Undo movement
+            this.speed *= -0.5; // Bounce back
+        }
     }
 
     checkCollision(track) {
@@ -70,9 +80,9 @@ class Car {
             this.speed *= -0.5;
             otherCar.speed *= -0.5;
 
-            // Simple collision response
-            this.x += dx > 0 ? 1 : -1; // Move away from each other
-            this.y += dy > 0 ? 1 : -1; // Move away from each other
+            // Move them apart
+            this.x += dx > 0 ? 1 : -1;
+            this.y += dy > 0 ? 1 : -1;
         }
     }
 
@@ -92,15 +102,15 @@ class Car {
         const cos = Math.cos(this.angle);
         const sin = Math.sin(this.angle);
         return [
-            {x: this.x - this.width / 2 * cos - this.height / 2 * sin, y: this.y - this.width / 2 * sin + this.height / 2 * cos},
-            {x: this.x + this.width / 2 * cos - this.height / 2 * sin, y: this.y + this.width / 2 * sin + this.height / 2 * cos},
-            {x: this.x - this.width / 2 * cos + this.height / 2 * sin, y: this.y - this.width / 2 * sin - this.height / 2 * cos},
-            {x: this.x + this.width / 2 * cos + this.height / 2 * sin, y: this.y + this.width / 2 * sin - this.height / 2 * cos}
+            { x: this.x - this.width / 2 * cos - this.height / 2 * sin, y: this.y - this.width / 2 * sin + this.height / 2 * cos },
+            { x: this.x + this.width / 2 * cos - this.height / 2 * sin, y: this.y + this.width / 2 * sin + this.height / 2 * cos },
+            { x: this.x - this.width / 2 * cos + this.height / 2 * sin, y: this.y - this.width / 2 * sin - this.height / 2 * cos },
+            { x: this.x + this.width / 2 * cos + this.height / 2 * sin, y: this.y + this.width / 2 * sin - this.height / 2 * cos }
         ];
     }
 
     getCenter() {
-        return {x: this.x, y: this.y};
+        return { x: this.x, y: this.y };
     }
 
     draw(ctx) {
@@ -139,7 +149,7 @@ class Track {
             const angle = i * Math.PI / 4;
             const x = this.centerX + this.outerRadius * Math.cos(angle);
             const y = this.centerY + this.outerRadius * Math.sin(angle);
-            checkpoints.push({x, y});
+            checkpoints.push({ x, y });
         }
         return checkpoints;
     }
