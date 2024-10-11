@@ -109,21 +109,24 @@ class Translation {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
-        this.mRNASequence = 'AUGUUCUGAA'; // Example mRNA sequence (with a start and stop codon)
+        this.mRNASequence = 'AUGUUCUGAA'; // Example mRNA sequence (with start and stop codons)
         this.mRNA = new mRNAStrand(this.mRNASequence, 50, 150);
         this.ribosome = new Ribosome();
+        this.animationFrame = null;
+        this.tickCount = 0;
         this.animate();
     }
 
     update() {
-        if (this.ribosome.currentIndex < this.mRNA.nucleotides.length) {
+        // Control the timing of amino acid addition
+        if (this.tickCount % 60 === 0) { // Adjust this value for speed (60 frames = 1 second at 60fps)
             this.ribosome.addAminoAcid();
-            // Reset if stop codon reached
             if (this.ribosome.currentIndex >= this.mRNA.nucleotides.length) {
                 this.ribosome.reset();
-                this.mRNA = new mRNAStrand(this.mRNASequence, 50, 150); // Reset mRNA for new cycle
+                this.mRNA = new mRNAStrand(this.mRNASequence, 50, 150); // Reset mRNA for a new cycle
             }
         }
+        this.tickCount++;
     }
 
     draw() {
@@ -150,7 +153,7 @@ class Translation {
     animate() {
         this.update();
         this.draw();
-        requestAnimationFrame(() => this.animate());
+        this.animationFrame = requestAnimationFrame(() => this.animate());
     }
 }
 
