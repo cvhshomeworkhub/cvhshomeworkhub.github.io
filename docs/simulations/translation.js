@@ -5,7 +5,6 @@ class Nucleotide {
         this.y = y;
         this.radius = 30;
         this.color = this.getColor();
-        this.targetY = y;
     }
 
     getColor() {
@@ -26,10 +25,6 @@ class Nucleotide {
         ctx.fillStyle = 'black';
         ctx.font = '24px Orbitron';
         ctx.fillText(this.type, this.x - 8, this.y + 8);
-    }
-
-    update() {
-        this.y += (this.targetY - this.y) * 0.1;
     }
 }
 
@@ -91,7 +86,8 @@ class Ribosome {
             ctx.fillRect(this.x - 50, this.y - 30, 100, 60);
             ctx.fillStyle = 'black';
             ctx.font = '16px Orbitron';
-            ctx.fillText(`Codon: ${mRNA.nucleotides[this.currentIndex].type}${mRNA.nucleotides[this.currentIndex + 1].type}${mRNA.nucleotides[this.currentIndex + 2].type}`, this.x - 45, this.y);
+            const codon = mRNA.nucleotides.slice(this.currentIndex, this.currentIndex + 3).map(n => n.type).join('');
+            ctx.fillText(`Codon: ${codon}`, this.x - 45, this.y);
         }
     }
 
@@ -113,17 +109,20 @@ class Translation {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
-        this.mRNASequence = 'AUGUUCUGAA'; // Example mRNA sequence
+        this.mRNASequence = 'AUGUUCUGAA'; // Example mRNA sequence (with a start and stop codon)
         this.mRNA = new mRNAStrand(this.mRNASequence, 50, 150);
         this.ribosome = new Ribosome();
         this.animate();
     }
 
     update() {
-        this.ribosome.addAminoAcid();
-        if (this.ribosome.currentIndex >= this.mRNA.nucleotides.length / 3) {
-            this.ribosome.reset();
-            this.mRNA = new mRNAStrand(this.mRNASequence, 50, 150); // Reset mRNA for new cycle
+        if (this.ribosome.currentIndex < this.mRNA.nucleotides.length) {
+            this.ribosome.addAminoAcid();
+            // Reset if stop codon reached
+            if (this.ribosome.currentIndex >= this.mRNA.nucleotides.length) {
+                this.ribosome.reset();
+                this.mRNA = new mRNAStrand(this.mRNASequence, 50, 150); // Reset mRNA for new cycle
+            }
         }
     }
 
