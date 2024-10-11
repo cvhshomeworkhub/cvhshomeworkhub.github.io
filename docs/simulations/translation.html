@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Simulation</title>
+    <!-- Link to Orbitron Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="../styles.css">
+    <style>
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #gameCanvas {
+            border: 2px solid var(--accent-color);
+            background: black;
+            box-shadow: 0 0 20px var(--accent-color);
+        }
+
+        .controls-container {
+            display: flex;
+            justify-content: space-between;
+            width: 800px;
+            margin-top: 20px;
+        }
+
+        .player-controls {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--accent-color);
+        }
+
+        .player-controls h3 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .control-key {
+            display: inline-block;
+            padding: 5px 10px;
+            background: rgba(33, 150, 243, 0.3);
+            border: 1px solid var(--accent-color);
+            border-radius: 5px;
+            color: white;
+            margin: 2px;
+        }
+
+        #gameOver {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-color);
+        }
+
+        .health-bars {
+            display: flex;
+            justify-content: space-between;
+            width: 800px;
+            margin-bottom: 10px;
+        }
+
+        .health-bar {
+            width: 300px;
+            height: 20px;
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .health-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2196F3, #00FFFF);
+            transition: width 0.3s ease;
+        }
+
+        .player2-health .health-fill {
+            float: right;
+            background: linear-gradient(90deg, #FF00FF, #FF69B4);
+        }
+    </style>
+</head>
+<body>
+    <header class="glass-header">
+        <div class="logo-container">
+            <h1 class="glow-text">Translation Simulation</h1>
+        </div>
+        <nav>
+            <a href="../index.html" class="nav-link">Home</a>
+            <a href="../updates.html" class="nav-link">Updates</a>
+            <a href="../simulations.html" class="nav-link">Simulations</a>
+             <div class="dropdown">
+                <button class="dropbtn glass-effect">Subject Study</button>
+                <div class="dropdown-content glass-effect">
+                    <a href="subject-pages/human-geography.html">Human Geography</a>
+                    <a href="subject-pages/biology.html">Biology</a>
+                    <a href="subject-pages/theater.html">Theater</a>
+                    <a href="subject-pages/tech-theater.html">Tech Theater</a>
+                    <a href="subject-pages/art.html">Art</a>
+                    <a href="subject-pages/english.html">English</a>
+                    <a href="subject-pages/algebra2.html">Algebra 2</a>
+                    <a href="subject-pages/geometry.html">Geometry</a>
+                    <a href="subject-pages/computer-science.html">Computer Science</a>
+                    <a href="subject-pages/pe.html">PE</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="fade-in">
+        <div class="game-container">
+            <canvas id="gameCanvas" width="1200" height="450"></canvas>
+            <center>
+                <div class="controls-container">
+                    <div class="player-controls">
+                        <h3>Vocabulary</h3>
+                        <p><strong>Amino Acid:</strong> Building blocks of proteins.</p>
+                        <p><strong>Polypeptide:</strong> A chain of amino acids.</p>
+                        <p><strong>tRNA:</strong> Transfer RNA, carries amino acids to the ribosome.</p>
+                        <p><strong>Ribosome:</strong> The molecular machine that synthesizes proteins.</p>
+                        <p><strong>rRNA:</strong> Ribosomal RNA, a component of the ribosome.</p>
+                    </div> 
+                </div>
+            </center>
+        </div>
+    </main>
+    <script src="../script.js"></script>
+    <script src="translation.js"></script>
+</body>
+</html>
