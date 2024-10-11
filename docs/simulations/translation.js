@@ -154,11 +154,13 @@ class Translation {
         // Draw tRNAs
         this.ribosome.tRNAs.forEach(tRNA => tRNA.draw(this.ctx));
         
-        // Draw labels
+        // Draw educational labels
         this.ctx.fillStyle = 'white';
         this.ctx.font = '24px Orbitron';
-        this.ctx.fillText('mRNA', 10, 30);
-        this.ctx.fillText('tRNA', 10, 300);
+        this.ctx.fillText('mRNA (Codons)', 10, 30);
+        this.ctx.fillText('tRNA (Amino Acids)', 10, 300);
+        this.ctx.fillText('Ribosome', 600, 230);
+        this.ctx.fillText('Translation Process', 400, 30);
     }
 
     animate() {
