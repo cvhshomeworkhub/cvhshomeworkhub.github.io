@@ -90,30 +90,32 @@ class DNAStrand {
 
 class RNAPolymerase {
     constructor() {
-        this.x = 50; // Start further right if needed
-        this.y = 75;
-        this.size = 150;
+        this.x = 50; // Start position
+        this.y = 75; // Vertical position
+        this.size = 60; // Smaller size
         this.speed = 1; // Slower speed
     }
 
     draw(ctx) {
         ctx.fillStyle = '#FFA500';
+
+        // Draw the triangle pointing in the direction of movement
         ctx.beginPath();
         ctx.moveTo(this.x, this.y);
-        ctx.lineTo(this.x + this.size / 2, this.y + this.size);
-        ctx.lineTo(this.x - this.size / 2, this.y + this.size);
+        ctx.lineTo(this.x + this.size / 2, this.y + this.size); // Pointing downwards
+        ctx.lineTo(this.x - this.size / 2, this.y + this.size); // Pointing downwards
         ctx.closePath();
         ctx.fill();
 
         ctx.fillStyle = 'black';
-        ctx.font = '20px Orbitron'; // Slightly smaller font size
+        ctx.font = '16px Orbitron'; // Smaller font size
 
         // Adding glow effect
         ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
         ctx.shadowBlur = 20;
 
-        ctx.fillText('RNA', this.x - 15, this.y + 50); // Centered text
-        ctx.fillText('Pol', this.x - 15, this.y + 80); // Centered text
+        ctx.fillText('RNA', this.x - 12, this.y + 35); // Adjusted to fit the smaller size
+        ctx.fillText('Pol', this.x - 12, this.y + 50); // Adjusted to fit the smaller size
 
         // Reset shadow to avoid affecting other drawings
         ctx.shadowBlur = 0;
