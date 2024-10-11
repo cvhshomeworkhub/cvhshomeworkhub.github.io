@@ -20,17 +20,18 @@ class Nucleotide {
     }
 
     draw(ctx) {
-        // Neon effect
         ctx.fillStyle = this.color;
         ctx.shadowColor = this.color;
-        ctx.shadowBlur = 20;
+        ctx.shadowBlur = 20; // Adjust the glow effect
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
+        ctx.shadowBlur = 0; // Reset shadow after drawing
+
+        // Draw nucleotide label
         ctx.fillStyle = 'black';
         ctx.font = '24px Orbitron';
         ctx.fillText(this.type, this.x - 8, this.y + 8);
-        ctx.shadowBlur = 0; // Reset shadow
     }
 
     update() {
@@ -95,7 +96,7 @@ class DNAStrand {
 class RNAPolymerase {
     constructor() {
         this.x = 0;
-        this.y = 75;
+        this.y = 100; // Adjusted position to make it visible
         this.size = 150;
         this.speed = 1; // Slower speed
     }
@@ -109,10 +110,14 @@ class RNAPolymerase {
         ctx.closePath();
         ctx.fill();
 
+        // Draw text with glow effect
         ctx.fillStyle = 'black';
+        ctx.shadowColor = 'rgba(255, 165, 0, 0.8)'; // Glow color
+        ctx.shadowBlur = 10; // Glow radius
         ctx.font = '20px Orbitron'; // Slightly smaller font size
         ctx.fillText('RNA', this.x - 15, this.y + 50); // Centered text
         ctx.fillText('Pol', this.x - 15, this.y + 80); // Centered text
+        ctx.shadowBlur = 0; // Reset shadow after drawing
     }
 
     move() {
@@ -187,16 +192,10 @@ class Transcription {
         // Draw codons below mRNA strand, moved down a bit
         if (this.mRNA.length >= 3) {
             for (let i = 0; i < Math.floor(this.mRNA.length / 3); i++) {
-                ctx.strokeStyle = 'white';
-                ctx.strokeRect(50 + i * this.dna.spacing * 3, 360, this.dna.spacing * 3, 60); // Moved down
-
-                // Draw codon with glow effect
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // Codon color
-                ctx.shadowColor = 'rgba(255, 255, 255, 0.8)'; // Glow color
-                ctx.shadowBlur = 15; // Glow radius
-                ctx.fillText(`Codon: ${this.mRNA[i * 3].type}${this.mRNA[i * 3 + 1].type}${this.mRNA[i * 3 + 2].type}`, 
+                this.ctx.strokeStyle = 'white';
+                this.ctx.strokeRect(50 + i * this.dna.spacing * 3, 360, this.dna.spacing * 3, 60); // Moved down
+                this.ctx.fillText(`Codon: ${this.mRNA[i * 3].type}${this.mRNA[i * 3 + 1].type}${this.mRNA[i * 3 + 2].type}`, 
                     50 + i * this.dna.spacing * 3 + 10, 390);
-                ctx.shadowBlur = 0; // Reset shadow
             }
         }
     }
