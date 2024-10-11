@@ -91,7 +91,7 @@ class DNAStrand {
 class RNAPolymerase {
     constructor() {
         this.x = 0;
-        this.y = 75; // Centered vertically on DNA
+        this.y = 110; // Position lowered between the bases
         this.size = 100; // Smaller size
         this.speed = 1; // Slower speed
     }
@@ -111,8 +111,9 @@ class RNAPolymerase {
         ctx.shadowBlur = 20;
 
         ctx.font = '20px Orbitron'; // Slightly smaller font size
-        ctx.fillText('RNA', this.x - 12, this.y + 35); // Adjusted to fit the smaller size
-        ctx.fillText('Pol', this.x - 12, this.y + 50); // Adjusted to fit the smaller size
+        // Center text in the triangle
+        ctx.fillText('RNA', this.x - 12, this.y + 30); // Adjusted for centering
+        ctx.fillText('Pol', this.x - 12, this.y + 45); // Adjusted for centering
 
         // Reset shadow to avoid affecting other drawings
         ctx.shadowBlur = 0;
