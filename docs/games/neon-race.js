@@ -9,7 +9,7 @@ class Car {
         this.maxSpeed = 5;
         this.acceleration = 0.2;
         this.deceleration = 0.1;
-        this.friction = 0.05; // Added friction
+        this.friction = 0.05; // Friction for slowing down
         this.angle = 0;
         this.controls = controls;
         this.lap = 0;
@@ -50,12 +50,10 @@ class Car {
                 // Bounce off the wall
                 this.speed *= -0.5; // Reverse speed
                 // Adjust position to prevent sticking
-                if (corner.x < track.centerX - track.innerRadius || corner.x > track.centerX + track.innerRadius) {
-                    this.x += Math.cos(this.angle + Math.PI) * 5; // Move car away from wall
-                }
-                if (corner.y < track.centerY - track.innerRadius || corner.y > track.centerY + track.innerRadius) {
-                    this.y += Math.sin(this.angle + Math.PI) * 5; // Move car away from wall
-                }
+                const overlapX = corner.x < track.centerX ? this.x + 5 : this.x - 5;
+                const overlapY = corner.y < track.centerY ? this.y + 5 : this.y - 5;
+                this.x = overlapX;
+                this.y = overlapY;
                 break;
             }
         }
@@ -114,7 +112,7 @@ class Track {
     isPointInTrack(x, y) {
         const dx = x - this.centerX;
         const dy = y - this.centerY;
-        const distance = Math.sqrt(dx*dx + dy*dy);
+        const distance = Math.sqrt(dx * dx + dy * dy);
         return distance >= this.innerRadius && distance <= this.outerRadius;
     }
 
@@ -134,7 +132,7 @@ class Track {
             const checkpoint = this.checkpoints[i];
             const dx = x - checkpoint.x;
             const dy = y - checkpoint.y;
-            if (Math.sqrt(dx*dx + dy*dy) < 20) {
+            if (Math.sqrt(dx * dx + dy * dy) < 20) {
                 return i;
             }
         }
@@ -167,9 +165,14 @@ class Game {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
         this.track = new Track(this.canvas);
-        // Adjust starting positions to be at the front
-        this.car1 = new Car(this.track.centerX - this.track.outerRadius * 0.75, this.track.centerY - 25, '#00ffff', {up: false, down: false, left: false, right: false});
-        this.car2 = new Car(this.track.centerX - this.track.outerRadius * 0.75, this.track.centerY + 35, '#ff00ff', {up: false, down: false, left: false, right: false});
+        // Adjust starting positions to be at the start of the track
+        const startAngle = Math.PI / 4; // Starting angle for the cars
+        const startX1 = this.track.centerX + this.track.innerRadius * Math.cos(startAngle);
+        const startY1 = this.track.centerY + this.track.innerRadius * Math.sin(startAngle) - 25; // Car 1
+        const startX2 = this.track.centerX + this.track.innerRadius * Math.cos(startAngle);
+        const startY2 = this.track.centerY + this.track.innerRadius * Math.sin(startAngle) + 35; // Car 2
+        this.car1 = new Car(startX1, startY1, '#00ffff', {up: false, down: false, left: false, right: false});
+        this.car2 = new Car(startX2, startY2, '#ff00ff', {up: false, down: false, left: false, right: false});
         this.winner = null;
         this.init();
     }
@@ -243,8 +246,13 @@ class Game {
     }
 
     restart() {
-        this.car1 = new Car(this.track.centerX - this.track.outerRadius * 0.75, this.track.centerY - 25, '#00ffff', {up: false, down: false, left: false, right: false});
-        this.car2 = new Car(this.track.centerX - this.track.outerRadius * 0.75, this.track.centerY + 35, '#ff00ff', {up: false, down: false, left: false, right: false});
+        const startAngle = Math.PI / 4; // Starting angle for the cars
+        const startX1 = this.track.centerX + this.track.innerRadius * Math.cos(startAngle);
+        const startY1 = this.track.centerY + this.track.innerRadius * Math.sin(startAngle) - 25; // Car 1
+        const startX2 = this.track.centerX + this.track.innerRadius * Math.cos(startAngle);
+        const startY2 = this.track.centerY + this.track.innerRadius * Math.sin(startAngle) + 35; // Car 2
+        this.car1 = new Car(startX1, startY1, '#00ffff', {up: false, down: false, left: false, right: false});
+        this.car2 = new Car(startX2, startY2, '#ff00ff', {up: false, down: false, left: false, right: false});
         this.winner = null;
         document.getElementById('gameOver').style.display = 'none';
     }
