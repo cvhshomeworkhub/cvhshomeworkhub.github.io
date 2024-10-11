@@ -35,21 +35,24 @@ class Car {
             this.speed *= (1 - this.friction);
         }
 
+        // Clamp speed
         this.speed = Math.max(-this.maxSpeed, Math.min(this.maxSpeed, this.speed));
 
         if (this.controls.left) this.angle -= 0.05;
         if (this.controls.right) this.angle += 0.05;
 
         // Update position based on speed and angle
-        this.x += Math.cos(this.angle) * this.speed;
-        this.y += Math.sin(this.angle) * this.speed;
+        const moveX = Math.cos(this.angle) * this.speed;
+        const moveY = Math.sin(this.angle) * this.speed;
 
-        // Keep cars on the track
-        const center = { x: track.centerX, y: track.centerY };
-        const trackDistance = Math.sqrt(Math.pow(this.x - center.x, 2) + Math.pow(this.y - center.y, 2));
-        if (trackDistance < track.innerRadius || trackDistance > track.outerRadius) {
-            this.x -= Math.cos(this.angle) * this.speed; // Undo movement
-            this.y -= Math.sin(this.angle) * this.speed; // Undo movement
+        this.x += moveX;
+        this.y += moveY;
+
+        // Ensure the car stays within track bounds
+        const distanceFromCenter = Math.sqrt((this.x - track.centerX) ** 2 + (this.y - track.centerY) ** 2);
+        if (distanceFromCenter < track.innerRadius || distanceFromCenter > track.outerRadius) {
+            this.x -= moveX; // Undo movement
+            this.y -= moveY; // Undo movement
             this.speed *= -0.5; // Bounce back
         }
     }
@@ -58,9 +61,7 @@ class Car {
         const corners = this.getCorners();
         for (let corner of corners) {
             if (!track.isPointInTrack(corner.x, corner.y)) {
-                // Bounce off the wall
                 this.speed *= -0.5; // Reverse speed
-                // Adjust position to prevent sticking
                 const overlapX = corner.x < track.centerX ? this.x + 5 : this.x - 5;
                 const overlapY = corner.y < track.centerY ? this.y + 5 : this.y - 5;
                 this.x = overlapX;
