@@ -11,7 +11,6 @@ class AminoAcid {
     }
 
     getAminoAcidColor(sequence) {
-        // Consistent colors for each amino acid
         const colorMap = {
             'M': '#FF5733', // Methionine (Start) - Orange
             'F': '#33FF57', // Phenylalanine - Green
@@ -24,7 +23,6 @@ class AminoAcid {
     }
 
     getAminoAcidLetter(sequence) {
-        // Simplified codon table focusing on common codons
         const codonTable = {
             'AUG': 'M', // Start codon - Methionine
             'UUU': 'F', 'UUC': 'F', // Phenylalanine
@@ -36,7 +34,6 @@ class AminoAcid {
     }
 
     getAminoAcidName(sequence) {
-        // Full names for amino acids
         const nameMap = {
             'M': 'Methionine',
             'F': 'Phenylalanine',
@@ -49,24 +46,20 @@ class AminoAcid {
     }
 
     draw(ctx) {
-        // Draw amino acid circle
         ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
         
-        // Draw border
         ctx.strokeStyle = 'white';
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Draw one-letter code
         ctx.fillStyle = 'black';
         ctx.font = 'bold 20px Orbitron';
         ctx.textAlign = 'center';
         ctx.fillText(this.letter, this.x, this.y + 8);
 
-        // Draw full name below
         ctx.fillStyle = 'white';
         ctx.font = '14px Orbitron';
         ctx.fillText(this.name, this.x, this.y + this.radius + 20);
@@ -89,7 +82,6 @@ class TRNA {
     }
 
     getMatchingAminoAcid(anticodon) {
-        // Convert anticodon to codon
         const codon = anticodon.split('').map(base => {
             switch(base) {
                 case 'A': return 'U';
@@ -103,7 +95,6 @@ class TRNA {
     }
 
     draw(ctx) {
-        // Draw tRNA body (L shape)
         ctx.strokeStyle = this.color;
         ctx.lineWidth = 5;
         ctx.beginPath();
@@ -112,13 +103,11 @@ class TRNA {
         ctx.lineTo(this.x + this.width, this.y + this.height);
         ctx.stroke();
 
-        // Draw anticodon label
         ctx.fillStyle = 'white';
         ctx.font = '18px Orbitron';
         ctx.textAlign = 'center';
-        ctx.fillText(`Anticodon: ${this.anticodon}`, this.x + this.width/2, this.y + this.height + 20);
+        ctx.fillText(`Anticodon: ${this.anticodon}`, this.x + this.width/2, this.y - 60);
 
-        // Draw attached amino acid
         this.aminoAcid.draw(ctx);
     }
 }
@@ -128,30 +117,26 @@ class Ribosome {
         this.x = 800;
         this.y = 150;
         this.size = 100;
-        this.speed = -0.5; // Slower movement
-        this.state = 'waiting'; // waiting, reading, moving
+        this.speed = -0.5;
+        this.state = 'waiting';
         this.stateTimer = 0;
     }
 
     draw(ctx) {
-        // Draw large subunit
         ctx.fillStyle = '#8B4513';
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size/2, 0, Math.PI * 2);
         ctx.fill();
         
-        // Draw small subunit
         ctx.beginPath();
         ctx.arc(this.x, this.y + 40, this.size/3, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw label
         ctx.fillStyle = 'white';
         ctx.font = '20px Orbitron';
         ctx.textAlign = 'center';
         ctx.fillText('Ribosome', this.x, this.y - 60);
 
-        // Draw current state
         ctx.font = '16px Orbitron';
         ctx.fillText(this.state.toUpperCase(), this.x, this.y - 40);
     }
@@ -161,21 +146,21 @@ class Translation {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
-        this.mRNASequence = 'AUGUCUUUUUAA'; // Simplified sequence
-        this.spacing = 100; // Increased spacing
+        this.mRNASequence = 'AUGUCUUUUUAA';
+        this.spacing = 100;
         this.ribosome = new Ribosome();
         this.aminoAcids = [];
         this.currentTRNA = null;
         this.translationProgress = 0;
         this.stepTimer = 0;
-        this.stepDuration = 120; // Longer duration for each step
+        this.stepDuration = 120;
         this.state = 'start';
+        this.currentCodonIndex = 0;
         this.animate();
     }
 
     update() {
         this.stepTimer++;
-        
         if (this.stepTimer >= this.stepDuration) {
             this.stepTimer = 0;
             this.nextStep();
@@ -202,6 +187,7 @@ class Translation {
                         this.ribosome.x - 40,
                         180
                     );
+                    this.currentCodonIndex = this.translationProgress;
                 }
                 this.state = 'adding_amino_acid';
                 break;
@@ -241,28 +227,22 @@ class Translation {
     }
 
     draw() {
-        // Clear canvas
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Draw mRNA strand with codons clearly marked
         this.drawMRNA();
 
-        // Draw current state
         this.ctx.fillStyle = 'white';
         this.ctx.font = '24px Orbitron';
         this.ctx.textAlign = 'left';
         this.ctx.fillText(`Current Step: ${this.state.replace(/_/g, ' ').toUpperCase()}`, 20, 50);
 
-        // Draw ribosome
         this.ribosome.draw(this.ctx);
 
-        // Draw current tRNA if exists
         if (this.currentTRNA) {
             this.currentTRNA.draw(this.ctx);
         }
 
-        // Draw amino acid chain
         this.aminoAcids.forEach((aa, index) => {
             aa.x = 800 - (index * this.spacing);
             aa.draw(this.ctx);
@@ -270,17 +250,27 @@ class Translation {
     }
 
     drawMRNA() {
-        // Draw mRNA strand with codon grouping
         for (let i = 0; i < this.mRNASequence.length; i += 3) {
             const codon = this.mRNASequence.substr(i, 3);
             const x = 50 + (i/3) * this.spacing;
             
-            // Draw codon box
+            const isCurrentCodon = (i === this.translationProgress);
+            
             this.ctx.strokeStyle = 'white';
-            this.ctx.lineWidth = 1;
+            this.ctx.lineWidth = isCurrentCodon ? 3 : 1;
+            
+            if (isCurrentCodon && this.state === 'tRNA_entering') {
+                this.ctx.fillStyle = 'rgba(255, 255, 0, 0.2)';
+                this.ctx.fillRect(x - 40, 130, 80, 40);
+                
+                this.ctx.fillStyle = '#FFD700';
+                this.ctx.font = 'bold 14px Orbitron';
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText('Current Codon', x, 120);
+            }
+            
             this.ctx.strokeRect(x - 40, 130, 80, 40);
 
-            // Draw nucleotides
             for (let j = 0; j < 3 && i + j < this.mRNASequence.length; j++) {
                 this.ctx.fillStyle = '#FF9933';
                 this.ctx.beginPath();
@@ -293,9 +283,8 @@ class Translation {
                 this.ctx.fillText(this.mRNASequence[i + j], x - 20 + (j * 20), 155);
             }
 
-            // Label codon
-            this.ctx.fillStyle = 'white';
-            this.ctx.font = '12px Orbitron';
+            this.ctx.fillStyle = isCurrentCodon ? '#FFD700' : 'white';
+            this.ctx.font = isCurrentCodon ? 'bold 12px Orbitron' : '12px Orbitron';
             this.ctx.fillText(`Codon ${i/3 + 1}`, x, 185);
         }
     }
