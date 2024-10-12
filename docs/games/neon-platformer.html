@@ -1,1 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Platformer</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="icon" href="../favicon.png" type="image/png">
+    <style>
+        #gameCanvas {
+            border: 2px solid var(--accent-color);
+            background: black;
+            box-shadow: 0 0 20px var(--accent-color);
+            margin: 20px auto;
+            display: block;
+        }
+        
+        .game-container {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .game-stats {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-color);
+            margin: 20px 0;
+            text-shadow: 0 0 10px var(--accent-color);
+        }
+        
+        .game-over {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-color);
+            z-index: 1000;
+        }
+        .game-controls {
+            margin-top: 20px;
+        }
+        .tool-btn {
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: var(--accent-color);
+            color: black;
+            border: none;
+            cursor: pointer;
+        }
+        .tool-btn.active {
+            background-color: #00ffff;
+        }
+    </style>
+</head>
+<body>
+    <header class="glass-header">
+        <div class="logo-container">
+            <h1 class="glow-text">Neon Platformer</h1>
+        </div>
+        <nav>
+            <a href="../index.html" class="nav-link">Home</a>
+            <a href="../chatroom.html" class="nav-link">Chatroom</a>
+            <a href="../games.html" class="nav-link">My Games</a>
+        </nav>
+    </header>
+    <main class="fade-in">
+        <div class="game-container">
+            <div class="game-stats">
+                <h2>Score: <span id="score">0</span></h2>
+                <h3>Coins: <span id="coins">0</span>/<span id="totalCoins">0</span></h3>
+            </div>
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+            <div class="game-controls">
+                <button onclick="setGameMode('play')" class="access-btn">Play</button>
+                <button onclick="setGameMode('create')" class="access-btn">Level Creator</button>
+                <div id="creatorTools" style="display: none;">
+                    <button onclick="setCurrentTool('platform')" class="tool-btn">Platform</button>
+                    <button onclick="setCurrentTool('hazard')" class="tool-btn">Hazard</button>
+                    <button onclick="setCurrentTool('coin')" class="tool-btn">Coin</button>
+                    <button onclick="setCurrentTool('checkpoint')" class="tool-btn">Checkpoint</button>
+                    <button onclick="setCurrentTool('endFlag')" class="tool-btn">End Flag</button>
+                    <button onclick="setCurrentTool('powerUp')" class="tool-btn">Power-Up</button>
+                    <button onclick="exportLevel()" class="access-btn">Export Level</button>
+                    <input type="text" id="importCode" placeholder="Enter level code">
+                    <button onclick="importLevel(document.getElementById('importCode').value)" class="access-btn">Import Level</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../script.js"></script>
+    <script src="neon-platformer.js"></script>
+    <script>
+        function setGameMode(mode) {
+            window.setGameMode(mode);
+            document.getElementById('creatorTools').style.display = mode === 'create' ? 'block' : 'none';
+        }
 
+        function setCurrentTool(tool) {
+            window.setCurrentTool(tool);
+            document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function exportLevel() {
+            const code = window.exportLevel();
+            alert('Level Code: ' + code);
+        }
+    </script>
+</body>
+</html>
