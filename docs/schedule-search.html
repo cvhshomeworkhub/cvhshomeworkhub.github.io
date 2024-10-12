@@ -6,6 +6,47 @@
     <title>CVHS Schedule Search</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.png" type="image/png">
+    <style>
+        /* Your existing CSS styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            color: #333;
+        }
+        .glass-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .filter-container {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .assignments-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .assignment-card {
+            flex: 1 1 calc(25% - 20px);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .assignment-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
 </head>
 <body>
     <header class="glass-header">
@@ -45,7 +86,7 @@
             <button id="fetchDataButton">Fetch Schedules</button>
         </div>
 
-        <div class="assignments-container" id="results"></div>
+        <div id="results" class="assignments-container"></div>
     </main>
 
     <script>
@@ -58,19 +99,13 @@
             const apiUrl = 'https://sheets.livepolls.app/api/spreadsheets/8cb7bf77-7f2b-4992-8016-862a1b494530/Sheet1';
 
             try {
-                const response = await fetch(apiUrl, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-
+                const response = await fetch(apiUrl);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
 
                 const data = await response.json();
-                displaySchedules(data);
+                displaySchedules(data.data); // Use the "data" field from your response
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
             }
@@ -81,10 +116,10 @@
             resultsContainer.innerHTML = ''; // Clear previous results
 
             const subject = document.getElementById("subject").value;
-            const periodIndex = document.getElementById("period").value - 1; // Adjust for zero-based index
+            const periodIndex = document.getElementById("period").value; // Get selected period
 
             data.forEach(student => {
-                const periodSubject = student[`Period ${periodIndex + 1}`]; // Adjust to match your data structure
+                const periodSubject = student[`${periodIndex}st Period`] || student[`${periodIndex}nd Period`] || student[`${periodIndex}rd Period`] || student[`${periodIndex}th Period`];
 
                 // Check if the student has the selected subject in the specified period
                 if ((subject === "" || periodSubject === subject)) {
