@@ -9,7 +9,9 @@
     <style>
         body {
             margin: 0;
-            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            color: #333;
         }
         .glass-header {
             position: sticky;
@@ -17,10 +19,58 @@
             z-index: 1000;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            padding: 10px 20px;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo-container h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
         main {
             padding: 20px;
+        }
+        .filter-container {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .filter-container label {
+            font-weight: bold;
+        }
+        .filter-container select,
+        .filter-container input {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        .filter-container button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .filter-container button:hover {
+            background-color: #0056b3;
         }
         .assignments-container {
             display: flex;
@@ -28,16 +78,21 @@
             gap: 20px;
         }
         .assignment-card {
-            flex: 1;
-            min-width: calc(25% - 14px);
-            max-width: calc(25% - 14px);
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px;
+            flex: 1 1 calc(25% - 20px);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
             border-radius: 8px;
             text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
         }
-        .filter-container {
-            margin-bottom: 20px;
+        .assignment-card:hover {
+            transform: translateY(-5px);
+        }
+        .assignment-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #007BFF;
         }
     </style>
 </head>
@@ -87,8 +142,8 @@
 
     <script>
         const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
-        const sheetId = 'AIzaSyCQe_6PuQMsHXCmJ8ihQdcqFOjaoFaVmxo'; // Replace with your actual Google Sheet ID
-        const range = 'Sheet1'; // Adjust the range as needed
+        const sheetId = 'YOUR_SHEET_ID'; // Replace with your actual Google Sheet ID
+        const range = 'Sheet1!A1:H'; // Adjust the range as needed
 
         let data = [];
 
