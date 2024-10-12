@@ -78,12 +78,12 @@
                 <button onclick="setGameMode('play')" class="access-btn">Play</button>
                 <button onclick="setGameMode('create')" class="access-btn">Level Creator</button>
                 <div id="creatorTools" style="display: none;">
-                    <button onclick="setCurrentTool('platform')" class="tool-btn">Platform</button>
-                    <button onclick="setCurrentTool('hazard')" class="tool-btn">Hazard</button>
-                    <button onclick="setCurrentTool('coin')" class="tool-btn">Coin</button>
-                    <button onclick="setCurrentTool('checkpoint')" class="tool-btn">Checkpoint</button>
-                    <button onclick="setCurrentTool('endFlag')" class="tool-btn">End Flag</button>
-                    <button onclick="setCurrentTool('powerUp')" class="tool-btn">Power-Up</button>
+                    <button onclick="setCurrentTool('platform', event)" class="tool-btn">Platform</button>
+                    <button onclick="setCurrentTool('hazard', event)" class="tool-btn">Hazard</button>
+                    <button onclick="setCurrentTool('coin', event)" class="tool-btn">Coin</button>
+                    <button onclick="setCurrentTool('checkpoint', event)" class="tool-btn">Checkpoint</button>
+                    <button onclick="setCurrentTool('endFlag', event)" class="tool-btn">End Flag</button>
+                    <button onclick="setCurrentTool('powerUp', event)" class="tool-btn">Power-Up</button>
                     <button onclick="exportLevel()" class="access-btn">Export Level</button>
                     <input type="text" id="importCode" placeholder="Enter level code">
                     <button onclick="importLevel(document.getElementById('importCode').value)" class="access-btn">Import Level</button>
