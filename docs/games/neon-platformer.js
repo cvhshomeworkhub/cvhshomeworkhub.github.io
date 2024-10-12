@@ -171,12 +171,12 @@ class Game {
         this.canvas.height = CANVAS_HEIGHT;
         this.gameObjects = [];
         this.player = new Player(GRID_SIZE, CANVAS_HEIGHT - GRID_SIZE * 2);
-        this.gameMode = 'play'; // 'play' or 'create'
+        this.gameMode = 'create'; // 'play' or 'create'
         this.currentTool = 'platform';
         this.score = 0;
         this.coinsCollected = 0;
         this.totalCoins = 0;
-
+        this.addInitialObjects();
         this.initEventListeners();
     }
 
@@ -254,6 +254,22 @@ class Game {
         }
     }
 
+    addInitialObjects() {
+        // Add a floor
+        this.gameObjects.push(new Platform(0, CANVAS_HEIGHT - GRID_SIZE, CANVAS_WIDTH, GRID_SIZE));
+        
+        // Add some platforms
+        this.gameObjects.push(new Platform(GRID_SIZE * 5, CANVAS_HEIGHT - GRID_SIZE * 5, GRID_SIZE * 3, GRID_SIZE));
+        this.gameObjects.push(new Platform(GRID_SIZE * 10, CANVAS_HEIGHT - GRID_SIZE * 8, GRID_SIZE * 3, GRID_SIZE));
+        
+        // Add a coin
+        this.gameObjects.push(new Coin(GRID_SIZE * 6, CANVAS_HEIGHT - GRID_SIZE * 6));
+        this.totalCoins++;
+        
+        // Add an end flag
+        this.gameObjects.push(new EndFlag(CANVAS_WIDTH - GRID_SIZE * 2, CANVAS_HEIGHT - GRID_SIZE * 3));
+    }
+    
     update() {
         if (this.gameMode === 'play') {
             this.player.update(this.gameObjects);
@@ -335,6 +351,7 @@ class Game {
             obj.draw(this.ctx);
         }
 
+        // Always draw the player, even in create mode
         this.player.draw(this.ctx);
 
         // Draw score and coin count
@@ -342,6 +359,9 @@ class Game {
         this.ctx.font = '20px Arial';
         this.ctx.fillText(`Score: ${this.score}`, 10, 30);
         this.ctx.fillText(`Coins: ${this.coinsCollected}/${this.totalCoins}`, 10, 60);
+        
+        // Draw current mode
+        this.ctx.fillText(`Mode: ${this.gameMode}`, 10, 90);
     }
 
     gameLoop() {
@@ -358,7 +378,7 @@ class Game {
         this.gameMode = mode;
         if (mode === 'play') {
             this.player.x = GRID_SIZE;
-            this.player.y = CANVAS_HEIGHT - GRID_SIZE * 2;
+            this.player.y = CANVAS_HEIGHT - GRID_SIZE * 3; // Adjust initial player position
         }
     }
 
