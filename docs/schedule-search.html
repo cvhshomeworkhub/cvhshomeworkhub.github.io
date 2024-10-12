@@ -67,14 +67,7 @@
                 // Check if the student has the selected subject in the specified period
                 if ((subject === "" || periodSubject === subject)) {
                     const card = document.createElement("div");
-                    card.innerHTML = `<h3>${student.Name}</h3>
-                                      <p>${student['1st Period'] || ''}</p>
-                                      <p>${student['2nd Period'] || ''}</p>
-                                      <p>${student['3rd Period'] || ''}</p>
-                                      <p>${student['4th Period'] || ''}</p>
-                                      <p>${student['5th Period'] || ''}</p>
-                                      <p>${student['6th Period'] || ''}</p>
-                                      <p>${student['7th Period'] || ''}</p>`;
+                    card.innerHTML = `<h3>${student.Name}</h3>`;
                     resultsContainer.appendChild(card);
                 }
             });
