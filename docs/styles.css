@@ -339,6 +339,25 @@ nav {
     transform: translateY(-2px);
 }
 
+.controls-container {
+    display: flex;
+    justify-content: space-between; /* Space out the items */
+    align-items: center; /* Center items vertically */
+    padding: 1rem; /* Add padding as needed */
+}
+
+.controls-container select,
+.controls-container input[type="range"],
+.controls-container button {
+    margin-right: 1rem; /* Add space between items */
+}
+
+.controls-container div {
+    display: flex;
+    align-items: center; /* Align label and input in the center */
+}
+
+
 /* ==========================================================================
    Modal Styles
    ========================================================================== */
