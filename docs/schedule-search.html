@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.png" type="image/png">
     <style>
+        /* Your existing CSS styles */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -22,55 +23,11 @@
             padding: 15px 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        .logo-container h1 {
-            margin: 0;
-            font-size: 1.5rem;
-            color: #fff;
-        }
-        nav {
-            display: flex;
-            gap: 15px;
-        }
-        .nav-link {
-            color: #fff;
-            text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        main {
-            padding: 20px;
-        }
         .filter-container {
             margin-bottom: 20px;
             display: flex;
             flex-direction: column;
             gap: 10px;
-        }
-        .filter-container label {
-            font-weight: bold;
-        }
-        .filter-container select,
-        .filter-container input {
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 1rem;
-        }
-        .filter-container button {
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .filter-container button:hover {
-            background-color: #0056b3;
         }
         .assignments-container {
             display: flex;
@@ -89,99 +46,68 @@
         .assignment-card:hover {
             transform: translateY(-5px);
         }
-        .assignment-card h3 {
-            margin: 0;
-            font-size: 1.2rem;
-            color: #007BFF;
-        }
     </style>
 </head>
-<body class="dark-theme">
+<body>
     <header class="glass-header">
         <div class="logo-container">
             <h1 class="glow-text">Schedules</h1>
         </div>
-        <nav>
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="updates.html" class="nav-link">Updates</a>
-            <a href="schedule-search.html" class="nav-link">Schedules</a>
-            <a href="chatroom.html" class="nav-link">Chatroom</a>
-            <a href="games.html" class="nav-link">My Games</a>
-            <a href="simulations.html" class="nav-link">Simulations</a>
-        </nav>
     </header>
 
-    <main class="fade-in">
-        <h2 class="section-title glow-text">List of Schedules</h2>
+    <main>
+        <h2 class="section-title">List of Schedules</h2>
 
         <div class="filter-container">
-            <label for="subject">Select Subject:</label>
-            <select id="subject">
-                <option value="">--Select--</option>
-                <option value="Human Geography">Human Geography</option>
-                <option value="Biology">Biology</option>
-                <option value="Theater">Theater</option>
-                <option value="Tech Theater">Tech Theater</option>
-                <option value="Art">Art</option>
-                <option value="English">English</option>
-                <option value="Algebra 2">Algebra 2</option>
-                <option value="Geometry">Geometry</option>
-                <option value="Computer Science">Computer Science</option>
-                <option value="PE">PE</option>
-            </select>
-
-            <label for="period">Select Period:</label>
-            <input type="range" id="period" min="1" max="7" value="1">
-            <span id="periodValue">1</span>
-
-            <button id="searchButton">Search</button>
+            <button id="fetchDataButton">Fetch Schedules</button>
         </div>
 
-        <div class="resources-grid assignments-container" id="results"></div>
+        <div class="assignments-container" id="results"></div>
     </main>
 
     <script>
-        const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
-        const sheetId = 'YOUR_SHEET_ID'; // Replace with your actual Google Sheet ID
-        const range = 'Sheet1!A1:H'; // Adjust the range as needed
+        document.getElementById("fetchDataButton").addEventListener("click", fetchSchedules);
 
-        let data = [];
+        async function fetchSchedules() {
+            const apiUrl = 'https://sheets.livepolls.app/api/spreadsheets/8cb7bf77-7f2b-4992-8016-862a1b494530/Sheet1';
 
-        // Fetch data from Google Sheets
-        async function fetchData() {
-            const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`);
-            const result = await response.json();
-            data = result.values.slice(1).map(row => ({
-                name: row[0],
-                schedule: row.slice(1)
-            }));
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                displaySchedules(data);
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+            }
         }
 
-        document.getElementById("period").addEventListener("input", function() {
-            document.getElementById("periodValue").textContent = this.value;
-        });
-
-        document.getElementById("searchButton").addEventListener("click", function() {
-            const subject = document.getElementById("subject").value;
-            const period = document.getElementById("period").value - 1; // Adjusting for 0-indexed array
+        function displaySchedules(data) {
             const resultsContainer = document.getElementById("results");
+            resultsContainer.innerHTML = ''; // Clear previous results
 
-            // Clear previous results
-            resultsContainer.innerHTML = '';
-
-            // Filter results based on selected subject and period
             data.forEach(student => {
-                if (student.schedule[period] === subject) {
-                    const card = document.createElement("div");
-                    card.classList.add("assignment-card");
-                    card.innerHTML = `<h3 class="resource-title">${student.name}</h3>`;
-                    resultsContainer.appendChild(card);
-                }
+                const card = document.createElement("div");
+                card.classList.add("assignment-card");
+                card.innerHTML = `<h3>${student.Name}</h3>
+                                  <p>${student['1st']}</p>
+                                  <p>${student['2nd']}</p>
+                                  <p>${student['3rd']}</p>
+                                  <p>${student['4th']}</p>
+                                  <p>${student['5th']}</p>
+                                  <p>${student['6th']}</p>
+                                  <p>${student['7th']}</p>`;
+                resultsContainer.appendChild(card);
             });
-        });
-
-        // Load data when the page is ready
-        fetchData();
+        }
     </script>
 </body>
 </html>
