@@ -41,44 +41,37 @@
         <div class="games-container">
             <h2 class="section-title glow-text">Schedule Search</h2>
             <div>
-                <div>
-                    <center>
-                      <select id="subject">
-                            <option value="">--Select Subject--</option>
-                            <option value="Human Geography">Human Geography</option>
-                            <option value="Biology">Biology</option>
-                            <option value="Theater">Theater</option>
-                            <option value="Tech Theater">Tech Theater</option>
-                            <option value="Art">Art</option>
-                            <option value="English">English</option>
-                            <option value="Algebra 2">Algebra 2</option>
-                            <option value="Geometry">Geometry</option>
-                            <option value="Algebra 1">Algebra 1</option>
-                            <option value="Computer Science">Computer Science</option>
-                            <option value="PE">PE</option>
-                            <option value="Chemistry">Chemistry</option>
-                            <option value="Dance">Dance</option>
-                            <option value="Spanish">Spanish</option>
-                            <option value="French">French</option>
-                            <option value="Baseball">Baseball</option>
-                            <option value="Volleyball">Volleyball</option>
-                        </select>  
-                    </center>
-                </div>
-                <h4></h4>
-                    <center>
+                <div class="controls-container">
+                    <select id="subject">
+                        <option value="">--Select Subject--</option>
+                        <option value="Human Geography">Human Geography</option>
+                        <option value="Biology">Biology</option>
+                        <option value="Theater">Theater</option>
+                        <option value="Tech Theater">Tech Theater</option>
+                        <option value="Art">Art</option>
+                        <option value="English">English</option>
+                        <option value="Algebra 2">Algebra 2</option>
+                        <option value="Geometry">Geometry</option>
+                        <option value="Algebra 1">Algebra 1</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="PE">PE</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Dance">Dance</option>
+                        <option value="Spanish">Spanish</option>
+                        <option value="French">French</option>
+                        <option value="Baseball">Baseball</option>
+                        <option value="Volleyball">Volleyball</option>
+                    </select>
+                
                     <div>
                         <label for="period">Select Period:</label>
                         <input type="range" id="period" min="1" max="7" value="1">
                         <span id="periodValue">1</span>
                     </div>
-                    </center>
-                <h4></h4>
-                    <center>
-                    <div>
-                        <button id="fetchDataButton" class="access-btn">Fetch Schedules</button>
-                    </div>
-                    </center>
+                
+                    <button id="fetchDataButton" class="access-btn">Fetch Schedules</button>
+                </div>
+
             </div>
 
             <div id="results"></div>
