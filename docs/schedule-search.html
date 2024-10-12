@@ -109,7 +109,7 @@
         function displaySchedules(data) {
             const resultsContainer = document.getElementById("results");
             resultsContainer.innerHTML = ''; // Clear previous results
-
+        
             const subject = document.getElementById("subject").value;
             const periodIndex = document.getElementById("period").value; // Get the selected period
             
@@ -118,19 +118,28 @@
                               periodIndex === "2" ? "2nd Period" :
                               periodIndex === "3" ? "3rd Period" :
                               `${periodIndex}th Period`;
-
+        
+            // Create a grid container for the cards
+            const gridContainer = document.createElement("div");
+            gridContainer.className = "resources-grid";
+        
             data.forEach(student => {
                 const periodSubject = student[periodKey] || ""; // Access the subject for the selected period
-
+        
                 // Check if the student has the selected subject in the specified period
                 if ((subject === "" || periodSubject === subject)) {
                     const card = document.createElement("div");
-                    card.innerHTML = `<h3>${student.Name}</h3>`;
-                    resultsContainer.appendChild(card);
+                    card.className = "resource-card glass-effect"; // Add the CSS classes for styling
+                    card.innerHTML = `<h3 class="resource-title">${student.Name}</h3>`; // Set the inner HTML
+                    gridContainer.appendChild(card); // Append the card to the grid container
                 }
             });
-
-            if (resultsContainer.innerHTML === '') {
+        
+            // Append the grid container to the results
+            resultsContainer.appendChild(gridContainer);
+        
+            // If no results, show a message
+            if (gridContainer.innerHTML === '') {
                 resultsContainer.innerHTML = '<p>No schedules found.</p>'; // Message when no results match
             }
         }
