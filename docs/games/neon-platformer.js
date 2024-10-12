@@ -375,16 +375,31 @@ class Game {
     }
 
     function setGameMode(mode) {
-    // Call the instance method directly
-    game.setGameMode(mode);
-
-    // Update the UI based on the game mode
-    document.getElementById('creatorTools').style.display = mode === 'create' ? 'block' : 'none';
+        // Directly set the game mode without calling itself
+        game.gameMode = mode; // Set the mode directly on the game instance
     
-    // Update button styles
-    document.querySelector(`button[onclick="setGameMode('play')"]`).classList.toggle('active', mode === 'play');
-    document.querySelector(`button[onclick="setGameMode('create')"]`).classList.toggle('active', mode === 'create');
-}
+        // Update the display of the creator tools
+        const creatorTools = document.getElementById('creatorTools');
+        if (mode === 'create') {
+            creatorTools.style.display = 'block';
+        } else {
+            creatorTools.style.display = 'none';
+        }
+    
+        // Update button styles based on the current mode
+        const playButton = document.querySelector(`button[onclick="setGameMode('play')"]`);
+        const createButton = document.querySelector(`button[onclick="setGameMode('create')"]`);
+        
+        playButton.classList.toggle('active', mode === 'play');
+        createButton.classList.toggle('active', mode === 'create');
+    
+        // If in 'play' mode, reset player position
+        if (mode === 'play') {
+            game.player.x = GRID_SIZE; // Reset to starting position
+            game.player.y = CANVAS_HEIGHT - GRID_SIZE * 3;
+        }
+    }
+
 
 
     setCurrentTool(tool) {
