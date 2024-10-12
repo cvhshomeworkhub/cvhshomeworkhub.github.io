@@ -54,7 +54,12 @@
 
             const subject = document.getElementById("subject").value;
             const periodIndex = document.getElementById("period").value; // Get the selected period
-            const periodKey = `${periodIndex}th Period`; // Create the key for the selected period
+            
+            // Create the key for the selected period
+            const periodKey = periodIndex === "1" ? "1st Period" :
+                              periodIndex === "2" ? "2nd Period" :
+                              periodIndex === "3" ? "3rd Period" :
+                              `${periodIndex}th Period`;
 
             data.forEach(student => {
                 const periodSubject = student[periodKey] || ""; // Access the subject for the selected period
