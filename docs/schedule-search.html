@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CVHS Schedule Search</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="favicon.png" type="image/png">
     <style>
         body {
             margin: 0;
@@ -23,7 +21,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .filter-container {
-            margin-bottom: 20px;
+            margin: 20px;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -32,6 +30,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+            margin: 20px;
         }
         .assignment-card {
             flex: 1 1 calc(25% - 20px);
@@ -49,14 +48,10 @@
 </head>
 <body>
     <header class="glass-header">
-        <div class="logo-container">
-            <h1 class="glow-text">Schedules</h1>
-        </div>
+        <h1>Schedules</h1>
     </header>
 
     <main>
-        <h2 class="section-title">List of Schedules</h2>
-
         <div class="filter-container">
             <select id="subject">
                 <option value="">--Select Subject--</option>
@@ -65,7 +60,6 @@
                 <option value="Tech Theater">Tech Theater</option>
                 <option value="English">English</option>
                 <option value="PE">PE</option>
-                <!-- Add more subjects as needed -->
             </select>
 
             <label for="period">Select Period:</label>
@@ -94,6 +88,7 @@
                 }
 
                 const data = await response.json();
+                console.log('Fetched data:', data); // Debugging line
                 displaySchedules(data.data); // Access the "data" field
             } catch (error) {
                 console.error('Fetch operation failed:', error.message);
@@ -105,10 +100,11 @@
             resultsContainer.innerHTML = ''; // Clear previous results
 
             const subject = document.getElementById("subject").value;
-            const periodIndex = document.getElementById("period").value - 1; // Adjust for zero-based index
+            const periodIndex = document.getElementById("period").value; // Adjust for zero-based index
 
             data.forEach(student => {
-                const periodSubject = student[`${periodIndex + 1}st Period`] || ""; // Use the correct key format
+                const periodSubject = student[`${periodIndex}st Period`] || ""; // Use the correct key format
+                console.log(`Student: ${student.Name}, Subject: ${periodSubject}`); // Debugging line
 
                 // Check if the student has the selected subject in the specified period
                 if ((subject === "" || periodSubject === subject)) {
@@ -125,6 +121,10 @@
                     resultsContainer.appendChild(card);
                 }
             });
+
+            if (resultsContainer.innerHTML === '') {
+                resultsContainer.innerHTML = '<p>No schedules found.</p>'; // Message when no results match
+            }
         }
     </script>
 </body>
