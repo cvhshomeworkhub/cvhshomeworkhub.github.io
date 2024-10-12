@@ -556,6 +556,22 @@ body.light-mode .theme-toggle {
     left: 20px; /* Adjust as needed */
 }
 
+select {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+}
+
+select:hover {
+    box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+}
+
 /* ==========================================================================
    Canvas Styles
    ========================================================================== */
