@@ -456,13 +456,3 @@ window.setGameMode = (mode) => game.setGameMode(mode);
 window.setCurrentTool = (tool) => game.setCurrentTool(tool);
 window.exportLevel = () => game.exportLevel();
 window.importLevel = (code) => game.importLevel(code);
-
-// Initialize the game
-const game = new Game();
-game.start();
-
-// Expose functions for UI interaction
-window.setGameMode = (mode) => game.setGameMode(mode);
-window.setCurrentTool = (tool) => game.setCurrentTool(tool);
-window.exportLevel = () => game.exportLevel();
-window.importLevel = (code) => game.importLevel(code);
