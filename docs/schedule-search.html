@@ -27,15 +27,17 @@
             flex-wrap: wrap;
             gap: 20px;
         }
-        .assignments-row {
-            display: flex;
-            width: 100%;
-            gap: 20px;
-        }
         .assignment-card {
             flex: 1;
-            min-width: calc(33.333% - 14px);
-            max-width: calc(33.333% - 14px);
+            min-width: calc(25% - 14px);
+            max-width: calc(25% - 14px);
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .filter-container {
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -51,36 +53,80 @@
             <a href="chatroom.html" class="nav-link">Chatroom</a>
             <a href="games.html" class="nav-link">My Games</a>
             <a href="simulations.html" class="nav-link">Simulations</a>
-            <div class="dropdown">
-                <button class="dropbtn glass-effect">Subject Study</button>
-                <div class="dropdown-content glass-effect">
-                    <a href="subject-pages/human-geography.html">Human Geography</a>
-                    <a href="subject-pages/biology.html">Biology</a>
-                    <a href="subject-pages/theater.html">Theater</a>
-                    <a href="subject-pages/tech-theater.html">Tech Theater</a>
-                    <a href="subject-pages/art.html">Art</a>
-                    <a href="subject-pages/english.html">English</a>
-                    <a href="subject-pages/algebra2.html">Algebra 2</a>
-                    <a href="subject-pages/geometry.html">Geometry</a>
-                    <a href="subject-pages/computer-science.html">Computer Science</a>
-                    <a href="subject-pages/pe.html">PE</a>
-                </div>
-            </div>
         </nav>
     </header>
 
     <main class="fade-in">
         <h2 class="section-title glow-text">List of Schedules</h2>
-        // add search features here
-        <div class="resources-grid">
-                <div class="resource-card glass-effect">
-                    <h3 class="resource-title">Kavin Elangovan</h3>
-                </div>
-            </div>
+
+        <div class="filter-container">
+            <label for="subject">Select Subject:</label>
+            <select id="subject">
+                <option value="">--Select--</option>
+                <option value="Human Geography">Human Geography</option>
+                <option value="Biology">Biology</option>
+                <option value="Theater">Theater</option>
+                <option value="Tech Theater">Tech Theater</option>
+                <option value="Art">Art</option>
+                <option value="English">English</option>
+                <option value="Algebra 2">Algebra 2</option>
+                <option value="Geometry">Geometry</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="PE">PE</option>
+            </select>
+
+            <label for="period">Select Period:</label>
+            <input type="range" id="period" min="1" max="7" value="1">
+            <span id="periodValue">1</span>
+
+            <button id="searchButton">Search</button>
+        </div>
+
+        <div class="resources-grid assignments-container" id="results"></div>
     </main>
 
     <script>
-        
+        const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
+        const sheetId = 'AIzaSyCQe_6PuQMsHXCmJ8ihQdcqFOjaoFaVmxo'; // Replace with your actual Google Sheet ID
+        const range = 'Sheet1'; // Adjust the range as needed
+
+        let data = [];
+
+        // Fetch data from Google Sheets
+        async function fetchData() {
+            const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`);
+            const result = await response.json();
+            data = result.values.slice(1).map(row => ({
+                name: row[0],
+                schedule: row.slice(1)
+            }));
+        }
+
+        document.getElementById("period").addEventListener("input", function() {
+            document.getElementById("periodValue").textContent = this.value;
+        });
+
+        document.getElementById("searchButton").addEventListener("click", function() {
+            const subject = document.getElementById("subject").value;
+            const period = document.getElementById("period").value - 1; // Adjusting for 0-indexed array
+            const resultsContainer = document.getElementById("results");
+
+            // Clear previous results
+            resultsContainer.innerHTML = '';
+
+            // Filter results based on selected subject and period
+            data.forEach(student => {
+                if (student.schedule[period] === subject) {
+                    const card = document.createElement("div");
+                    card.classList.add("assignment-card");
+                    card.innerHTML = `<h3 class="resource-title">${student.name}</h3>`;
+                    resultsContainer.appendChild(card);
+                }
+            });
+        });
+
+        // Load data when the page is ready
+        fetchData();
     </script>
 </body>
 </html>
