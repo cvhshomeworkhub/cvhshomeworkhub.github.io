@@ -59,6 +59,30 @@
         <h2 class="section-title">List of Schedules</h2>
 
         <div class="filter-container">
+            <select id="subject">
+                <option value="">--Select Subject--</option>
+                <option value="Human Geography">Human Geography</option>
+                <option value="Biology">Biology</option>
+                <option value="Theater">Theater</option>
+                <option value="Tech Theater">Tech Theater</option>
+                <option value="Art">Art</option>
+                <option value="English">English</option>
+                <option value="Algebra 2">Algebra 2</option>
+                <option value="Geometry">Geometry</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="PE">PE</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Dance">Dance</option>
+                <option value="Spanish">Spanish</option>
+                <option value="French">French</option>
+                <option value="Baseball">Baseball</option>
+                <option value="Volleyball">Volleyball</option>
+            </select>
+
+            <label for="period">Select Period:</label>
+            <input type="range" id="period" min="1" max="7" value="1">
+            <span id="periodValue">1</span>
+
             <button id="fetchDataButton">Fetch Schedules</button>
         </div>
 
@@ -67,6 +91,9 @@
 
     <script>
         document.getElementById("fetchDataButton").addEventListener("click", fetchSchedules);
+        document.getElementById("period").addEventListener("input", function() {
+            document.getElementById("periodValue").textContent = this.value;
+        });
 
         async function fetchSchedules() {
             const apiUrl = 'https://sheets.livepolls.app/api/spreadsheets/8cb7bf77-7f2b-4992-8016-862a1b494530/Sheet1';
@@ -94,18 +121,26 @@
             const resultsContainer = document.getElementById("results");
             resultsContainer.innerHTML = ''; // Clear previous results
 
+            const subject = document.getElementById("subject").value;
+            const periodIndex = document.getElementById("period").value - 1; // Adjust for zero-based index
+
             data.forEach(student => {
-                const card = document.createElement("div");
-                card.classList.add("assignment-card");
-                card.innerHTML = `<h3>${student.Name}</h3>
-                                  <p>${student['1st']}</p>
-                                  <p>${student['2nd']}</p>
-                                  <p>${student['3rd']}</p>
-                                  <p>${student['4th']}</p>
-                                  <p>${student['5th']}</p>
-                                  <p>${student['6th']}</p>
-                                  <p>${student['7th']}</p>`;
-                resultsContainer.appendChild(card);
+                const periodSubject = student[`Period ${periodIndex + 1}`]; // Adjust to match your data structure
+
+                // Check if the student has the selected subject in the specified period
+                if ((subject === "" || periodSubject === subject)) {
+                    const card = document.createElement("div");
+                    card.classList.add("assignment-card");
+                    card.innerHTML = `<h3>${student.Name}</h3>
+                                      <p>${student['1st']}</p>
+                                      <p>${student['2nd']}</p>
+                                      <p>${student['3rd']}</p>
+                                      <p>${student['4th']}</p>
+                                      <p>${student['5th']}</p>
+                                      <p>${student['6th']}</p>
+                                      <p>${student['7th']}</p>`;
+                    resultsContainer.appendChild(card);
+                }
             });
         }
     </script>
