@@ -95,9 +95,12 @@
     <script src="neon-platformer.js"></script>
     <script>
         function setGameMode(mode) {
-            window.setGameMode(mode);
-            document.getElementById('creatorTools').style.display = mode === 'create' ? 'block' : 'none';
-        }
+        window.setGameMode(mode);
+        document.getElementById('creatorTools').style.display = mode === 'create' ? 'block' : 'none';
+        // Update button styles
+        document.querySelector(`button[onclick="setGameMode('play')"]`).classList.toggle('active', mode === 'play');
+        document.querySelector(`button[onclick="setGameMode('create')"]`).classList.toggle('active', mode === 'create');
+    }
 
         function setCurrentTool(tool) {
             window.setCurrentTool(tool);
@@ -109,6 +112,8 @@
             const code = window.exportLevel();
             alert('Level Code: ' + code);
         }
+
+        setGameMode('create');
     </script>
 </body>
 </html>
