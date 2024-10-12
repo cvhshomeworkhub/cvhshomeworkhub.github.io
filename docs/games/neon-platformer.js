@@ -375,12 +375,17 @@ class Game {
     }
 
     function setGameMode(mode) {
-        game.setGameMode(mode); // Use the game instance to call the method
-        document.getElementById('creatorTools').style.display = mode === 'create' ? 'block' : 'none';
-        // Update button styles
-        document.querySelector(`button[onclick="setGameMode('play')"]`).classList.toggle('active', mode === 'play');
-        document.querySelector(`button[onclick="setGameMode('create')"]`).classList.toggle('active', mode === 'create');
-    }
+    // Call the instance method directly
+    game.setGameMode(mode);
+
+    // Update the UI based on the game mode
+    document.getElementById('creatorTools').style.display = mode === 'create' ? 'block' : 'none';
+    
+    // Update button styles
+    document.querySelector(`button[onclick="setGameMode('play')"]`).classList.toggle('active', mode === 'play');
+    document.querySelector(`button[onclick="setGameMode('create')"]`).classList.toggle('active', mode === 'create');
+}
+
 
     setCurrentTool(tool) {
         this.currentTool = tool;
