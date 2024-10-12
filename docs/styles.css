@@ -557,19 +557,20 @@ body.light-mode .theme-toggle {
 }
 
 select {
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    color: black;
-    border: none;
+    background: var(--glass-background); /* Use the glass background */
+    border: 1px solid var(--glass-border); /* Use the glass border */
+    color: var(--text-light); /* Change text color to match */
     padding: 0.75rem;
     border-radius: 5px;
     font-size: 1rem;
     font-family: 'Orbitron', sans-serif;
     cursor: pointer;
     transition: all var(--transition-speed) ease;
+    backdrop-filter: blur(10px); /* Add blur effect for glassy look */
 }
 
 select:hover {
-    box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+    box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4); /* Add hover effect */
 }
 
 /* ==========================================================================
