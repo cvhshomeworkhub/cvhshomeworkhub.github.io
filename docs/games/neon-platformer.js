@@ -441,7 +441,6 @@ window.setGameMode = (mode) => game.setGameMode(mode);
 window.setCurrentTool = (tool) => game.setCurrentTool(tool);
 window.exportLevel = () => game.exportLevel();
 window.importLevel = (code) => game.importLevel(code);
-</antArtifact>
 
 // Initialize the game
 const game = new Game();
