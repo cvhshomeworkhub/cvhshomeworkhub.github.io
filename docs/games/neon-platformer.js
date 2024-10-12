@@ -374,12 +374,12 @@ class Game {
         this.gameLoop();
     }
 
-    setGameMode(mode) {
-        this.gameMode = mode;
-        if (mode === 'play') {
-            this.player.x = GRID_SIZE;
-            this.player.y = CANVAS_HEIGHT - GRID_SIZE * 3; // Adjust initial player position
-        }
+    function setGameMode(mode) {
+        game.setGameMode(mode); // Use the game instance to call the method
+        document.getElementById('creatorTools').style.display = mode === 'create' ? 'block' : 'none';
+        // Update button styles
+        document.querySelector(`button[onclick="setGameMode('play')"]`).classList.toggle('active', mode === 'play');
+        document.querySelector(`button[onclick="setGameMode('create')"]`).classList.toggle('active', mode === 'create');
     }
 
     setCurrentTool(tool) {
