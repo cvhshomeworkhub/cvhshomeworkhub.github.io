@@ -1,3 +1,5 @@
+const game = newGame();
+
 // Constants
 const GRID_SIZE = 32;
 const CANVAS_WIDTH = 800;
@@ -373,38 +375,13 @@ class Game {
     start() {
         this.gameLoop();
     }
-
-    function setGameMode(mode) {
-        // Directly set the game mode without calling itself
-        game.gameMode = mode; // Set the mode directly on the game instance
     
-        // Update the display of the creator tools
-        const creatorTools = document.getElementById('creatorTools');
-        if (mode === 'create') {
-            creatorTools.style.display = 'block';
-        } else {
-            creatorTools.style.display = 'none';
-        }
-    
-        // Update button styles based on the current mode
-        const playButton = document.querySelector(`button[onclick="setGameMode('play')"]`);
-        const createButton = document.querySelector(`button[onclick="setGameMode('create')"]`);
-        
-        playButton.classList.toggle('active', mode === 'play');
-        createButton.classList.toggle('active', mode === 'create');
-    
-        // If in 'play' mode, reset player position
-        if (mode === 'play') {
-            game.player.x = GRID_SIZE; // Reset to starting position
-            game.player.y = CANVAS_HEIGHT - GRID_SIZE * 3;
-        }
+    function setCurrentTool(tool, event) {
+        window.setCurrentTool(tool);
+        document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
     }
 
-
-
-    setCurrentTool(tool) {
-        this.currentTool = tool;
-    }
 
     exportLevel() {
         const levelData = this.gameObjects.map(obj => ({
@@ -448,7 +425,6 @@ class Game {
 }
 
 // Initialize the game
-const game = new Game();
 game.start();
 
 // Expose functions for UI interaction
