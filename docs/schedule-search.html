@@ -6,47 +6,6 @@
     <title>CVHS Schedule Search</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.png" type="image/png">
-    <style>
-        /* Your existing CSS styles */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f0f0f0;
-            color: #333;
-        }
-        .glass-header {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .filter-container {
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .assignments-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .assignment-card {
-            flex: 1 1 calc(25% - 20px);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
-        .assignment-card:hover {
-            transform: translateY(-5px);
-        }
-    </style>
 </head>
 <body>
     <header class="glass-header">
@@ -86,9 +45,7 @@
             <button id="fetchDataButton">Fetch Schedules</button>
         </div>
 
-        <div class="resource-card glass-effect">
-            <h3 class="resource-title">Kavin Elangovan</h3>
-        </div>
+        <div class="assignments-container" id="results"></div>
     </main>
 
     <script>
@@ -134,13 +91,13 @@
                     const card = document.createElement("div");
                     card.classList.add("assignment-card");
                     card.innerHTML = `<h3>${student.Name}</h3>
-                                      <p>${student['1st']}</p>
-                                      <p>${student['2nd']}</p>
-                                      <p>${student['3rd']}</p>
-                                      <p>${student['4th']}</p>
-                                      <p>${student['5th']}</p>
-                                      <p>${student['6th']}</p>
-                                      <p>${student['7th']}</p>`;
+                                      <p>${student['1st Period']}</p>
+                                      <p>${student['2nd Period']}</p>
+                                      <p>${student['3rd Period']}</p>
+                                      <p>${student['4th Period']}</p>
+                                      <p>${student['5th Period']}</p>
+                                      <p>${student['6th Period']}</p>
+                                      <p>${student['7th Period']}</p>`;
                     resultsContainer.appendChild(card);
                 }
             });
