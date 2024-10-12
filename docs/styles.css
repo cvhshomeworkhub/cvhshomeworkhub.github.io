@@ -558,7 +558,7 @@ body.light-mode .theme-toggle {
 
 select {
     background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    color: white;
+    color: black;
     border: none;
     padding: 0.75rem;
     border-radius: 5px;
