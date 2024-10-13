@@ -119,6 +119,12 @@ class Player {
         }
     }
 
+    getMaxJumpHeight() {
+        // Calculate the maximum height the player can reach
+        // This is a simplified calculation and might need adjustment
+        return (this.jumpForce * this.jumpForce) / (2 * this.gravity);
+    }
+
 class Obstacle {
     constructor(canvas) {
         this.canvas = canvas;
@@ -144,13 +150,22 @@ class Obstacle {
 }
 
 class PowerUp {
-    constructor(canvas, type) {
+    constructor(canvas, playerJumpHeight) {
         this.canvas = canvas;
         this.size = 30;
         this.x = canvas.width;
-        this.y = Math.random() * (canvas.height - this.size - 60) + 30; // Adjust vertical position
+        
+        // Calculate the maximum height the player can reach
+        const maxJumpHeight = canvas.height - playerJumpHeight;
+        
+        // Set the y position to be within the player's jump range
+        this.y = Math.max(
+            maxJumpHeight,
+            Math.random() * (canvas.height - this.size - 60) + 30
+        );
+        
         this.speed = 5;
-        this.type = type || this.getRandomType();
+        this.type = this.getRandomType();
     }
 
     getRandomType() {
@@ -310,7 +325,8 @@ class Game {
     }
 
     spawnPowerUp() {
-        this.powerUps.push(new PowerUp(this.canvas));
+        const playerJumpHeight = this.player.getMaxJumpHeight();
+        this.powerUps.push(new PowerUp(this.canvas, playerJumpHeight));
     }
 
     update() {
