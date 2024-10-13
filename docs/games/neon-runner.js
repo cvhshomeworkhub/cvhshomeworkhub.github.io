@@ -78,7 +78,6 @@ class Player {
     }
 
     drawIronManFace(ctx) {
-        // Simple Iron Man face representation
         ctx.fillStyle = '#FF0000';
         ctx.fillRect(this.x, this.y, this.size, this.size);
         ctx.fillStyle = '#FFD700';
@@ -106,7 +105,7 @@ class Player {
                 break;
             case 'flash':
                 this.color = 'yellow';
-                this.powerUpTimer = 11 * 60; // 11 seconds
+                this.powerUpTimer = 12 * 60; // 12 seconds
                 this.jumpForce *= 2;
                 break;
         }
@@ -142,7 +141,7 @@ class PowerUp {
         this.canvas = canvas;
         this.size = 30;
         this.x = canvas.width;
-        this.y = Math.random() * (canvas.height - this.size - 20) + 10;
+        this.y = Math.random() * (canvas.height - this.size - 60) + 30; // Adjust vertical position
         this.speed = 5;
         this.type = type || this.getRandomType();
     }
@@ -180,6 +179,8 @@ class PowerUp {
 
     drawSuperS(ctx) {
         ctx.fillStyle = 'red';
+        ctx.shadowColor = 'yellow';
+        ctx.shadowBlur = 10;
         ctx.beginPath();
         ctx.moveTo(15, 0);
         ctx.lineTo(30, 10);
@@ -189,10 +190,13 @@ class PowerUp {
         ctx.lineTo(0, 10);
         ctx.closePath();
         ctx.fill();
+        ctx.shadowBlur = 0;
     }
 
     drawStar(ctx) {
         ctx.fillStyle = 'silver';
+        ctx.shadowColor = 'white';
+        ctx.shadowBlur = 10;
         ctx.beginPath();
         for (let i = 0; i < 5; i++) {
             ctx.lineTo(Math.cos((18 + i * 72) * Math.PI / 180) * 15 + 15,
@@ -202,10 +206,13 @@ class PowerUp {
         }
         ctx.closePath();
         ctx.fill();
+        ctx.shadowBlur = 0;
     }
 
     drawTriangle(ctx) {
         ctx.fillStyle = '#00BFFF';
+        ctx.shadowColor = 'blue';
+        ctx.shadowBlur = 10;
         ctx.beginPath();
         ctx.moveTo(15, 0);
         ctx.lineTo(30, 30);
@@ -221,10 +228,13 @@ class PowerUp {
         ctx.lineTo(15, 10);
         ctx.closePath();
         ctx.stroke();
+        ctx.shadowBlur = 0;
     }
 
     drawLightning(ctx) {
         ctx.fillStyle = 'yellow';
+        ctx.shadowColor = 'orange';
+        ctx.shadowBlur = 10;
         ctx.beginPath();
         ctx.moveTo(15, 0);
         ctx.lineTo(25, 12);
@@ -235,6 +245,7 @@ class PowerUp {
         ctx.lineTo(15, 0);
         ctx.closePath();
         ctx.fill();
+        ctx.shadowBlur = 0;
     }
 }
 
@@ -265,14 +276,6 @@ class Game {
                     this.player.jump();
                 }
             }
-
-        this.timerDisplay = document.createElement('div');
-        this.timerDisplay.style.position = 'absolute';
-        this.timerDisplay.style.top = '10px';
-        this.timerDisplay.style.right = '10px';
-        this.timerDisplay.style.fontFamily = 'Arial, sans-serif';
-        this.timerDisplay.style.fontSize = '16px';
-        document.body.appendChild(this.timerDisplay);
         });
 
         document.addEventListener('touchstart', (e) => {
@@ -283,6 +286,14 @@ class Game {
                 this.player.jump();
             }
         });
+
+        this.timerDisplay = document.createElement('div');
+        this.timerDisplay.style.position = 'absolute';
+        this.timerDisplay.style.top = '10px';
+        this.timerDisplay.style.right = '10px';
+        this.timerDisplay.style.fontFamily = 'Arial, sans-serif';
+        this.timerDisplay.style.fontSize = '16px';
+        document.body.appendChild(this.timerDisplay);
 
         this.animate();
     }
@@ -360,44 +371,6 @@ class Game {
                player.x + player.size > powerUp.x &&
                player.y < powerUp.y + powerUp.size &&
                player.y + player.size > powerUp.y;
-    }
-
-    update() {
-        if (this.gameOver) return;
-
-        this.player.update();
-
-        this.obstacleTimer++;
-        if (this.obstacleTimer > 100) {
-            this.spawnObstacle();
-            this.obstacleTimer = 0;
-        }
-
-        this.powerUpTimer++;
-        if (this.powerUpTimer > 300) { // Adjust timing for power-ups
-            this.spawnPowerUp();
-            this.powerUpTimer = 0;
-        }
-
-        this.obstacles = this.obstacles.filter(obstacle => {
-            obstacle.update();
-            if (this.checkCollision(this.player, obstacle)) {
-                this.endGame();
-            }
-            return obstacle.x > -obstacle.width;
-        });
-
-        this.powerUps = this.powerUps.filter(powerUp => {
-            powerUp.update();
-            if (this.checkPowerUpCollision(this.player, powerUp)) {
-                this.scoreMultiplier *= 2; // Increase multiplier on power-up collection
-                return false; // Remove power-up after collection
-            }
-            return powerUp.x > -powerUp.size;
-        });
-
-        this.score += this.scoreMultiplier;
-        document.getElementById('score').textContent = Math.floor(this.score / 10);
     }
 
     draw() {
