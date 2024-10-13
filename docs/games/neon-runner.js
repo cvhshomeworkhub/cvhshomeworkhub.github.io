@@ -332,21 +332,20 @@ class Game {
 
     update() {
         if (this.gameOver) return;
-
+    
         this.player.update();
-
         this.obstacleTimer++;
         if (this.obstacleTimer > 100 / this.gameSpeed) {
             this.spawnObstacle();
             this.obstacleTimer = 0;
         }
-
+    
         this.powerUpTimer++;
         if (this.powerUpTimer > 750) { // Spawn power-up every 12.50 seconds
             this.spawnPowerUp();
             this.powerUpTimer = 0;
         }
-
+    
         this.obstacles = this.obstacles.filter(obstacle => {
             obstacle.update();
             if (this.checkCollision(this.player, obstacle)) {
@@ -361,7 +360,7 @@ class Game {
             }
             return obstacle.x > -obstacle.width;
         });
-
+    
         this.powerUps = this.powerUps.filter(powerUp => {
             powerUp.update();
             if (this.checkPowerUpCollision(this.player, powerUp)) {
@@ -370,18 +369,19 @@ class Game {
             }
             return powerUp.x > -powerUp.size;
         });
-
+    
         if (this.player.powerUp === 'flash') {
             this.gameSpeed = 0.5; // Slow down obstacles
         } else {
             this.gameSpeed = 1;
         }
-
+    
         this.score += this.scoreMultiplier * this.gameSpeed;
         document.getElementById('score').textContent = Math.floor(this.score / 10);
-
-        this.updateTimerDisplay();
+    
+        this.updateTimerDisplay(); // Ensure timer display is updated here
     }
+
 
     checkCollision(player, obstacle) {
         return player.x < obstacle.x + obstacle.width &&
@@ -419,8 +419,8 @@ class Game {
     updateTimerDisplay() {
         let timerText = '';
         if (this.player.powerUp) {
-            const seconds = Math.ceil(this.player.powerUpTimer / 60);
-            switch(this.player.powerUp) {
+            const seconds = Math.ceil(this.player.powerUpTimer / 60); // Convert frames to seconds
+            switch (this.player.powerUp) {
                 case 'superS':
                     timerText += `<span style="color: red;">S: ${seconds}s</span><br>`;
                     break;
