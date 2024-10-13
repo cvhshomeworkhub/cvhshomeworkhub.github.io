@@ -104,7 +104,7 @@ class Player {
             case 'flash':
                 this.color = 'yellow';
                 this.powerUpTimer = 12 * 60; // 12 seconds
-                this.jumpForce = this.originalJumpForce * 2;
+                this.jumpForce = this.originalJumpForce * 1.35;
                 break;
         }
     }
