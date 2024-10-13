@@ -9,11 +9,13 @@ class Player {
         this.gravity = 0.8;
         this.grounded = true;
         this.color = '#00ffff';
+        this.jumpsRemaining = 2; // New property to track available jumps
     }
 
     jump() {
-        if (this.grounded) {
+        if (this.jumpsRemaining > 0) {
             this.dy = this.jumpForce;
+            this.jumpsRemaining--;
             this.grounded = false;
         }
     }
@@ -26,6 +28,7 @@ class Player {
             this.y = this.canvas.height - this.size - 10;
             this.dy = 0;
             this.grounded = true;
+            this.jumpsRemaining = 2; // Reset jumps when touching the ground
         }
     }
 
