@@ -124,6 +124,7 @@ class Player {
         // This is a simplified calculation and might need adjustment
         return (this.jumpForce * this.jumpForce) / (2 * this.gravity);
     }
+}
 
 class Obstacle {
     constructor(canvas) {
