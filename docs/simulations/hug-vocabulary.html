@@ -14,34 +14,70 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            font-family: 'Orbitron', sans-serif;        
         }
 
+        .search-container {
+            display: flex;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        #searchInput {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid var(--accent-color);
+            border-right: none;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        #dropdownList {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid var(--accent-color);
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            background-color: var(--secondary-color);
+            color: white;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
         #gameCanvas {
             border: 2px solid var(--accent-color);
             background: black;
             box-shadow: 0 0 20px var(--accent-color);
         }
-
-        #searchInput {
-            width: 300px;
-            padding: 10px;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
         
         #flipButton {
             margin-top: 20px;
             padding: 10px 20px;
-            font-size: 16px;
+            font-size: 18px;
             background-color: var(--accent-color);
             color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
         #flipButton:hover {
             background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        #flipButton:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -59,7 +95,10 @@
 
     <main class="fade-in">
         <div class="game-container">
-            <input type="text" id="searchInput" placeholder="Search for a term...">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for a term...">
+                <select id="dropdownList"></select>
+            </div>
             <canvas id="gameCanvas" width="1200" height="450"></canvas>
             <button id="flipButton">Flip Card</button>
         </div>
