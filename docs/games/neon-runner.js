@@ -32,7 +32,7 @@ class Player {
             this.y = this.canvas.height - this.size - 10;
             this.dy = 0;
             this.grounded = true;
-            this.jumpsRemaining = (this.powerUp === 'superS' || this.powerUp === 'ironMan') ? 2 : 1;
+            this.jumpsRemaining = this.powerUp === 'superS' || this.powerUp === 'ironMan' ? 2 : 1;
         }
 
         if (this.powerUp) {
@@ -62,23 +62,34 @@ class Player {
         ctx.translate(this.x, this.y);
         ctx.fillStyle = 'blue';
         ctx.shadowBlur = 20;
+
+        // Outer square shield
         ctx.fillRect(-this.size / 2 - 5, -this.size / 2 - 5, this.size + 10, this.size + 10);
+        
+        // Inner shield
         ctx.fillStyle = 'white';
         ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+        
+        // Inner circle
         ctx.fillStyle = 'blue';
         ctx.beginPath();
         ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
         ctx.fill();
+
         ctx.restore();
     }
 
     drawIronManFace(ctx) {
         ctx.fillStyle = '#FF0000';
         ctx.fillRect(this.x, this.y, this.size, this.size);
+        
+        // Face details
         ctx.fillStyle = '#FFD700'; // Gold for the eyes
         ctx.fillRect(this.x + 5, this.y + 5, 8, 4); // Left eye
         ctx.fillRect(this.x + 17, this.y + 5, 8, 4); // Right eye
         ctx.fillRect(this.x + 10, this.y + 15, 10, 5); // Mouth
+
+        // Enhanced face mask design
         ctx.fillStyle = 'black';
         ctx.beginPath();
         ctx.moveTo(this.x + 5, this.y + 5);
@@ -89,6 +100,8 @@ class Player {
         ctx.lineTo(this.x + 5, this.y + 30);
         ctx.closePath();
         ctx.fill();
+
+        // Add blue triangle for Iron Man's design
         ctx.fillStyle = '#00BFFF'; // Blue color for the triangle
         ctx.beginPath();
         ctx.moveTo(this.x + 10, this.y + 20); // Top point of triangle
@@ -100,7 +113,7 @@ class Player {
 
     activatePowerUp(type) {
         this.powerUp = type;
-        switch (type) {
+        switch(type) {
             case 'superS':
                 this.color = 'red';
                 this.powerUpTimer = 11 * 60; // 11 seconds
@@ -194,7 +207,7 @@ class PowerUp {
         ctx.save();
         ctx.translate(this.x, this.y);
 
-        switch (this.type) {
+        switch(this.type) {
             case 'superS':
                 this.drawSuperS(ctx);
                 break;
