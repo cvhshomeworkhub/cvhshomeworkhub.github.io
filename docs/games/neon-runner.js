@@ -342,7 +342,7 @@ class Game {
         }
 
         this.powerUpTimer++;
-        if (this.powerUpTimer > 750) { // Spawn power-up every 40 seconds
+        if (this.powerUpTimer > 750) { // Spawn power-up every 12.50 seconds
             this.spawnPowerUp();
             this.powerUpTimer = 0;
         }
