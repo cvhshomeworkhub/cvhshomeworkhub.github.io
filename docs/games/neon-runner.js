@@ -59,29 +59,56 @@ class Player {
 
     drawShield(ctx) {
         ctx.save();
-        ctx.globalAlpha = 0.5;
-        ctx.fillStyle = 'red';
-        ctx.beginPath();
-        ctx.arc(this.x + this.size / 2, this.y + this.size / 2, this.size * 0.75, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.translate(this.x, this.y);
+        ctx.fillStyle = 'blue';
+        ctx.shadowBlur = 20;
+
+        // Outer square shield
+        ctx.fillRect(-this.size / 2 - 5, -this.size / 2 - 5, this.size + 10, this.size + 10);
+        
+        // Inner shield
         ctx.fillStyle = 'white';
+        ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+        
+        // Inner circle
+        ctx.fillStyle = 'blue';
         ctx.beginPath();
-        ctx.arc(this.x + this.size / 2, this.y + this.size / 2, this.size * 0.5, 0, Math.PI * 2);
+        ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = 'red';
-        ctx.beginPath();
-        ctx.arc(this.x + this.size / 2, this.y + this.size / 2, this.size * 0.25, 0, Math.PI * 2);
-        ctx.fill();
+
         ctx.restore();
     }
 
     drawIronManFace(ctx) {
         ctx.fillStyle = '#FF0000';
         ctx.fillRect(this.x, this.y, this.size, this.size);
-        ctx.fillStyle = '#FFD700';
-        ctx.fillRect(this.x + 5, this.y + 5, 8, 4);
-        ctx.fillRect(this.x + 17, this.y + 5, 8, 4);
-        ctx.fillRect(this.x + 10, this.y + 15, 10, 5);
+        
+        // Face details
+        ctx.fillStyle = '#FFD700'; // Gold for the eyes
+        ctx.fillRect(this.x + 5, this.y + 5, 8, 4); // Left eye
+        ctx.fillRect(this.x + 17, this.y + 5, 8, 4); // Right eye
+        ctx.fillRect(this.x + 10, this.y + 15, 10, 5); // Mouth
+
+        // Enhanced face mask design
+        ctx.fillStyle = 'black';
+        ctx.beginPath();
+        ctx.moveTo(this.x + 5, this.y + 5);
+        ctx.lineTo(this.x + 10, this.y);
+        ctx.lineTo(this.x + 20, this.y);
+        ctx.lineTo(this.x + 25, this.y + 5);
+        ctx.lineTo(this.x + 25, this.y + 30);
+        ctx.lineTo(this.x + 5, this.y + 30);
+        ctx.closePath();
+        ctx.fill();
+
+        // Add blue triangle for Iron Man's design
+        ctx.fillStyle = '#00BFFF'; // Blue color for the triangle
+        ctx.beginPath();
+        ctx.moveTo(this.x + 10, this.y + 20); // Top point of triangle
+        ctx.lineTo(this.x + 15, this.y + 30); // Bottom right point
+        ctx.lineTo(this.x + 5, this.y + 30);  // Bottom left point
+        ctx.closePath();
+        ctx.fill();
     }
 
     activatePowerUp(type) {
@@ -120,8 +147,6 @@ class Player {
     }
 
     getMaxJumpHeight() {
-        // Calculate the maximum height the player can reach
-        // This is a simplified calculation and might need adjustment
         return (this.jumpForce * this.jumpForce) / (2 * this.gravity);
     }
 }
@@ -155,16 +180,16 @@ class PowerUp {
         this.canvas = canvas;
         this.size = 30;
         this.x = canvas.width;
-        
+
         // Calculate the maximum height the player can reach
         const maxJumpHeight = canvas.height - playerJumpHeight;
-        
+
         // Set the y position to be within the player's jump range
         this.y = Math.max(
             maxJumpHeight,
             Math.random() * (canvas.height - this.size - 60) + 30
         );
-        
+
         this.speed = 5;
         this.type = this.getRandomType();
     }
@@ -181,29 +206,29 @@ class PowerUp {
     draw(ctx) {
         ctx.save();
         ctx.translate(this.x, this.y);
-        
+
         switch(this.type) {
             case 'superS':
                 this.drawSuperS(ctx);
                 break;
             case 'capShield':
-                this.drawStar(ctx);
+                this.drawStar(ctx); // Draw silver star for Cap's Shield power-up
                 break;
             case 'ironMan':
-                this.drawTriangle(ctx);
+                this.drawTriangle(ctx); // Draw triangle for Iron Man power-up
                 break;
             case 'flash':
                 this.drawLightning(ctx);
                 break;
         }
-        
+
         ctx.restore();
     }
 
     drawSuperS(ctx) {
         ctx.fillStyle = 'red';
         ctx.shadowColor = 'yellow';
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 20; // Increased glow for the neon effect
         ctx.beginPath();
         ctx.moveTo(15, 0);
         ctx.lineTo(30, 10);
@@ -214,44 +239,41 @@ class PowerUp {
         ctx.closePath();
         ctx.fill();
         ctx.shadowBlur = 0;
+
+        // Draw futuristic lines
+        ctx.strokeStyle = 'yellow';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(15, 0);
+        ctx.lineTo(15, 30); // Vertical line through the center
+        ctx.stroke();
     }
 
     drawStar(ctx) {
-        ctx.fillStyle = 'silver';
-        ctx.shadowColor = 'white';
-        ctx.shadowBlur = 10;
+        ctx.fillStyle = 'silver'; // Silver color for Cap's Shield power-up
         ctx.beginPath();
-        for (let i = 0; i < 5; i++) {
-            ctx.lineTo(Math.cos((18 + i * 72) * Math.PI / 180) * 15 + 15,
-                       Math.sin((18 + i * 72) * Math.PI / 180) * 15 + 15);
-            ctx.lineTo(Math.cos((54 + i * 72) * Math.PI / 180) * 7 + 15,
-                       Math.sin((54 + i * 72) * Math.PI / 180) * 7 + 15);
-        }
+        ctx.moveTo(15, 0);
+        ctx.lineTo(20, 10);
+        ctx.lineTo(30, 10);
+        ctx.lineTo(22, 15);
+        ctx.lineTo(25, 25);
+        ctx.lineTo(15, 20);
+        ctx.lineTo(5, 25);
+        ctx.lineTo(8, 15);
+        ctx.lineTo(0, 10);
+        ctx.lineTo(10, 10);
         ctx.closePath();
         ctx.fill();
-        ctx.shadowBlur = 0;
     }
 
     drawTriangle(ctx) {
-        ctx.fillStyle = '#00BFFF';
-        ctx.shadowColor = 'blue';
-        ctx.shadowBlur = 10;
+        ctx.fillStyle = '#00BFFF'; // Blue color for the triangle
         ctx.beginPath();
-        ctx.moveTo(15, 0);
-        ctx.lineTo(30, 30);
-        ctx.lineTo(0, 30);
+        ctx.moveTo(15, 0); // Top point of triangle
+        ctx.lineTo(30, 30); // Bottom right point
+        ctx.lineTo(0, 30);  // Bottom left point
         ctx.closePath();
         ctx.fill();
-
-        ctx.strokeStyle = 'white';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(10, 20);
-        ctx.lineTo(20, 20);
-        ctx.lineTo(15, 10);
-        ctx.closePath();
-        ctx.stroke();
-        ctx.shadowBlur = 0;
     }
 
     drawLightning(ctx) {
@@ -310,14 +332,6 @@ class Game {
             }
         });
 
-        this.timerDisplay = document.createElement('div');
-        this.timerDisplay.style.position = 'absolute';
-        this.timerDisplay.style.top = '10px';
-        this.timerDisplay.style.right = '10px';
-        this.timerDisplay.style.fontFamily = 'Arial, sans-serif';
-        this.timerDisplay.style.fontSize = '16px';
-        document.body.appendChild(this.timerDisplay);
-
         this.animate();
     }
 
@@ -332,20 +346,21 @@ class Game {
 
     update() {
         if (this.gameOver) return;
-    
+
         this.player.update();
+
         this.obstacleTimer++;
         if (this.obstacleTimer > 100 / this.gameSpeed) {
             this.spawnObstacle();
             this.obstacleTimer = 0;
         }
-    
+
         this.powerUpTimer++;
         if (this.powerUpTimer > 750) { // Spawn power-up every 12.50 seconds
             this.spawnPowerUp();
             this.powerUpTimer = 0;
         }
-    
+
         this.obstacles = this.obstacles.filter(obstacle => {
             obstacle.update();
             if (this.checkCollision(this.player, obstacle)) {
@@ -360,7 +375,7 @@ class Game {
             }
             return obstacle.x > -obstacle.width;
         });
-    
+
         this.powerUps = this.powerUps.filter(powerUp => {
             powerUp.update();
             if (this.checkPowerUpCollision(this.player, powerUp)) {
@@ -369,19 +384,16 @@ class Game {
             }
             return powerUp.x > -powerUp.size;
         });
-    
+
         if (this.player.powerUp === 'flash') {
             this.gameSpeed = 0.5; // Slow down obstacles
         } else {
             this.gameSpeed = 1;
         }
-    
+
         this.score += this.scoreMultiplier * this.gameSpeed;
         document.getElementById('score').textContent = Math.floor(this.score / 10);
-    
-        this.updateTimerDisplay(); // Ensure timer display is updated here
     }
-
 
     checkCollision(player, obstacle) {
         return player.x < obstacle.x + obstacle.width &&
@@ -414,28 +426,6 @@ class Game {
         this.player.draw(this.ctx);
         this.obstacles.forEach(obstacle => obstacle.draw(this.ctx));
         this.powerUps.forEach(powerUp => powerUp.draw(this.ctx));
-    }
-
-    updateTimerDisplay() {
-        let timerText = '';
-        if (this.player.powerUp) {
-            const seconds = Math.ceil(this.player.powerUpTimer / 60); // Convert frames to seconds
-            switch (this.player.powerUp) {
-                case 'superS':
-                    timerText += `<span style="color: red;">S: ${seconds}s</span><br>`;
-                    break;
-                case 'capShield':
-                    timerText += `<span style="color: white;">Shield: ${seconds}s</span><br>`;
-                    break;
-                case 'ironMan':
-                    timerText += `<span style="color: blue;">IM: ${seconds}s (${this.player.ironManCounter})</span><br>`;
-                    break;
-                case 'flash':
-                    timerText += `<span style="color: yellow;">Speed: ${seconds}s</span><br>`;
-                    break;
-            }
-        }
-        this.timerDisplay.innerHTML = timerText;
     }
 
     animate() {
