@@ -5,7 +5,8 @@ class Player {
         this.x = 50;
         this.y = canvas.height - this.size - 10;
         this.dy = 0;
-        this.jumpForce = -15;
+        this.originalJumpForce = -15;
+        this.jumpForce = this.originalJumpForce;
         this.gravity = 0.8;
         this.grounded = true;
         this.color = '#00ffff';
@@ -37,10 +38,7 @@ class Player {
         if (this.powerUp) {
             this.powerUpTimer--;
             if (this.powerUpTimer <= 0) {
-                if (this.powerUp !== 'ironMan' || this.ironManCounter === 0) {
-                    this.powerUp = null;
-                    this.color = '#00ffff';
-                }
+                this.deactivatePowerUp();
             }
         }
     }
@@ -106,11 +104,20 @@ class Player {
             case 'flash':
                 this.color = 'yellow';
                 this.powerUpTimer = 12 * 60; // 12 seconds
-                this.jumpForce *= 2;
+                this.jumpForce = this.originalJumpForce * 2;
                 break;
         }
     }
-}
+
+    deactivatePowerUp() {
+        if (this.powerUp === 'flash') {
+            this.jumpForce = this.originalJumpForce;
+        }
+        if (this.powerUp !== 'ironMan' || this.ironManCounter === 0) {
+            this.powerUp = null;
+            this.color = '#00ffff';
+        }
+    }
 
 class Obstacle {
     constructor(canvas) {
@@ -318,7 +325,7 @@ class Game {
         }
 
         this.powerUpTimer++;
-        if (this.powerUpTimer > 900) { // Spawn power-up every 40 seconds
+        if (this.powerUpTimer > 2400) { // Spawn power-up every 40 seconds
             this.spawnPowerUp();
             this.powerUpTimer = 0;
         }
