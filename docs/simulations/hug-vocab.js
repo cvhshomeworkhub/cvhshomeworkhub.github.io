@@ -17,6 +17,7 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 const searchInput = document.getElementById('searchInput');
+const dropdownList = document.getElementById('dropdownList');
 const flipButton = document.getElementById('flipButton');
 
 const cardWidth = 600;
@@ -41,7 +42,7 @@ const drawCard = () => {
 
     // Draw card content
     if (currentCard) {
-        ctx.font = '24px Arial';
+        ctx.font = '24px Orbitron';
         ctx.fillStyle = '#000000';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -50,14 +51,14 @@ const drawCard = () => {
         const lines = getWrappedText(text, cardWidth - 40);
 
         lines.forEach((line, index) => {
-            ctx.fillText(line, canvas.width / 2, cardY + 100 + index * 30);
+            ctx.fillText(line, canvas.width / 2, canvas.height / 2 + (index - (lines.length - 1) / 2) * 30);
         });
     } else {
-        ctx.font = '24px Arial';
+        ctx.font = '24px Orbitron';
         ctx.fillStyle = '#888888';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('Search for a term', canvas.width / 2, canvas.height / 2);
+        ctx.fillText('Search for a term...', canvas.width / 2, canvas.height / 2);
     }
 };
 
@@ -114,9 +115,18 @@ const updateCard = (term) => {
     drawCard();
 };
 
-searchInput.addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    const matchingTerms = vocabularyData.filter(item => item.Front.toLowerCase().includes(searchTerm));
+const updateDropdown = (searchTerm) => {
+    const matchingTerms = vocabularyData.filter(item => 
+        item.Front.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    dropdownList.innerHTML = '';
+    matchingTerms.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.Front;
+        option.textContent = item.Front;
+        dropdownList.appendChild(option);
+    });
 
     if (matchingTerms.length === 1) {
         updateCard(matchingTerms[0].Front);
@@ -124,6 +134,15 @@ searchInput.addEventListener('input', (e) => {
         currentCard = null;
         drawCard();
     }
+};
+
+searchInput.addEventListener('input', (e) => {
+    updateDropdown(e.target.value);
+});
+
+dropdownList.addEventListener('change', (e) => {
+    searchInput.value = e.target.value;
+    updateCard(e.target.value);
 });
 
 flipButton.addEventListener('click', flipCard);
@@ -131,5 +150,6 @@ flipButton.addEventListener('click', flipCard);
 // Initialize the game
 (async () => {
     vocabularyData = await fetchVocabularyData();
+    updateDropdown('');
     drawCard();
 })();
