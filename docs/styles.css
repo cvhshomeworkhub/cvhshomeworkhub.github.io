@@ -202,18 +202,20 @@ nav {
     right: 0; /* For right-aligned dropdowns */
 }
 
-.dropdown-content.left {
-    display: none; /* Hide initially */
+.dropdown-content.left {.dropdown-content {
+    display: none;
     position: absolute;
     top: 100%;
-    left: 0; /* Align to the left */
     min-width: 200px;
     z-index: 1000;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(10px);
+    top: 100%;
+    left: 0;
     border-radius: 8px;
     overflow: hidden;
     animation: fadeIn var(--transition-speed) ease;
+}
 }
 
 .dropdown-content.left a {
