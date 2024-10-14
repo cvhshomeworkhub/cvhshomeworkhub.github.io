@@ -225,7 +225,7 @@ nav {
 
 .dropdown-content.left a:hover {
     background: rgba(255, 255, 255, 0.1);
-    transform: translateX(5px);
+    transform: translateX(-5px);
 }
 
 /* Show the left-aligned dropdown on hover */
