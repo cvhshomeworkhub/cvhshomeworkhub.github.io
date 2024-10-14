@@ -167,7 +167,7 @@ nav {
     top: 100%;
     min-width: 200px;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(10px);
     top: 100%;
     left: 0;
@@ -192,6 +192,19 @@ nav {
 
 .dropdown:hover .dropdown-content {
     display: block;
+}
+
+.dropdown:hover .dropdown-content {
+    left: 0; /* Align to the left */
+}
+
+.dropdown-content {
+    right: 0; /* For right-aligned dropdowns */
+}
+
+.dropdown-content.left {
+    right: auto; /* Reset right positioning */
+    left: 0; /* Position to the left instead */
 }
 
 /* ==========================================================================
