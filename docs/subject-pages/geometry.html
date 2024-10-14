@@ -12,27 +12,7 @@
         <div class="logo-container">
             <h1 class="glow-text">Geometry Resources</h1>
         </div>
-        <nav>
-            <a href="../index.html" class="nav-link">Home</a>
-            <a href="../updates.html" class="nav-link">Updates</a>
-            <a href="../chatroom.html" class="nav-link">Chatroom</a>
-            <a href="../simulations.html" class="nav-link">Simulations</a>
-            <div class="dropdown">
-                <button class="dropbtn glass-effect">Subject Study</button>
-                <div class="dropdown-content glass-effect">
-                    <a href="human-geography.html">Human Geography</a>
-                    <a href="biology.html">Biology</a>
-                    <a href="theater.html">Theater</a>
-                    <a href="tech-theater.html">Tech Theater</a>
-                    <a href="art.html">Art</a>
-                    <a href="english.html">English</a>
-                    <a href="algebra2.html">Algebra 2</a>
-                    <a href="geometry.html">Geometry</a>
-                    <a href="computer-science.html">Computer Science</a>
-                    <a href="pe.html">PE</a>
-                </div>
-            </div>
-        </nav>
+        <div id="nav-container"></div> <!-- Placeholder for navigation -->
     </header>
 
     <main class="fade-in">
@@ -45,5 +25,24 @@
     </main>
 
     <script src="../script.js"></script>
+    <script>
+                // Load navigation from nav.html
+        async function loadNav() {
+            try {
+                const response = await fetch('navnav.html');
+                const nav = await response.text();
+                document.getElementById('nav-container').innerHTML = nav;
+            } catch (error) {
+                console.error('Error loading navigation:', error);
+                document.getElementById('nav-container').innerHTML = '<p>Error loading navigation. Please try again later.</p>';
+            }
+        }
+
+        // Fetch assignments and load navigation when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNav();
+            fetchAssignments();
+        });
+    </script>
 </body>
 </html>
