@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geometry Resources</title>
-    <link rel="stylesheet" href="https://cvhshomeworkhub.github.io/navnav.html">
+    <link rel="stylesheet" href="https://cvhshomeworkhub.github.io/styles.css">
     <link rel="icon" href="../favicon.png" type="image/png">
 </head>
 <body>
@@ -29,7 +29,7 @@
                 // Load navigation from nav.html
         async function loadNav() {
             try {
-                const response = await fetch('navnav.html');
+                const response = await fetch('https://cvhshomeworkhub.github.io/navnav.html');
                 const nav = await response.text();
                 document.getElementById('nav-container').innerHTML = nav;
             } catch (error) {
