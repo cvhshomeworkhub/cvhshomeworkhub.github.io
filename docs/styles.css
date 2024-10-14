@@ -202,7 +202,7 @@ nav {
     right: 0; /* For right-aligned dropdowns */
 }
 
-.dropdown-content.left {.dropdown-content {
+.dropdown-content.left {
     display: none;
     position: absolute;
     top: 100%;
@@ -210,12 +210,9 @@ nav {
     z-index: 1000;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(10px);
-    top: 100%;
-    left: 0;
     border-radius: 8px;
     overflow: hidden;
     animation: fadeIn var(--transition-speed) ease;
-}
 }
 
 .dropdown-content.left a {
@@ -231,8 +228,8 @@ nav {
     transform: translateX(5px);
 }
 
-/* Show the dropdown on hover */
-.dropdown:hover .dropdown-content.left {
+/* Show the left-aligned dropdown on hover */
+.dropdown.left:hover .dropdown-content.left {
     display: block; /* Show on hover */
 }
 
