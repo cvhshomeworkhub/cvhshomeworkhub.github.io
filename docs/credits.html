@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credits</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+</head>
+<body>
+    <header class="glass-header">
+        <div class="logo-container">
+            <h1 class="glow-text">Credits</h1>
+        </div>
+        <div id="nav-container"></div> <!-- Placeholder for navigation -->
+    </header>
+
+    <main class="fade-in">
+        <div class="games-container">
+            <h2 class="section-title glow-text">Our Team</h2>
+            <div class="resources-grid">
+                <div class="resource-card glass-effect">
+                    <h3 class="resource-title">Kavin Elangovan</h3>
+                    <p class="resource-description">The main coder and developer of the website (Also takes the notes)</p>
+                </div>
+            </div>
+            <div class="resources-grid">
+                <div class="resource-card glass-effect">
+                    <h3 class="resource-title">Naithan Mathew</h3>
+                    <p class="resource-description">The "advisor" of this project, helping to provide ideas and spare awarenees of this project</p>
+                </div>
+                
+                <div class="resource-card glass-effect">
+                    <h3 class="resource-title">Manuel Minisini</h3>
+                    <p class="resource-description">The secondary coder of the website, providing maintenance on the calendar and keeping the website up!</p>
+                </div>
+            </div>
+            <div class="resources-grid">
+                <div class="resource-card glass-effect">
+                    <h3 class="resource-title">Sathyan Gopal</h3>
+                    <p class="resource-description">The programmer for the artificial intelligence (also reviews the website)</p>
+                </div>
+                
+                <div class="resource-card glass-effect">
+                    <h3 class="resource-title">Krish Kalla</h3>
+                    <p class="resource-description">Our social networker, helping us with networking with teachers and administration (Also helping us spread the word to students)</p>
+                </div>
+            </div>
+            <div class="resources-grid">
+                <div class="resource-card glass-effect">
+                    <h3 class="resource-title"><strong><b><u><i>COACH LAMANE</i></u></b></strong></h3>
+                    <p class="resource-description">The inspiration behind this idea and our best supporter (Thank you!!!)</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        // Load navigation from nav.html
+        async function loadNav() {
+            try {
+                const response = await fetch('navnav.html');
+                const nav = await response.text();
+                document.getElementById('nav-container').innerHTML = nav;
+            } catch (error) {
+                console.error('Error loading navigation:', error);
+                document.getElementById('nav-container').innerHTML = '<p>Error loading navigation. Please try again later.</p>';
+            }
+        }
+
+        // Fetch assignments and load navigation when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNav();
+            fetchAssignments();
+        });
+    </script>
+</body>
+</html>
