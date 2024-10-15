@@ -162,14 +162,22 @@
             }
         }
     
-        function onGameOver(finalScore) {
+        async function onGameOver(finalScore) {
             const scoreElement = document.getElementById('score');
             if (scoreElement) {
                 const currentScore = parseInt(scoreElement.textContent);
-                updateHighScore(currentScore);
+                await updateHighScore(currentScore); // Ensure this updates the high score if needed
             }
-    
-            // Other game over logic...
+            
+            document.getElementById('finalScore').textContent = finalScore; // Update final score display
+            document.getElementById('gameOver').style.display = 'block'; // Show game over screen
+        }
+        
+        // Ensure you call onGameOver in your game's endGame function
+        function endGame() {
+            const finalScore = Math.floor(this.score / 10);
+            onGameOver(finalScore); // Call onGameOver here
+            this.gameOver = true;
         }
     
         document.addEventListener('DOMContentLoaded', () => {
