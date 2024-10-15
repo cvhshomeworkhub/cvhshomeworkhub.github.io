@@ -84,7 +84,7 @@
         <div class="game-container">
             <div class="game-stats">
                 <h2>Score: <span id="score">0</span></h2>
-                <h2>High Score: <span id="score">0</span></h2>
+                <h2>High Score: <span id="highScore">0</span></h2> <!-- Add this line -->
             </div>
             <canvas id="gameCanvas" width="800" height="400"></canvas>
             
@@ -114,6 +114,68 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadNav();
             fetchAssignments();
+        });
+
+        const SHEET_ID = '61a816c6-ba9d-4e74-bd58-2ad2a5d1002b';
+        const HIGH_SCORE_URL = `https://sheets.livepolls.app/api/spreadsheets/${SHEET_ID}/Sheet1`;
+    
+        let highScore = 0;
+    
+        async function fetchHighScore() {
+            try {
+                const response = await fetch(HIGH_SCORE_URL, {
+                    method: 'GET',
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                highScore = parseInt(data[0].name) || 0; // Assuming the value is stored in the first row, column A
+                updateHighScoreDisplay();
+            } catch (error) {
+                console.error('Error fetching high score:', error);
+            }
+        }
+    
+        async function updateHighScore(newScore) {
+            if (newScore > highScore) {
+                highScore = newScore;
+                try {
+                    await fetch(`${HIGH_SCORE_URL}/1`, {
+                        method: 'PUT',
+                        headers: {
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify({ name: highScore })
+                    });
+                } catch (error) {
+                    console.error('Error updating high score:', error);
+                }
+            }
+            updateHighScoreDisplay();
+        }
+    
+        function updateHighScoreDisplay() {
+            const highScoreElement = document.getElementById('highScore');
+            if (highScoreElement) {
+                highScoreElement.textContent = highScore;
+            }
+        }
+    
+        function onGameOver(finalScore) {
+            const scoreElement = document.getElementById('score');
+            if (scoreElement) {
+                const currentScore = parseInt(scoreElement.textContent);
+                updateHighScore(currentScore);
+            }
+    
+            // Other game over logic...
+        }
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNav();
+            fetchAssignments();
+            fetchHighScore(); // Fetch the high score when the page loads
         });
     </script>
 </body>
