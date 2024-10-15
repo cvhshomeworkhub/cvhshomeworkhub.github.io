@@ -67,7 +67,7 @@ chat_sessions = {}
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('mainframe-ref.html')
 
 
 @app.route('/init', methods=['GET'])
