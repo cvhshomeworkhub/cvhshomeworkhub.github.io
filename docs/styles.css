@@ -170,7 +170,7 @@ nav {
     display: none;
     position: absolute;
     top: 100%;
-    min-width: 200px;
+    min-width: 225px;
     z-index: 1000;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(10px);
@@ -211,7 +211,7 @@ nav {
     display: none;
     position: absolute;
     top: 100%;
-    min-width: 200px;
+    min-width: 225px;
     z-index: 500;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(10px);
@@ -645,4 +645,3 @@ canvas {
     display: block;
     margin: 20px auto;
 }
-
