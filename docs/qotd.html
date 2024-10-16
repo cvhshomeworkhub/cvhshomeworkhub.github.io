@@ -6,18 +6,124 @@
     <title>CVHS QOTD</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.png" type="image/png">
+    <style>
+        .qotd-frame {
+            background: var(--glass-background);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+        .qotd-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .qotd-subject {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        .qotd-date {
+            color: #888;
+            font-style: italic;
+        }
+        .qotd-specifics {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        .qotd-question {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .qotd-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .qotd-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .qotd-option input[type="radio"],
+        .qotd-option input[type="checkbox"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .qotd-option input[type="checkbox"] {
+            border-radius: 4px;
+        }
+        .qotd-option input[type="radio"]:checked,
+        .qotd-option input[type="checkbox"]:checked {
+            background-color: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+        .qotd-option label {
+            font-size: 1.1rem;
+            color: var(--text-light);
+        }
+        .qotd-submit {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        #qotdSubmit {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        #qotdSubmit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+        }
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .feedback.correct {
+            background-color: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+        .feedback.incorrect {
+            background-color: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+        }
+        .attempts {
+            margin-top: 1rem;
+            text-align: center;
+            color: #888;
+        }
+    </style>
 </head>
 <body>
     <header class="glass-header">
         <div class="logo-container">
             <h1 class="glow-text">Question of the Day</h1>
         </div>
-        <div id="nav-container"></div> <!-- Placeholder for navigation -->
+        <div id="nav-container"></div>
     </header>
-
     <main class="fade-in">
         <div class="games-container">
-            <h2 class="section-title glow-text">Today's Question (10/16/2024)</h2>
+            <h2 class="section-title glow-text">Today's Question</h2>
+            <div id="qotdContainer" class="qotd-frame"></div>
         </div>
     </main>
     <script src="script.js"></script>
@@ -34,10 +140,112 @@
             }
         }
 
-        // Fetch assignments and load navigation when the page loads
+        // Fetch QOTD data
+        async function fetchQOTD() {
+            try {
+                const response = await fetch('https://sheets.livepolls.app/api/spreadsheets/bc82dea8-d6f7-43dd-ac21-8d7de68f0d98/Sheet1');
+                const data = await response.json();
+                if (data.success) {
+                    return data.data;
+                } else {
+                    throw new Error('Failed to fetch QOTD data');
+                }
+            } catch (error) {
+                console.error('Error fetching QOTD:', error);
+                return null;
+            }
+        }
+
+        // Display QOTD
+        function displayQOTD(qotd) {
+            const container = document.getElementById('qotdContainer');
+            container.innerHTML = `
+                <div class="qotd-header">
+                    <span class="qotd-subject">${qotd.Subject}</span>
+                    <span class="qotd-date">${qotd.Date}</span>
+                </div>
+                <div class="qotd-specifics">${qotd.Specifics}</div>
+                <div class="qotd-question glow-text">${qotd.Question}</div>
+                <div class="qotd-options" id="qotdOptions"></div>
+                <div class="qotd-submit">
+                    <button id="qotdSubmit">Submit</button>
+                </div>
+                <div id="feedback" class="feedback"></div>
+                <div id="attempts" class="attempts"></div>
+            `;
+
+            const optionsContainer = document.getElementById('qotdOptions');
+            if (qotd.Type === 'Free Response') {
+                optionsContainer.innerHTML = `<textarea rows="4" cols="50" id="freeResponseAnswer"></textarea>`;
+            } else if (qotd.Type === 'Single Answer' || qotd.Type === 'Multiple Answer') {
+                const inputType = qotd.Type === 'Single Answer' ? 'radio' : 'checkbox';
+                const options = ['A', 'B', 'C', 'D', 'E'].filter(opt => qotd[`Ans${opt}`]);
+                options.forEach(opt => {
+                    optionsContainer.innerHTML += `
+                        <div class="qotd-option">
+                            <input type="${inputType}" id="option${opt}" name="qotdAnswer" value="${opt}">
+                            <label for="option${opt}">${qotd[`Ans${opt}`]}</label>
+                        </div>
+                    `;
+                });
+            }
+
+            let attempts = 0;
+            const maxAttempts = 3;
+
+            document.getElementById('qotdSubmit').addEventListener('click', () => {
+                attempts++;
+                const feedbackElement = document.getElementById('feedback');
+                const attemptsElement = document.getElementById('attempts');
+                
+                let userAnswer;
+                if (qotd.Type === 'Free Response') {
+                    userAnswer = document.getElementById('freeResponseAnswer').value.trim().toLowerCase();
+                } else if (qotd.Type === 'Single Answer') {
+                    userAnswer = document.querySelector('input[name="qotdAnswer"]:checked')?.value;
+                } else if (qotd.Type === 'Multiple Answer') {
+                    userAnswer = Array.from(document.querySelectorAll('input[name="qotdAnswer"]:checked'))
+                                      .map(input => input.value)
+                                      .sort()
+                                      .join(', ');
+                }
+
+                const correctAnswer = qotd.Correct1.toLowerCase();
+
+                if (userAnswer === correctAnswer) {
+                    feedbackElement.textContent = 'Correct! Great job!';
+                    feedbackElement.className = 'feedback correct';
+                    document.getElementById('qotdSubmit').disabled = true;
+                } else {
+                    feedbackElement.textContent = 'Incorrect. Try again!';
+                    feedbackElement.className = 'feedback incorrect';
+                    
+                    if (attempts >= maxAttempts) {
+                        feedbackElement.textContent = `Incorrect. The correct answer was: ${qotd.Correct1}`;
+                        document.getElementById('qotdSubmit').disabled = true;
+                    }
+                }
+
+                attemptsElement.textContent = `Attempts: ${attempts}/${maxAttempts}`;
+            });
+        }
+
+        // Main function to load QOTD
+        async function loadQOTD() {
+            const qotdData = await fetchQOTD();
+            if (qotdData) {
+                const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+                const todayQOTD = qotdData.find(q => q.Date === today) || qotdData[0]; // Fallback to first question if no match
+                displayQOTD(todayQOTD);
+            } else {
+                document.getElementById('qotdContainer').innerHTML = '<p>Failed to load Question of the Day. Please try again later.</p>';
+            }
+        }
+
+        // Load everything when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             loadNav();
-            fetchAssignments();
+            loadQOTD();
         });
     </script>
 </body>
