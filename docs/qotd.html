@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.png" type="image/png">
     <style>
+        /* Existing styles remain unchanged */
         .qotd-frame {
             background: var(--glass-background);
             backdrop-filter: blur(10px);
@@ -45,39 +46,14 @@
         }
         .qotd-options textarea {
             width: 100%;
-            height: 100px; /* Change height as desired */
+            height: 150px; /* Increased height for better visibility */
             padding: 0.5rem;
-            font-size: 1rem;
+            font-size: 1.5rem; /* Larger font size for clearer text */
             border: 2px solid var(--primary-color);
             border-radius: 5px;
             resize: none; /* Prevent resizing if desired */
-        }
-        .qotd-option {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .qotd-option input[type="radio"],
-        .qotd-option input[type="checkbox"] {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--primary-color);
-            border-radius: 50%;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-        .qotd-option input[type="checkbox"] {
-            border-radius: 4px;
-        }
-        .qotd-option input[type="radio"]:checked,
-        .qotd-option input[type="checkbox"]:checked {
-            background-color: var(--primary-color);
-            box-shadow: 0 0 10px var(--primary-color);
-        }
-        .qotd-option label {
-            font-size: 1.1rem;
-            color: var(--text-light);
+            color: #FFFFFF; /* Text color for better visibility */
+            background-color: rgba(255, 255, 255, 0.1); /* Light background for contrast */
         }
         .qotd-submit {
             margin-top: 2rem;
@@ -135,12 +111,11 @@
             <div id="qotdContainer" class="qotd-frame"></div>
         </div>
     </main>
-    <script src="script.js"></script>
     <script>
         // Load navigation from nav.html
         async function loadNav() {
             try {
-                const response = await fetch('navnav.html');
+                const response = await fetch('nav.html');
                 const nav = await response.text();
                 document.getElementById('nav-container').innerHTML = nav;
             } catch (error) {
@@ -175,96 +150,40 @@
                 </div>
                 <div class="qotd-specifics">${qotd.Specifics}</div>
                 <div class="qotd-question glow-text">${qotd.Question}</div>
-                <div class="qotd-options" id="qotdOptions"></div>
+                <div class="qotd-options" id="qotdOptions">
+                    <textarea id="freeResponseAnswer" placeholder="Type your answer here..."></textarea>
+                </div>
                 <div class="qotd-submit">
                     <button id="qotdSubmit">Submit</button>
                 </div>
                 <div id="feedback" class="feedback"></div>
                 <div id="attempts" class="attempts"></div>
             `;
-        
-            const optionsContainer = document.getElementById('qotdOptions');
-            if (qotd.Type === 'Free Response') {
-                optionsContainer.innerHTML = `<textarea rows="6" cols="60" id="freeResponseAnswer"></textarea>`;
-            } else if (qotd.Type === 'Single Answer' || qotd.Type === 'Multiple Answer') {
-                const inputType = qotd.Type === 'Single Answer' ? 'radio' : 'checkbox';
-                const options = ['A', 'B', 'C', 'D', 'E'].filter(opt => qotd[`Ans${opt}`]);
-                options.forEach(opt => {
-                    optionsContainer.innerHTML += `
-                        <div class="qotd-option">
-                            <input type="${inputType}" id="option${opt}" name="qotdAnswer" value="${opt}">
-                            <label for="option${opt}">${qotd[`Ans${opt}`]}</label>
-                        </div>
-                    `;
-                });
-            }
-        
+
             let attempts = 0;
             const maxAttempts = 3;
-        
+
             document.getElementById('qotdSubmit').addEventListener('click', () => {
                 attempts++;
                 const feedbackElement = document.getElementById('feedback');
                 const attemptsElement = document.getElementById('attempts');
-        
-                let userAnswer;
-                if (qotd.Type === 'Free Response') {
-                    userAnswer = document.getElementById('freeResponseAnswer').value.trim();
-                } else if (qotd.Type === 'Single Answer') {
-                    userAnswer = document.querySelector('input[name="qotdAnswer"]:checked')?.value;
-                } else if (qotd.Type === 'Multiple Answer') {
-                    userAnswer = Array.from(document.querySelectorAll('input[name="qotdAnswer"]:checked'))
-                                      .map(input => input.value)
-                                      .sort()
-                                      .join(', ');
-                }
-        
-                const correctAnswers = qotd.Correct1.split(',').map(ans => ans.trim());
-        
-                if (qotd.Type === 'Free Response') {
-                    if (userAnswer.toLowerCase() === correctAnswers[0].toLowerCase()) {
-                        feedbackElement.textContent = 'Correct! Great job!';
-                        feedbackElement.className = 'feedback correct';
+
+                const userAnswer = document.getElementById('freeResponseAnswer').value.trim();
+                const correctAnswer = qotd.Correct1.trim();
+
+                if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                    feedbackElement.textContent = 'Correct! Great job!';
+                    feedbackElement.className = 'feedback correct';
+                    document.getElementById('qotdSubmit').disabled = true;
+                } else {
+                    feedbackElement.textContent = 'Incorrect. Try again!';
+                    feedbackElement.className = 'feedback incorrect';
+                    if (attempts >= maxAttempts) {
+                        feedbackElement.textContent = `Incorrect. The correct answer was: ${correctAnswer}`;
                         document.getElementById('qotdSubmit').disabled = true;
-                    } else {
-                        feedbackElement.textContent = 'Incorrect. Try again!';
-                        feedbackElement.className = 'feedback incorrect';
-                        if (attempts >= maxAttempts) {
-                            feedbackElement.textContent = `Incorrect. The correct answer was: ${qotd.Correct1}`;
-                            document.getElementById('qotdSubmit').disabled = true;
-                        }
-                    }
-                } else if (qotd.Type === 'Single Answer') {
-                    if (userAnswer && correctAnswers.includes(userAnswer)) {
-                        feedbackElement.textContent = 'Correct! Great job!';
-                        feedbackElement.className = 'feedback correct';
-                        document.getElementById('qotdSubmit').disabled = true;
-                    } else {
-                        feedbackElement.textContent = 'Incorrect. Try again!';
-                        feedbackElement.className = 'feedback incorrect';
-                        if (attempts >= maxAttempts) {
-                            feedbackElement.textContent = `Incorrect. The correct answer was: ${qotd.Correct1}`;
-                            document.getElementById('qotdSubmit').disabled = true;
-                        }
-                    }
-                } else if (qotd.Type === 'Multiple Answer') {
-                    const userAnswersArray = userAnswer ? userAnswer.split(', ').map(ans => ans.trim()) : [];
-                    const allCorrect = correctAnswers.every(ans => userAnswersArray.includes(ans)) && 
-                                       userAnswersArray.length === correctAnswers.length;
-                    if (allCorrect) {
-                        feedbackElement.textContent = 'Correct! Great job!';
-                        feedbackElement.className = 'feedback correct';
-                        document.getElementById('qotdSubmit').disabled = true;
-                    } else {
-                        feedbackElement.textContent = 'Incorrect. Try again!';
-                        feedbackElement.className = 'feedback incorrect';
-                        if (attempts >= maxAttempts) {
-                            feedbackElement.textContent = `Incorrect. The correct answers were: ${qotd.Correct1}`;
-                            document.getElementById('qotdSubmit').disabled = true;
-                        }
                     }
                 }
-        
+
                 attemptsElement.textContent = `Attempts: ${attempts}/${maxAttempts}`;
             });
         }
