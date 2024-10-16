@@ -68,7 +68,7 @@
                 
                 // Filter for Human Geography assignments and sort by due date
                 const geometryAssignments = rows
-                    .filter(row => row[0].toLowerCase() === 'ap human geography')
+                    .filter(row => row[0].toLowerCase() === 'pre-ap geometry')
                     .sort((a, b) => new Date(a[1]) - new Date(b[1]));
                 
                 const container = document.getElementById('assignments-container');
