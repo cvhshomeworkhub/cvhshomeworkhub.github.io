@@ -80,16 +80,15 @@
                 }
                 
                 // Create assignment cards
-                art1Assignments.forEach(([subject, dueDate, title]) => {
+                art1Assignments.forEach(([dueDate, title]) => {
                     const card = document.createElement('div');
                     card.className = 'assignment-card glass-effect';
                     card.innerHTML = `
                         <div class="assignment-header">
-                            <h3 class="assignment-title">${subject}</h3>
-                            <span class="due-date">${dueDate}</span>
+                            <h3 class="assignment-title">${title}</h3>
                         </div>
                         <div class="assignment-content">
-                            <p class="assignment-details">${title}</p>
+                            <p class="assignment-details">${dueDate}</p>
                         </div>
                     `;
                     container.appendChild(card);
