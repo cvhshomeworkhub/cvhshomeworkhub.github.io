@@ -177,12 +177,12 @@
                 }
                 
                 // Create assignment cards
-                alg2Assignments.forEach(([dueDate, title]) => {
+                alg2Assignments.forEach(([dueDate, subject]) => {
                     const card = document.createElement('div');
                     card.className = 'assignment-card glass-effect';
                     card.innerHTML = `
                         <div class="assignment-header">
-                            <h3 class="assignment-title">${title}</h3>
+                            <h3 class="assignment-title">${subject}</h3>
                         </div>
                         <div class="assignment-content">
                             <p class="assignment-details">${dueDate}</p>
