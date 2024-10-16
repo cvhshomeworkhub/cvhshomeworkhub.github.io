@@ -206,10 +206,10 @@
                 attempts++;
                 const feedbackElement = document.getElementById('feedback');
                 const attemptsElement = document.getElementById('attempts');
-                
+        
                 let userAnswer;
                 if (qotd.Type === 'Free Response') {
-                    userAnswer = document.getElementById('freeResponseAnswer').value.trim().toLowerCase();
+                    userAnswer = document.getElementById('freeResponseAnswer').value.trim();
                 } else if (qotd.Type === 'Single Answer') {
                     userAnswer = document.querySelector('input[name="qotdAnswer"]:checked')?.value;
                 } else if (qotd.Type === 'Multiple Answer') {
@@ -221,7 +221,20 @@
         
                 const correctAnswers = qotd.Correct1.split(',').map(ans => ans.trim());
         
-                if (qotd.Type === 'Single Answer') {
+                if (qotd.Type === 'Free Response') {
+                    if (userAnswer.toLowerCase() === correctAnswers[0].toLowerCase()) {
+                        feedbackElement.textContent = 'Correct! Great job!';
+                        feedbackElement.className = 'feedback correct';
+                        document.getElementById('qotdSubmit').disabled = true;
+                    } else {
+                        feedbackElement.textContent = 'Incorrect. Try again!';
+                        feedbackElement.className = 'feedback incorrect';
+                        if (attempts >= maxAttempts) {
+                            feedbackElement.textContent = `Incorrect. The correct answer was: ${qotd.Correct1}`;
+                            document.getElementById('qotdSubmit').disabled = true;
+                        }
+                    }
+                } else if (qotd.Type === 'Single Answer') {
                     if (userAnswer && correctAnswers.includes(userAnswer)) {
                         feedbackElement.textContent = 'Correct! Great job!';
                         feedbackElement.className = 'feedback correct';
