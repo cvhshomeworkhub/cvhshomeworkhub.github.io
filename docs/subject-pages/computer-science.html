@@ -131,7 +131,7 @@
                 }
                 
                 // Create assignment cards
-                compSciAssignments.forEach(([dueDate, title]) => {
+                compSciAssignments.forEach(([subject, dueDate, title]) => {
                     const card = document.createElement('div');
                     card.className = 'assignment-card glass-effect';
                     card.innerHTML = `
