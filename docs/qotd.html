@@ -43,6 +43,15 @@
             flex-direction: column;
             gap: 1rem;
         }
+        .qotd-options textarea {
+            width: 100%;
+            height: 100px; /* Change height as desired */
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 5px;
+            resize: none; /* Prevent resizing if desired */
+        }
         .qotd-option {
             display: flex;
             align-items: center;
@@ -158,77 +167,94 @@
 
         // Display QOTD
         function displayQOTD(qotd) {
-            const container = document.getElementById('qotdContainer');
-            container.innerHTML = `
-                <div class="qotd-header">
-                    <span class="qotd-subject">${qotd.Subject}</span>
-                    <span class="qotd-date">${qotd.Date}</span>
-                </div>
-                <div class="qotd-specifics">${qotd.Specifics}</div>
-                <div class="qotd-question glow-text">${qotd.Question}</div>
-                <div class="qotd-options" id="qotdOptions"></div>
-                <div class="qotd-submit">
-                    <button id="qotdSubmit">Submit</button>
-                </div>
-                <div id="feedback" class="feedback"></div>
-                <div id="attempts" class="attempts"></div>
-            `;
-
-            const optionsContainer = document.getElementById('qotdOptions');
+        const container = document.getElementById('qotdContainer');
+        container.innerHTML = `
+            <div class="qotd-header">
+                <span class="qotd-subject">${qotd.Subject}</span>
+                <span class="qotd-date">${qotd.Date}</span>
+            </div>
+            <div class="qotd-specifics">${qotd.Specifics}</div>
+            <div class="qotd-question glow-text">${qotd.Question}</div>
+            <div class="qotd-options" id="qotdOptions"></div>
+            <div class="qotd-submit">
+                <button id="qotdSubmit">Submit</button>
+            </div>
+            <div id="feedback" class="feedback"></div>
+            <div id="attempts" class="attempts"></div>
+        `;
+    
+        const optionsContainer = document.getElementById('qotdOptions');
+        if (qotd.Type === 'Free Response') {
+            optionsContainer.innerHTML = `<textarea rows="6" cols="60" id="freeResponseAnswer"></textarea>`;
+        } else if (qotd.Type === 'Single Answer' || qotd.Type === 'Multiple Answer') {
+            const inputType = qotd.Type === 'Single Answer' ? 'radio' : 'checkbox';
+            const options = ['A', 'B', 'C', 'D', 'E'].filter(opt => qotd[`Ans${opt}`]);
+            options.forEach(opt => {
+                optionsContainer.innerHTML += `
+                    <div class="qotd-option">
+                        <input type="${inputType}" id="option${opt}" name="qotdAnswer" value="${opt}">
+                        <label for="option${opt}">${qotd[`Ans${opt}`]}</label>
+                    </div>
+                `;
+            });
+        }
+    
+        let attempts = 0;
+        const maxAttempts = 3;
+    
+        document.getElementById('qotdSubmit').addEventListener('click', () => {
+            attempts++;
+            const feedbackElement = document.getElementById('feedback');
+            const attemptsElement = document.getElementById('attempts');
+            
+            let userAnswer;
             if (qotd.Type === 'Free Response') {
-                optionsContainer.innerHTML = `<textarea rows="4" cols="50" id="freeResponseAnswer"></textarea>`;
-            } else if (qotd.Type === 'Single Answer' || qotd.Type === 'Multiple Answer') {
-                const inputType = qotd.Type === 'Single Answer' ? 'radio' : 'checkbox';
-                const options = ['A', 'B', 'C', 'D', 'E'].filter(opt => qotd[`Ans${opt}`]);
-                options.forEach(opt => {
-                    optionsContainer.innerHTML += `
-                        <div class="qotd-option">
-                            <input type="${inputType}" id="option${opt}" name="qotdAnswer" value="${opt}">
-                            <label for="option${opt}">${qotd[`Ans${opt}`]}</label>
-                        </div>
-                    `;
-                });
+                userAnswer = document.getElementById('freeResponseAnswer').value.trim().toLowerCase();
+            } else if (qotd.Type === 'Single Answer') {
+                userAnswer = document.querySelector('input[name="qotdAnswer"]:checked')?.value;
+            } else if (qotd.Type === 'Multiple Answer') {
+                userAnswer = Array.from(document.querySelectorAll('input[name="qotdAnswer"]:checked'))
+                                  .map(input => input.value)
+                                  .sort()
+                                  .join(', ');
             }
-
-            let attempts = 0;
-            const maxAttempts = 3;
-
-            document.getElementById('qotdSubmit').addEventListener('click', () => {
-                attempts++;
-                const feedbackElement = document.getElementById('feedback');
-                const attemptsElement = document.getElementById('attempts');
-                
-                let userAnswer;
-                if (qotd.Type === 'Free Response') {
-                    userAnswer = document.getElementById('freeResponseAnswer').value.trim().toLowerCase();
-                } else if (qotd.Type === 'Single Answer') {
-                    userAnswer = document.querySelector('input[name="qotdAnswer"]:checked')?.value;
-                } else if (qotd.Type === 'Multiple Answer') {
-                    userAnswer = Array.from(document.querySelectorAll('input[name="qotdAnswer"]:checked'))
-                                      .map(input => input.value)
-                                      .sort()
-                                      .join(', ');
-                }
-
-                const correctAnswer = qotd.Correct1.toLowerCase();
-
-                if (userAnswer === correctAnswer) {
+    
+            const correctAnswers = qotd.Correct1.toLowerCase().split(', ').map(ans => ans.trim());
+            const isCorrect = correctAnswers.includes(userAnswer);
+    
+            if (qotd.Type === 'Multiple Answer') {
+                const userAnswersArray = userAnswer.split(', ').map(ans => ans.trim());
+                const allCorrect = correctAnswers.length === userAnswersArray.length && correctAnswers.every(ans => userAnswersArray.includes(ans));
+                if (allCorrect) {
                     feedbackElement.textContent = 'Correct! Great job!';
                     feedbackElement.className = 'feedback correct';
                     document.getElementById('qotdSubmit').disabled = true;
                 } else {
                     feedbackElement.textContent = 'Incorrect. Try again!';
                     feedbackElement.className = 'feedback incorrect';
-                    
+                    if (attempts >= maxAttempts) {
+                        feedbackElement.textContent = `Incorrect. The correct answers were: ${qotd.Correct1}`;
+                        document.getElementById('qotdSubmit').disabled = true;
+                    }
+                }
+            } else {
+                if (isCorrect) {
+                    feedbackElement.textContent = 'Correct! Great job!';
+                    feedbackElement.className = 'feedback correct';
+                    document.getElementById('qotdSubmit').disabled = true;
+                } else {
+                    feedbackElement.textContent = 'Incorrect. Try again!';
+                    feedbackElement.className = 'feedback incorrect';
                     if (attempts >= maxAttempts) {
                         feedbackElement.textContent = `Incorrect. The correct answer was: ${qotd.Correct1}`;
                         document.getElementById('qotdSubmit').disabled = true;
                     }
                 }
-
-                attemptsElement.textContent = `Attempts: ${attempts}/${maxAttempts}`;
-            });
-        }
+            }
+    
+            attemptsElement.textContent = `Attempts: ${attempts}/${maxAttempts}`;
+        });
+    }
 
         // Main function to load QOTD
         async function loadQOTD() {
