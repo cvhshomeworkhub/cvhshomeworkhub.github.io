@@ -46,14 +46,14 @@
         }
         .qotd-options textarea {
             width: 100%;
-            height: 150px; /* Increased height for better visibility */
+            height: 150px;
             padding: 0.5rem;
-            font-size: 1.5rem; /* Larger font size for clearer text */
+            font-size: 1.5rem;
             border: 2px solid var(--primary-color);
             border-radius: 5px;
-            resize: none; /* Prevent resizing if desired */
-            color: #FFFFFF; /* Text color for better visibility */
-            background-color: rgba(255, 255, 255, 0.1); /* Light background for contrast */
+            resize: none;
+            color: #FFFFFF;
+            background-color: rgba(255, 255, 255, 0.1);
         }
         .qotd-submit {
             margin-top: 2rem;
@@ -95,6 +95,24 @@
             margin-top: 1rem;
             text-align: center;
             color: #888;
+        }
+        /* New styles for multiple choice options */
+        .multiple-choice-option {
+            display: block;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            color: #FFFFFF;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .multiple-choice-option:hover,
+        .multiple-choice-option.selected {
+            background-color: rgba(0, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 255, 255, 0.4);
         }
     </style>
 </head>
@@ -146,6 +164,15 @@
         // Display QOTD
         function displayQOTD(qotd) {
             const container = document.getElementById('qotdContainer');
+            const hasOptions = qotd.Options && qotd.Options.trim() !== "";
+            const optionsHtml = hasOptions
+                ? qotd.Options.split('\n').map((option, index) => `
+                    <div class="multiple-choice-option" data-option="${option}">
+                        ${option}
+                    </div>
+                `).join('')
+                : '<textarea id="freeResponseAnswer" placeholder="Type your answer here..."></textarea>';
+
             container.innerHTML = `
                 <div class="qotd-header">
                     <span class="qotd-subject">${qotd.Subject}</span>
@@ -154,7 +181,7 @@
                 <div class="qotd-specifics">${qotd.Specifics}</div>
                 <div class="qotd-question glow-text">${qotd.Question}</div>
                 <div class="qotd-options" id="qotdOptions">
-                    <textarea id="freeResponseAnswer" placeholder="Type your answer here..."></textarea>
+                    ${optionsHtml}
                 </div>
                 <div class="qotd-submit">
                     <button id="qotdSubmit">Submit</button>
@@ -165,16 +192,32 @@
 
             let attempts = 0;
             const maxAttempts = 3;
+            let selectedOption = null;
+
+            if (hasOptions) {
+                document.querySelectorAll('.multiple-choice-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        document.querySelectorAll('.multiple-choice-option').forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        selectedOption = option.dataset.option;
+                    });
+                });
+            }
 
             document.getElementById('qotdSubmit').addEventListener('click', () => {
                 attempts++;
                 const feedbackElement = document.getElementById('feedback');
                 const attemptsElement = document.getElementById('attempts');
 
-                const userAnswer = document.getElementById('freeResponseAnswer').value.trim();
+                let userAnswer;
+                if (hasOptions) {
+                    userAnswer = selectedOption;
+                } else {
+                    userAnswer = document.getElementById('freeResponseAnswer').value.trim();
+                }
                 const correctAnswer = qotd.Correct1.trim();
 
-                if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                if (userAnswer && userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
                     feedbackElement.textContent = 'Correct! Great job!';
                     feedbackElement.className = 'feedback correct';
                     document.getElementById('qotdSubmit').disabled = true;
