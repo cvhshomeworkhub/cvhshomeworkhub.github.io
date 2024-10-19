@@ -137,6 +137,9 @@ nav {
     display: flex;
     gap: 1rem;
     align-items: center;
+    padding: 1rem;
+    background: var(--glass-background);
+    backdrop-filter: blur(10px);
 }
 
 .nav-link {
@@ -236,6 +239,86 @@ nav {
 /* Show the left-aligned dropdown on hover */
 .dropdown.left:hover .dropdown-content.left {
     display: block; /* Show on hover */
+}
+
+/* New Animated Banner Styles */
+.animated-banner {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    padding: 1rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.animated-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 20px,
+        rgba(255, 255, 255, 0.1) 20px,
+        rgba(255, 255, 255, 0.1) 40px
+    );
+    animation: moveLines 10s linear infinite;
+}
+
+@keyframes moveLines {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.banner-text {
+    font-size: 2.5rem;
+    color: var(--text-light);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8),
+                 0 0 20px rgba(0, 255, 255, 0.6),
+                 0 0 30px rgba(0, 255, 255, 0.4);
+    position: relative;
+    z-index: 1;
+    animation: glowPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+    0% {
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.8),
+                     0 0 20px rgba(0, 255, 255, 0.6),
+                     0 0 30px rgba(0, 255, 255, 0.4);
+    }
+    100% {
+        text-shadow: 0 0 15px rgba(0, 255, 255, 0.9),
+                     0 0 25px rgba(0, 255, 255, 0.7),
+                     0 0 35px rgba(0, 255, 255, 0.5);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .dropdown {
+        width: 100%;
+    }
+    
+    .dropdown-content {
+        width: 100%;
+        position: static;
+    }
+    
+    .banner-text {
+        font-size: 1.8rem;
+    }
 }
 
 /* ==========================================================================
