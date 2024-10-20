@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Keyboard</title>
+    <link rel="stylesheet" href="https://cvhshomeworkhub.github.io/styles.css">
+    <link rel="icon" href="../favicon.png" type="image/png">
+    <style>
+        body {
+            background: black;
+            color: var(--accent-color);
+            font-family: 'Orbitron', sans-serif;
+        }
+        .game-container {
+            text-align: center;
+            padding: 20px;
+        }
+        .text-area {
+            width: 80%;
+            height: 100px;
+            font-size: 24px;
+            padding: 10px;
+            border: 2px solid var(--accent-color);
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px var(--accent-color);
+        }
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 10px;
+            margin: 0 auto;
+            width: 80%;
+        }
+        .key {
+            border: 2px solid var(--accent-color);
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            color: var(--accent-color);
+            cursor: pointer;
+            background: transparent;
+            transition: background 0.2s, color 0.2s;
+        }
+        .key.active {
+            background: var(--accent-color);
+            color: black;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        .generate-button {
+            padding: 10px 20px;
+            border: 2px solid var(--accent-color);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--accent-color);
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .generate-button:hover {
+            background: var(--accent-color);
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <header class="glass-header">
+        <h1 class="glow-text">Neon Keyboard</h1>
+    </header>
+    
+    <main class="game-container">
+        <textarea class="text-area" id="textInput" placeholder="Start typing here..."></textarea>
+        <div class="keyboard" id="keyboardContainer"></div>
+        <div class="button-container">
+            <button class="generate-button" onclick="generateRandomText()">Generate Random Text</button>
+        </div>
+    </main>
+
+    <script src="../script.js"></script>
+    <script>
+        const keys = [
+            { char: 'Q', color: '#FF00FF' }, { char: 'W', color: '#00FFFF' }, { char: 'E', color: '#FFFF00' },
+            { char: 'R', color: '#FF0000' }, { char: 'T', color: '#00FF00' }, { char: 'Y', color: '#0000FF' },
+            { char: 'U', color: '#FF1493' }, { char: 'I', color: '#00BFFF' }, { char: 'O', color: '#FFA500' },
+            { char: 'P', color: '#800080' }, { char: 'A', color: '#FFC0CB' }, { char: 'S', color: '#7FFF00' },
+            { char: 'D', color: '#FF4500' }, { char: 'F', color: '#FF8C00' }, { char: 'G', color: '#ADFF2F' },
+            { char: 'H', color: '#FFD700' }, { char: 'J', color: '#DA70D6' }, { char: 'K', color: '#F08080' },
+            { char: 'L', color: '#FF6347' }, { char: 'Z', color: '#8B0000' }, { char: 'X', color: '#CD5C5C' },
+            { char: 'C', color: '#FF69B4' }, { char: 'V', color: '#B22222' }, { char: 'B', color: '#4682B4' },
+            { char: 'N', color: '#A52A2A' }, { char: 'M', color: '#808080' },
+        ];
+
+        const keyboardContainer = document.getElementById('keyboardContainer');
+        const textInput = document.getElementById('textInput');
+
+        function createKeyboard() {
+            keys.forEach(key => {
+                const keyElement = document.createElement('div');
+                keyElement.classList.add('key');
+                keyElement.innerText = key.char;
+                keyElement.style.color = key.color;
+                keyElement.dataset.char = key.char;
+                keyElement.onclick = () => handleKeyPress(keyElement);
+                keyboardContainer.appendChild(keyElement);
+            });
+        }
+
+        function handleKeyPress(keyElement) {
+            const char = keyElement.dataset.char;
+            textInput.value += char;
+            keyElement.classList.add('active');
+
+            setTimeout(() => {
+                keyElement.classList.remove('active');
+            }, 200);
+        }
+
+        function generateRandomText() {
+            const words = ['hello', 'world', 'neon', 'game', 'keyboard', 'typing', 'challenge', 'fun', 'javascript', 'code'];
+            const randomText = words[Math.floor(Math.random() * words.length)];
+            textInput.value = randomText;
+        }
+
+        document.addEventListener('DOMContentLoaded', createKeyboard);
+    </script>
+</body>
+</html>
