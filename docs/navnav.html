@@ -1,36 +1,11 @@
-<nav class="nav">
-    <div class="nav-container">
-        <div class="hamburger" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        <div class="nav-links">
-            <a href="https://cvhshomeworkhub.github.io/index.html" class="nav-link">Home</a>
-            <div class="dropdown">
-                <button class="dropbtn" onclick="toggleDropdown(event)">Explore</button>
-                <div class="dropdown-content">
-                    <a href="https://cvhshomeworkhub.github.io/updates.html">Updates</a>
-                    <a href="https://cvhshomeworkhub.github.io/chatroom.html">Chatroom</a>
-                    <a href="https://cvhshomeworkhub.github.io/games.html">My Games</a>
-                    <a href="https://cvhshomeworkhub.github.io/simulations.html">Simulations</a>
-                    <a href="https://cvhshomeworkhub.github.io/mainframe-ai.html">𝙼𝚊𝚒𝚗𝚏𝚛𝚊𝚖𝚎 𝙰𝙸</a>
-                </div>
-            </div>
-            <a href="https://cvhshomeworkhub.github.io/subject-study.html" class="nav-link">Subject Study</a>
-            <a href="https://cvhshomeworkhub.github.io/qotd.html" class="nav-link">QOTD</a>
-            <a href="https://cvhshomeworkhub.github.io/credits.html" class="nav-link">Credits</a>
-            <a href="https://cvhshomeworkhub.github.io/apply.html" class="nav-link"><strong>APPLY NOW!</strong></a>
-        </div>
-    </div>
-</nav>
-
+<!DOCTYPE html>
+<html>
+<head>
 <style>
 /* Base styles */
 .nav {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Space between elements */
     padding: 1rem;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
@@ -40,6 +15,7 @@
     color: white;
     text-decoration: none;
     padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
 }
 
 .dropdown {
@@ -85,9 +61,10 @@
 
 /* Hamburger menu icon */
 .hamburger {
-    display: flex; /* Show hamburger */
+    display: none;
     flex-direction: column;
     cursor: pointer;
+    padding: 10px;
 }
 
 .hamburger div {
@@ -101,22 +78,23 @@
 /* Mobile styles */
 @media screen and (max-width: 768px) {
     .nav {
-        padding: 0.5rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hamburger {
+        display: flex;
+        align-self: flex-end;
     }
 
     .nav-links {
-        display: none; /* Hidden by default */
-        flex-direction: column; /* Stack links vertically */
+        display: none;
         width: 100%;
-        background: rgba(0, 0, 0, 0.9);
-        position: absolute;
-        top: 100%;
-        right: 0; /* Align with the right edge */
-        z-index: 1000;
     }
 
     .nav-links.active {
-        display: flex; /* Show links when active */
+        display: flex;
+        flex-direction: column;
     }
 
     .nav-link {
@@ -143,39 +121,46 @@
         background: rgba(0, 0, 0, 0.4);
     }
 
-    .dropdown-content.show {
-        display: block;
-    }
-
     .dropdown-content a {
         padding-left: 2rem;
     }
 }
 </style>
+</head>
+<body>
+
+<nav class="nav">
+    <div class="hamburger" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    
+    <div class="nav-links">
+        <a href="https://cvhshomeworkhub.github.io/index.html" class="nav-link">Home</a>
+        <div class="dropdown">
+            <button class="dropbtn">Explore</button>
+            <div class="dropdown-content">
+                <a href="https://cvhshomeworkhub.github.io/updates.html">Updates</a>
+                <a href="https://cvhshomeworkhub.github.io/chatroom.html">Chatroom</a>
+                <a href="https://cvhshomeworkhub.github.io/games.html">My Games</a>
+                <a href="https://cvhshomeworkhub.github.io/simulations.html">Simulations</a>
+                <a href="https://cvhshomeworkhub.github.io/mainframe-ai.html">𝙼𝚊𝚒𝚗𝚏𝚛𝚊𝚖𝚎 𝙰𝙸</a>
+            </div>
+        </div>
+        <a href="https://cvhshomeworkhub.github.io/subject-study.html" class="nav-link">Subject Study</a>
+        <a href="https://cvhshomeworkhub.github.io/qotd.html" class="nav-link">QOTD</a>
+        <a href="https://cvhshomeworkhub.github.io/credits.html" class="nav-link">Credits</a>
+        <a href="https://cvhshomeworkhub.github.io/apply.html" class="nav-link"><strong>APPLY NOW!</strong></a>
+    </div>
+</nav>
 
 <script>
 function toggleMenu() {
     const navLinks = document.querySelector('.nav-links');
     navLinks.classList.toggle('active');
 }
-
-function toggleDropdown(event) {
-    event.preventDefault();
-    const dropdown = event.target.nextElementSibling;
-    dropdown.classList.toggle('show');
-}
-
-// Close dropdowns and menu when clicking outside
-document.addEventListener('click', function(event) {
-    if (!event.target.matches('.dropbtn') && !event.target.matches('.hamburger *')) {
-        const dropdowns = document.getElementsByClassName('dropdown-content');
-        for (let dropdown of dropdowns) {
-            dropdown.classList.remove('show');
-        }
-        const navLinks = document.querySelector('.nav-links');
-        if (navLinks.classList.contains('active')) {
-            navLinks.classList.remove('active');
-        }
-    }
-});
 </script>
+
+</body>
+</html>
