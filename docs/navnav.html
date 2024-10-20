@@ -65,6 +65,7 @@
     flex-direction: column;
     cursor: pointer;
     padding: 10px;
+    z-index: 1001;
 }
 
 .hamburger div {
@@ -75,6 +76,19 @@
     transition: 0.4s;
 }
 
+/* Add rotation for hamburger animation */
+.hamburger.active div:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger.active div:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active div:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
 .nav-container {
     display: flex;
     align-items: center;
@@ -83,6 +97,10 @@
 
 /* Mobile styles */
 @media screen and (max-width: 768px) {
+    .nav {
+        padding: 0.5rem;
+    }
+
     .nav-container {
         flex-direction: column;
         align-items: flex-start;
@@ -90,16 +108,20 @@
 
     .hamburger {
         display: flex;
-        align-self: flex-end;
         position: absolute;
         right: 1rem;
-        top: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     .nav-links {
         display: none;
         width: 100%;
-        padding-top: 3rem;
+        background: rgba(0, 0, 0, 0.9);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
     }
 
     .nav-links.active {
@@ -129,6 +151,11 @@
         width: 100%;
         box-shadow: none;
         background: rgba(0, 0, 0, 0.4);
+        display: none;
+    }
+
+    .dropdown-content.show {
+        display: block;
     }
 
     .dropdown-content a {
@@ -149,7 +176,7 @@
         <div class="nav-links">
             <a href="https://cvhshomeworkhub.github.io/index.html" class="nav-link">Home</a>
             <div class="dropdown">
-                <button class="dropbtn">Explore</button>
+                <button class="dropbtn" onclick="toggleDropdown(event)">Explore</button>
                 <div class="dropdown-content">
                     <a href="https://cvhshomeworkhub.github.io/updates.html">Updates</a>
                     <a href="https://cvhshomeworkhub.github.io/chatroom.html">Chatroom</a>
@@ -168,9 +195,31 @@
 
 <script>
 function toggleMenu() {
+    const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
+    hamburger.classList.toggle('active');
     navLinks.classList.toggle('active');
 }
+
+function toggleDropdown(event) {
+    if (window.innerWidth <= 768) {
+        event.preventDefault();
+        const dropdown = event.target.nextElementSibling;
+        dropdown.classList.toggle('show');
+    }
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(event) {
+    if (!event.target.matches('.dropbtn')) {
+        const dropdowns = document.getElementsByClassName('dropdown-content');
+        for (let dropdown of dropdowns) {
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+            }
+        }
+    }
+});
 </script>
 
 </body>
