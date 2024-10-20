@@ -61,7 +61,7 @@
 
 /* Hamburger menu icon */
 .hamburger {
-    display: none;
+    display: none; /* Default to hidden */
     flex-direction: column;
     cursor: pointer;
     padding: 10px;
@@ -104,16 +104,15 @@
     .nav-container {
         flex-direction: column;
         align-items: flex-start;
+        position: relative; /* Ensure positioning context for absolute elements */
     }
-/*
+
     .hamburger {
-        display: flex;
+        display: flex; /* Show hamburger on mobile */
         position: absolute;
         right: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 1rem; /* Adjusted for better visibility */
     }
-*/
 
     .nav-links {
         display: none;
