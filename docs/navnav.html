@@ -1,6 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
+<nav class="nav">
+    <div class="nav-container">
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="nav-links">
+            <a href="https://cvhshomeworkhub.github.io/index.html" class="nav-link">Home</a>
+            <div class="dropdown">
+                <button class="dropbtn" onclick="toggleDropdown(event)">Explore</button>
+                <div class="dropdown-content">
+                    <a href="https://cvhshomeworkhub.github.io/updates.html">Updates</a>
+                    <a href="https://cvhshomeworkhub.github.io/chatroom.html">Chatroom</a>
+                    <a href="https://cvhshomeworkhub.github.io/games.html">My Games</a>
+                    <a href="https://cvhshomeworkhub.github.io/simulations.html">Simulations</a>
+                    <a href="https://cvhshomeworkhub.github.io/mainframe-ai.html">𝙼𝚊𝚒𝚗𝚏𝚛𝚊𝚖𝚎 𝙰𝙸</a>
+                </div>
+            </div>
+            <a href="https://cvhshomeworkhub.github.io/subject-study.html" class="nav-link">Subject Study</a>
+            <a href="https://cvhshomeworkhub.github.io/qotd.html" class="nav-link">QOTD</a>
+            <a href="https://cvhshomeworkhub.github.io/credits.html" class="nav-link">Credits</a>
+            <a href="https://cvhshomeworkhub.github.io/apply.html" class="nav-link"><strong>APPLY NOW!</strong></a>
+        </div>
+    </div>
+</nav>
+
 <style>
 /* Base styles */
 .nav {
@@ -61,7 +85,7 @@
 
 /* Hamburger menu icon */
 .hamburger {
-    display: none; /* Hidden by default */
+    display: flex; /* Show hamburger */
     flex-direction: column;
     cursor: pointer;
 }
@@ -74,30 +98,10 @@
     transition: 0.4s;
 }
 
-/* Add rotation for hamburger animation */
-.hamburger.active div:nth-child(1) {
-    transform: rotate(-45deg) translate(-5px, 6px);
-}
-
-.hamburger.active div:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.active div:nth-child(3) {
-    transform: rotate(45deg) translate(-5px, -6px);
-}
-
 /* Mobile styles */
 @media screen and (max-width: 768px) {
     .nav {
         padding: 0.5rem;
-    }
-
-    .hamburger {
-        display: flex; /* Show hamburger on mobile */
-        position: absolute;
-        right: 1rem; /* Move to the right */
-        top: 1rem; /* Adjust as needed */
     }
 
     .nav-links {
@@ -137,7 +141,6 @@
         width: 100%;
         box-shadow: none;
         background: rgba(0, 0, 0, 0.4);
-        display: none;
     }
 
     .dropdown-content.show {
@@ -149,41 +152,10 @@
     }
 }
 </style>
-</head>
-<body>
-
-<nav class="nav">
-    <div class="nav-container">
-        <div class="hamburger" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        <div class="nav-links">
-            <a href="https://cvhshomeworkhub.github.io/index.html" class="nav-link">Home</a>
-            <div class="dropdown">
-                <button class="dropbtn" onclick="toggleDropdown(event)">Explore</button>
-                <div class="dropdown-content">
-                    <a href="https://cvhshomeworkhub.github.io/updates.html">Updates</a>
-                    <a href="https://cvhshomeworkhub.github.io/chatroom.html">Chatroom</a>
-                    <a href="https://cvhshomeworkhub.github.io/games.html">My Games</a>
-                    <a href="https://cvhshomeworkhub.github.io/simulations.html">Simulations</a>
-                    <a href="https://cvhshomeworkhub.github.io/mainframe-ai.html">𝙼𝚊𝚒𝚗𝚏𝚛𝚊𝚖𝚎 𝙰𝙸</a>
-                </div>
-            </div>
-            <a href="https://cvhshomeworkhub.github.io/subject-study.html" class="nav-link">Subject Study</a>
-            <a href="https://cvhshomeworkhub.github.io/qotd.html" class="nav-link">QOTD</a>
-            <a href="https://cvhshomeworkhub.github.io/credits.html" class="nav-link">Credits</a>
-            <a href="https://cvhshomeworkhub.github.io/apply.html" class="nav-link"><strong>APPLY NOW!</strong></a>
-        </div>
-    </div>
-</nav>
 
 <script>
 function toggleMenu() {
-    const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
-    hamburger.classList.toggle('active');
     navLinks.classList.toggle('active');
 }
 
@@ -198,19 +170,12 @@ document.addEventListener('click', function(event) {
     if (!event.target.matches('.dropbtn') && !event.target.matches('.hamburger *')) {
         const dropdowns = document.getElementsByClassName('dropdown-content');
         for (let dropdown of dropdowns) {
-            if (dropdown.classList.contains('show')) {
-                dropdown.classList.remove('show');
-            }
+            dropdown.classList.remove('show');
         }
         const navLinks = document.querySelector('.nav-links');
         if (navLinks.classList.contains('active')) {
             navLinks.classList.remove('active');
-            const hamburger = document.querySelector('.hamburger');
-            hamburger.classList.remove('active');
         }
     }
 });
 </script>
-
-</body>
-</html>
