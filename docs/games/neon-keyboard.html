@@ -9,7 +9,7 @@
     <style>
         body {
             background: black;
-            color: var(--accent-color);
+            color: #00ffff;
             font-family: 'Orbitron', sans-serif;
         }
         .game-container {
@@ -17,114 +17,98 @@
             padding: 20px;
         }
         .text-area {
-            width: 80%;
-            height: 100px;
             font-size: 24px;
-            padding: 10px;
+            margin: 20px 0;
             border: 2px solid var(--accent-color);
-            background: rgba(0, 0, 0, 0.7);
-            color: var(--accent-color);
-            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
             box-shadow: 0 0 20px var(--accent-color);
+            width: 80%;
         }
         .keyboard {
             display: grid;
-            grid-template-columns: repeat(12, 1fr);
+            grid-template-columns: repeat(10, 1fr);
             gap: 10px;
-            margin: 0 auto;
+            margin: 20px auto;
             width: 80%;
         }
         .key {
+            background: rgba(255, 255, 255, 0.1);
             border: 2px solid var(--accent-color);
             border-radius: 5px;
+            color: var(--accent-color);
             padding: 20px;
             text-align: center;
-            color: var(--accent-color);
-            cursor: pointer;
-            background: transparent;
-            transition: background 0.2s, color 0.2s;
+            transition: background 0.3s;
         }
         .key.active {
-            background: var(--accent-color);
-            color: black;
-        }
-        .button-container {
-            margin-top: 20px;
-        }
-        .generate-button {
-            padding: 10px 20px;
-            border: 2px solid var(--accent-color);
-            border-radius: 5px;
-            background: transparent;
-            color: var(--accent-color);
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s;
-        }
-        .generate-button:hover {
             background: var(--accent-color);
             color: black;
         }
     </style>
 </head>
 <body>
-    <header class="glass-header">
+    <div class="game-container">
         <h1 class="glow-text">Neon Keyboard</h1>
-    </header>
-    
-    <main class="game-container">
-        <textarea class="text-area" id="textInput" placeholder="Start typing here..."></textarea>
-        <div class="keyboard" id="keyboardContainer"></div>
-        <div class="button-container">
-            <button class="generate-button" onclick="generateRandomText()">Generate Random Text</button>
-        </div>
-    </main>
-
+        <textarea class="text-area" id="textArea" readonly></textarea>
+        <div class="keyboard" id="keyboard"></div>
+        <button onclick="startGame()">Start Game</button>
+    </div>
     <script src="../script.js"></script>
     <script>
-        const keys = [
-            { char: 'Q', color: '#FF00FF' }, { char: 'W', color: '#00FFFF' }, { char: 'E', color: '#FFFF00' },
-            { char: 'R', color: '#FF0000' }, { char: 'T', color: '#00FF00' }, { char: 'Y', color: '#0000FF' },
-            { char: 'U', color: '#FF1493' }, { char: 'I', color: '#00BFFF' }, { char: 'O', color: '#FFA500' },
-            { char: 'P', color: '#800080' }, { char: 'A', color: '#FFC0CB' }, { char: 'S', color: '#7FFF00' },
-            { char: 'D', color: '#FF4500' }, { char: 'F', color: '#FF8C00' }, { char: 'G', color: '#ADFF2F' },
-            { char: 'H', color: '#FFD700' }, { char: 'J', color: '#DA70D6' }, { char: 'K', color: '#F08080' },
-            { char: 'L', color: '#FF6347' }, { char: 'Z', color: '#8B0000' }, { char: 'X', color: '#CD5C5C' },
-            { char: 'C', color: '#FF69B4' }, { char: 'V', color: '#B22222' }, { char: 'B', color: '#4682B4' },
-            { char: 'N', color: '#A52A2A' }, { char: 'M', color: '#808080' },
-        ];
+        const words = ["neon", "runner", "game", "javascript", "coding", "fun", "challenge", "speed", "type", "learn"];
+        let currentWord = "";
+        let inputIndex = 0;
 
-        const keyboardContainer = document.getElementById('keyboardContainer');
-        const textInput = document.getElementById('textInput');
+        function startGame() {
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            document.getElementById("textArea").value = currentWord;
+            inputIndex = 0;
+            setupKeyboard();
+        }
 
-        function createKeyboard() {
+        function setupKeyboard() {
+            const keyboardDiv = document.getElementById("keyboard");
+            keyboardDiv.innerHTML = ""; // Clear previous keyboard
+
+            const keys = "abcdefghijklmnopqrstuvwxyz".split("");
             keys.forEach(key => {
-                const keyElement = document.createElement('div');
-                keyElement.classList.add('key');
-                keyElement.innerText = key.char;
-                keyElement.style.color = key.color;
-                keyElement.dataset.char = key.char;
-                keyElement.onclick = () => handleKeyPress(keyElement);
-                keyboardContainer.appendChild(keyElement);
+                const keyDiv = document.createElement("div");
+                keyDiv.classList.add("key");
+                keyDiv.textContent = key;
+                keyDiv.addEventListener("click", () => handleKeyPress(key));
+                keyboardDiv.appendChild(keyDiv);
+            });
+
+            document.addEventListener("keydown", (e) => {
+                const key = e.key.toLowerCase();
+                if (keys.includes(key)) {
+                    handleKeyPress(key);
+                }
             });
         }
 
-        function handleKeyPress(keyElement) {
-            const char = keyElement.dataset.char;
-            textInput.value += char;
-            keyElement.classList.add('active');
+        function handleKeyPress(key) {
+            const keyboardKeys = document.querySelectorAll(".key");
+            keyboardKeys.forEach(k => k.classList.remove("active"));
 
-            setTimeout(() => {
-                keyElement.classList.remove('active');
-            }, 200);
+            const pressedKey = Array.from(keyboardKeys).find(k => k.textContent === key);
+            if (pressedKey) {
+                pressedKey.classList.add("active");
+            }
+
+            if (key === currentWord[inputIndex]) {
+                inputIndex++;
+                if (inputIndex >= currentWord.length) {
+                    alert("You typed the word correctly!");
+                    startGame();
+                }
+            } else {
+                alert("Wrong key! Try again.");
+            }
         }
-
-        function generateRandomText() {
-            const words = ['hello', 'world', 'neon', 'game', 'keyboard', 'typing', 'challenge', 'fun', 'javascript', 'code'];
-            const randomText = words[Math.floor(Math.random() * words.length)];
-            textInput.value = randomText;
-        }
-
-        document.addEventListener('DOMContentLoaded', createKeyboard);
     </script>
 </body>
 </html>
