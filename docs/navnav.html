@@ -59,36 +59,6 @@
     display: block;
 }
 
-/* Hamburger menu icon */
-.hamburger {
-    display: none; /* Default to hidden */
-    flex-direction: column;
-    cursor: pointer;
-    padding: 10px;
-    z-index: 1001;
-}
-
-.hamburger div {
-    width: 25px;
-    height: 3px;
-    background-color: white;
-    margin: 2px 0;
-    transition: 0.4s;
-}
-
-/* Add rotation for hamburger animation */
-.hamburger.active div:nth-child(1) {
-    transform: rotate(-45deg) translate(-5px, 6px);
-}
-
-.hamburger.active div:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.active div:nth-child(3) {
-    transform: rotate(45deg) translate(-5px, -6px);
-}
-
 .nav-container {
     display: flex;
     align-items: center;
@@ -104,29 +74,15 @@
     .nav-container {
         flex-direction: column;
         align-items: flex-start;
-        position: relative; /* Ensure positioning context for absolute elements */
-    }
-
-    .hamburger {
-        display: flex; /* Show hamburger on mobile */
-        position: absolute;
-        right: 1rem;
-        top: 1rem; /* Adjusted for better visibility */
     }
 
     .nav-links {
-        display: none;
+        display: flex; /* Always display links */
+        flex-direction: column; /* Stack links vertically */
         width: 100%;
         background: rgba(0, 0, 0, 0.9);
-        position: absolute;
-        top: 100%;
-        left: 0;
+        position: static; /* No longer absolute */
         z-index: 1000;
-    }
-
-    .nav-links.active {
-        display: flex;
-        flex-direction: column;
     }
 
     .nav-link {
@@ -168,11 +124,6 @@
 
 <nav class="nav">
     <div class="nav-container">
-        <div class="hamburger" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
         <div class="nav-links">
             <a href="https://cvhshomeworkhub.github.io/index.html" class="nav-link">Home</a>
             <div class="dropdown">
@@ -194,13 +145,6 @@
 </nav>
 
 <script>
-function toggleMenu() {
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    hamburger.classList.toggle('active');
-    navLinks.classList.toggle('active');
-}
-
 function toggleDropdown(event) {
     if (window.innerWidth <= 768) {
         event.preventDefault();
