@@ -6,6 +6,7 @@
 .nav {
     display: flex;
     align-items: center;
+    justify-content: space-between; /* Space between elements */
     padding: 1rem;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
@@ -15,7 +16,6 @@
     color: white;
     text-decoration: none;
     padding: 0.5rem 1rem;
-    margin: 0 0.5rem;
 }
 
 .dropdown {
@@ -59,10 +59,32 @@
     display: block;
 }
 
-.nav-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
+/* Hamburger menu icon */
+.hamburger {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.hamburger div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 2px 0;
+    transition: 0.4s;
+}
+
+/* Add rotation for hamburger animation */
+.hamburger.active div:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger.active div:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active div:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
 }
 
 /* Mobile styles */
@@ -71,18 +93,26 @@
         padding: 0.5rem;
     }
 
-    .nav-container {
-        flex-direction: column;
-        align-items: flex-start;
+    .hamburger {
+        display: flex; /* Show hamburger on mobile */
+        position: absolute;
+        right: 1rem; /* Move to the right */
+        top: 1rem; /* Adjust as needed */
     }
 
     .nav-links {
-        display: flex; /* Always display links */
+        display: none; /* Hidden by default */
         flex-direction: column; /* Stack links vertically */
         width: 100%;
         background: rgba(0, 0, 0, 0.9);
-        position: static; /* No longer absolute */
+        position: absolute;
+        top: 100%;
+        right: 0; /* Align with the right edge */
         z-index: 1000;
+    }
+
+    .nav-links.active {
+        display: flex; /* Show links when active */
     }
 
     .nav-link {
@@ -124,6 +154,11 @@
 
 <nav class="nav">
     <div class="nav-container">
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
         <div class="nav-links">
             <a href="https://cvhshomeworkhub.github.io/index.html" class="nav-link">Home</a>
             <div class="dropdown">
@@ -145,22 +180,33 @@
 </nav>
 
 <script>
-function toggleDropdown(event) {
-    if (window.innerWidth <= 768) {
-        event.preventDefault();
-        const dropdown = event.target.nextElementSibling;
-        dropdown.classList.toggle('show');
-    }
+function toggleMenu() {
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('active');
 }
 
-// Close dropdowns when clicking outside
+function toggleDropdown(event) {
+    event.preventDefault();
+    const dropdown = event.target.nextElementSibling;
+    dropdown.classList.toggle('show');
+}
+
+// Close dropdowns and menu when clicking outside
 document.addEventListener('click', function(event) {
-    if (!event.target.matches('.dropbtn')) {
+    if (!event.target.matches('.dropbtn') && !event.target.matches('.hamburger *')) {
         const dropdowns = document.getElementsByClassName('dropdown-content');
         for (let dropdown of dropdowns) {
             if (dropdown.classList.contains('show')) {
                 dropdown.classList.remove('show');
             }
+        }
+        const navLinks = document.querySelector('.nav-links');
+        if (navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            const hamburger = document.querySelector('.hamburger');
+            hamburger.classList.remove('active');
         }
     }
 });
