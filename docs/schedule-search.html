@@ -6,6 +6,28 @@
     <title>CVHS Schedule Search</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.png" type="image/png">
+    <style>
+        .resources-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; /* Adjusts spacing between cards */
+        }
+        .resource-card {
+            flex: 0 0 calc(25% - 10px); /* Adjusts to fit 4 cards per row with some margin */
+            margin: 5px; /* Adds some space between the cards */
+            box-sizing: border-box; /* Ensures padding and margin are included in the width */
+        }
+        @media (max-width: 768px) {
+            .resource-card {
+                flex: 0 0 calc(50% - 10px); /* Adjusts to 2 cards per row on smaller screens */
+            }
+        }
+        @media (max-width: 480px) {
+            .resource-card {
+                flex: 0 0 100%; /* Stacks cards on small screens */
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="glass-header">
