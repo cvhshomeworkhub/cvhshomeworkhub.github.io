@@ -37,52 +37,11 @@
         </div>
         <div id="nav-container"></div> <!-- Placeholder for navigation -->
     </header>
-
+    
     <main class="fade-in">
-        <div class="games-container">
-            <h2 class="section-title glow-text">Schedules</h2>
-                <h4></h4>
-                <h3 class="resource-title">Please fill this out (for you and others you know)!</h3>
-                <p class="resource-description">Allows for better scheduling info!</p>
-                <a href="https://docs.google.com/spreadsheets/d/1PCXDpvzGOsruoTfskIyDekMZMh0dBNAkYK9eGlAIUAQ/edit?usp=sharing" class="access-btn">OPEN DATABASE</a>
-                <h4></h4>
-                <div class="controls-container">
-                    <select id="subject">
-                        <option value="">--Select Subject--</option>
-                        <option value="Human Geography">Human Geography</option>
-                        <option value="Biology">Biology</option>
-                        <option value="Theater">Theater</option>
-                        <option value="Tech Theater">Tech Theater</option>
-                        <option value="Art">Art</option>
-                        <option value="English">English</option>
-                        <option value="Algebra 2">Algebra 2</option>
-                        <option value="Geometry">Geometry</option>
-                        <option value="Algebra 1">Algebra 1</option>
-                        <option value="Computer Science">Computer Science</option>
-                        <option value="PE">PE</option>
-                        <option value="Chemistry">Chemistry</option>
-                        <option value="Dance">Dance</option>
-                        <option value="Spanish">Spanish</option>
-                        <option value="French">French</option>
-                        <option value="Baseball">Baseball</option>
-                        <option value="Volleyball">Volleyball</option>
-                        <option value="Broadcast Journalism">Broadcast Journalism</option>
-                        <option value="Visual Art">Visual Art</option>
-                    </select>
-                
-                    <div>
-                        <label for="period">Select Period:</label>
-                        <input type="range" id="period" min="1" max="7" value="1">
-                        <span id="periodValue">1</span>
-                    </div>
-                
-                    <button id="fetchDataButton" class="access-btn">Fetch Schedules</button>
-                </div>
-
-            </div>
-
-            <div id="results"></div>
-        <h4></h4><h4></h4>
+        <h2 class="section-title glow-text">Schedules</h2>
+        <div class="iframe-container">
+            <iframe src="https://docs.google.com/spreadsheets/d/1PCXDpvzGOsruoTfskIyDekMZMh0dBNAkYK9eGlAIUAQ/edit?gid=0#gid=0"></iframe>
         </div>
     </main>
     <script>
