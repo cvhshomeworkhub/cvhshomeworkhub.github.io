@@ -117,9 +117,7 @@
     </style>
 </head>
 <body>
-    <div class="animated-banner">
-        <h4 class="banner-text">Applications end at Advocacy today! (Interviews @ Lunch!)  <a href="https://cvhshomeworkhub.github.io/apply.html">APPLY NOW!</a></h4>
-    </div>
+    <div id="banner-container"></div> <!-- Placeholder for banner -->
     <header class="glass-header">
         <div class="logo-container">
             <h1 class="glow-text">Question of the Day</h1>
@@ -251,10 +249,23 @@
             }
         }
 
+        // Function to load the banner
+        async function loadBanner() {
+            try {
+                const response = await fetch('banner.html');
+                const bannerContent = await response.text();
+                document.getElementById('banner-container').innerHTML = bannerContent;
+            } catch (error) {
+                console.error('Error loading banner:', error);
+                document.getElementById('banner-container').innerHTML = '<p>Error loading banner. Please try again later.</p>';
+            }
+        }
+
         // Load everything when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             loadNav();
             loadQOTD();
+            loadBanner();
         });
     </script>
 </body>
