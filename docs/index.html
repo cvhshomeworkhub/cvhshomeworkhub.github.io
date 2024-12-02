@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CVHS Homework Hub</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon2.png" type="image/png">
     <style>
         body {
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
         }
         .glass-header {
             position: sticky;
@@ -21,90 +21,60 @@
         }
         main {
             padding: 20px;
+            text-align: center;
         }
-        .assignments-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .assignments-row {
-            display: flex;
-            width: 100%;
-            gap: 20px;
-        }
-        .assignment-card {
-            flex: 1;
-            min-width: calc(33.333% - 14px);
-            max-width: calc(33.333% - 14px);
-        }
-        
         .logo-container h1 {
             margin: 0;
             font-size: 2.5em;
         }
-        
         .logo-container h4 {
             margin: 5px 0;
-        }
-
-        /* Mobile styles */
-        @media screen and (max-width: 768px) {
-            .glass-header {
-                padding: 10px;
-            }
-            
-            .logo-container {
-                text-align: left;
-                padding-right: 50px; /* Make space for hamburger menu */
-            }
-            
-            .logo-container h1 {
-                font-size: 1.5em; /* Smaller font size on mobile */
-            }
-            
-            .logo-container h4 {
-                font-size: 0.9em;
-            }
-            
-            /* Ensure the animated banner doesn't interfere */
-            .animated-banner {
-                font-size: 0.8em;
-            }
-            
-            /* Adjust hamburger menu positioning */
-            .hamburger {
-                top: 50%; /* Center vertically */
-                transform: translateY(-50%);
-                right: 15px;
-            }
-        }
-        
-        /* Additional mobile optimization */
-        @media screen and (max-width: 480px) {
-            .logo-container h1 {
-                font-size: 1.2em; /* Even smaller for very small screens */
-            }
-            
-            .logo-container h4 {
-                font-size: 0.8em;
-            }
         }
     </style>
 </head>
 <body class="dark-theme">
-    <div id="banner-container"></div> <!-- Placeholder for banner -->
     <header class="glass-header">
         <div class="logo-container">
             <h1 class="glow-text">CVHS Homework Hub</h1>
             <h4><strong><i>"For freshmen, by freshmen"</i></strong></h4>
         </div>
     </header>
-
-    <main class="fade-in">
-        <h2 class="section-title glow-text">This website is under maintenance currently! Please wait until <i>DECEMBER 2</i> for the new update!</h2>
-        <center>
-            <h4><strong>Upcoming Features: </strong>Customizable Classes, Quizlets, 𝙸𝚗𝚝𝚎𝚛𝚕𝚒𝚗𝚔 𝙰𝙸, Updated Subject Pages & Question Bank</h4>
-        </center>
+    <main>
+        <h2>The update is COMPLETE!</h2>
+        <button id="accessBtn" class="access-btn" onclick="bookmarkWebsite()">OPEN THE UPDATE</button>
+        <h4><strong>New Features: </strong>Customizable Classes, Quizlets, 𝙸𝚗𝚝𝚎𝚛𝚕𝚒𝚗𝚔 𝙰𝙸, Updated Subject Pages & Question Bank</h4>
     </main>
+
+    <script>
+        function bookmarkWebsite() {
+            // Check if the bookmark has already been added
+            if (!localStorage.getItem('interlink_bookmarked')) {
+                // Attempt to bookmark the website
+                if (window.sidebar && window.sidebar.addPanel) {
+                    // Firefox
+                    window.sidebar.addPanel('Interlink', 'https://interlinkcvhs.org', '');
+                } else if (window.external && ('AddFavorite' in window.external)) {
+                    // IE
+                    window.external.AddFavorite('https://interlinkcvhs.org', 'Interlink');
+                } else if (window.opera && window.print) {
+                    // Opera
+                    var elem = document.createElement('a');
+                    elem.setAttribute('href', 'https://interlinkcvhs.org');
+                    elem.setAttribute('title', 'Interlink');
+                    elem.setAttribute('rel', 'sidebar');
+                    elem.click();
+                } else {
+                    // Fallback for other browsers
+                    alert('Please use your browser\'s bookmark function to bookmark this page.');
+                }
+
+                // Set a flag in localStorage to prevent multiple bookmarking
+                localStorage.setItem('interlink_bookmarked', 'true');
+            } else {
+                // If already bookmarked, just redirect to the website
+                window.location.href = 'https://interlinkcvhs.org';
+            }
+        }
+    </script>
 </body>
 </html>
